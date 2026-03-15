@@ -1,14 +1,28 @@
-export interface StateInfo {
-  slug: string;
+export interface StateData {
   name: string;
+  slug: string;
   abbreviation: string;
   filingFee: number;
   processingTime: string;
-  requiresPublicationNotice: boolean;
-  onlineFilingAvailable: boolean;
+  onlineFiling: boolean;
+  stateTaxExemption: boolean;
+  annualReportFee: number;
+  annualReportFrequency: string;
   secretaryOfStateUrl: string;
+  requiresRegisteredAgent: boolean;
+  minimumBoardMembers: number;
+  specificRequirements: string[];
+  description: string;
+  metaTitle: string;
+  metaDescription: string;
+  /** @deprecated Use onlineFiling */
+  onlineFilingAvailable: boolean;
+  requiresPublicationNotice: boolean;
   steps: string[];
 }
+
+/** @deprecated Use StateData */
+export type StateInfo = StateData;
 
 const DEFAULT_STEPS: string[] = [
   'Choose a name and verify availability with the Secretary of State',
@@ -29,16 +43,32 @@ function stepsFor(requiresPublication: boolean): string[] {
     : DEFAULT_STEPS;
 }
 
-export const STATES: StateInfo[] = [
+export const STATES: StateData[] = [
   {
     slug: 'alabama',
     name: 'Alabama',
     abbreviation: 'AL',
     filingFee: 200,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 25,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sos.alabama.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'Must file annual report with the Alabama Secretary of State',
+      'Requires a registered agent with a physical Alabama address',
+      'Articles must include a dissolution clause directing assets to another 501(c)(3)',
+    ],
+    description:
+      'Alabama requires nonprofits to file Articles of Incorporation with the Secretary of State and pay a $200 filing fee. The state offers online filing and typically processes applications within 5-7 business days. Alabama nonprofits must file an annual report and may apply for state tax exemption.',
+    metaTitle: 'How to Start a Nonprofit in Alabama | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Alabama. $200 filing fee, 5-7 day processing, online filing available. Complete AL nonprofit formation guide.',
     steps: stepsFor(false),
   },
   {
@@ -47,9 +77,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'AK',
     filingFee: 250,
     processingTime: '10-15 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: false,
+    annualReportFee: 0,
+    annualReportFrequency: 'Biennially',
     secretaryOfStateUrl: 'https://www.commerce.alaska.gov/web/cbpl/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'Must file biennial report with the Division of Corporations',
+      'No state income tax, so no separate state tax exemption needed',
+      'Registered agent must have a physical Alaska address',
+    ],
+    description:
+      'Alaska nonprofits file with the Division of Corporations, Business and Professional Licensing. The $250 filing fee is among the higher state fees. Alaska has no state income tax, simplifying the tax exemption process.',
+    metaTitle: 'How to Start a Nonprofit in Alaska | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Alaska. $250 filing fee, 10-15 day processing, online filing available. Complete AK nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -58,9 +104,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'AZ',
     filingFee: 40,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: true,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: true,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://azsos.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'Must publish Articles of Incorporation in an Arizona-approved newspaper within 60 days of filing',
+      'File an annual report with the Arizona Corporation Commission',
+      'Apply for state tax exemption with the Arizona Department of Revenue',
+    ],
+    description:
+      'Arizona has a low $40 filing fee but requires a publication notice in an approved newspaper within 60 days of incorporation. The Arizona Corporation Commission handles nonprofit filings and annual reports.',
+    metaTitle: 'How to Start a Nonprofit in Arizona | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Arizona. $40 filing fee, publication notice required. Complete AZ nonprofit incorporation guide.',
     steps: stepsFor(true),
   },
   {
@@ -69,9 +131,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'AR',
     filingFee: 50,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sos.arkansas.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'Must file annual franchise tax report (nonprofits may be exempt from payment)',
+      'Registered agent required with a physical Arkansas address',
+      'Articles must state the nonprofit purpose and dissolution clause',
+    ],
+    description:
+      'Arkansas offers a straightforward nonprofit incorporation process with a $50 filing fee. The Secretary of State processes filings within 5-7 business days and offers online filing.',
+    metaTitle: 'How to Start a Nonprofit in Arkansas | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Arkansas. $50 filing fee, 5-7 day processing, online filing available. Complete AR nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -80,9 +158,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'CA',
     filingFee: 30,
     processingTime: '3-5 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 20,
+    annualReportFrequency: 'Biennially',
     secretaryOfStateUrl: 'https://www.sos.ca.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'Must file Statement of Information (Form SI-100) within 90 days of incorporation and biennially thereafter ($20)',
+      'Apply for state tax exemption with the Franchise Tax Board using Form 3500 or 3500A',
+      'Must register with the California Attorney General Registry of Charitable Trusts (Form CT-1)',
+      'California nonprofits are exempt from the $800 minimum franchise tax for the first 5 years',
+    ],
+    description:
+      'California has one of the lowest nonprofit filing fees at $30 and offers fast online processing. However, California requires multiple additional filings: a Statement of Information within 90 days, registration with the Attorney General, and a separate state tax exemption application with the Franchise Tax Board (Form 3500 or 3500A). Public benefit corporations need at least one director, but three or more are recommended.',
+    metaTitle: 'How to Start a Nonprofit in California | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in California. $30 filing fee, 3-5 day processing. Requires FTB exemption (Form 3500A) and AG registration.',
     steps: stepsFor(false),
   },
   {
@@ -91,9 +186,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'CO',
     filingFee: 50,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 10,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sos.state.co.us/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'Must file periodic report annually with the Secretary of State ($10)',
+      'Apply for state sales tax exemption with the Colorado Department of Revenue',
+      'Charitable solicitation registration may be required',
+    ],
+    description:
+      'Colorado offers affordable nonprofit incorporation at $50 with convenient online filing. The state requires an annual periodic report for $10. Colorado nonprofits can apply for state sales tax exemption separately.',
+    metaTitle: 'How to Start a Nonprofit in Colorado | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Colorado. $50 filing fee, online filing, $10 annual report. Complete CO nonprofit formation guide.',
     steps: stepsFor(false),
   },
   {
@@ -102,9 +213,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'CT',
     filingFee: 50,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 50,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://portal.ct.gov/sots',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'Must file annual report with the Secretary of State ($50)',
+      'Register with the Department of Consumer Protection for charitable solicitation',
+      'Apply for state tax exemption with the Department of Revenue Services',
+    ],
+    description:
+      'Connecticut nonprofit incorporation costs $50 with online filing available through the Secretary of the State. Annual reports cost $50. The state requires charitable solicitation registration before fundraising.',
+    metaTitle: 'How to Start a Nonprofit in Connecticut | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Connecticut. $50 filing fee, online filing available. Complete CT nonprofit incorporation guide.',
     steps: stepsFor(false),
   },
   {
@@ -113,9 +240,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'DE',
     filingFee: 89,
     processingTime: '3-5 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://corp.delaware.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'Nonprofits are exempt from the annual franchise tax report filing fee',
+      'Must maintain a registered agent in Delaware at all times',
+      'Delaware nonprofits enjoy strong legal protections and well-established corporate law',
+      'File annual exempt domestic corporation report at no cost',
+    ],
+    description:
+      'Delaware is known for its business-friendly corporate law, which extends to nonprofits. The $89 filing fee includes fast processing, and nonprofits are exempt from the annual franchise tax. Delaware requires only one director minimum and offers some of the strongest board member liability protections in the country.',
+    metaTitle: 'How to Start a Nonprofit in Delaware | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Delaware. $89 filing fee, 3-5 day processing. Business-friendly laws and strong liability protections.',
     steps: stepsFor(false),
   },
   {
@@ -124,9 +268,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'DC',
     filingFee: 80,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 80,
+    annualReportFrequency: 'Biennially',
     secretaryOfStateUrl: 'https://dcra.dc.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File with the DC Department of Consumer and Regulatory Affairs (DCRA)',
+      'Must file biennial report ($80)',
+      'Register for DC tax exemption with the Office of Tax and Revenue',
+      'Basic Business License may be required depending on activities',
+    ],
+    description:
+      'The District of Columbia processes nonprofit incorporations through the Department of Consumer and Regulatory Affairs. The $80 filing fee includes online filing options. DC requires a biennial report and separate tax exemption application with the Office of Tax and Revenue.',
+    metaTitle: 'How to Start a Nonprofit in Washington DC | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Washington DC. $80 filing fee, 5-10 day processing. Complete DC nonprofit formation guide.',
     steps: stepsFor(false),
   },
   {
@@ -135,9 +296,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'FL',
     filingFee: 70,
     processingTime: '3-5 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: false,
+    annualReportFee: 61,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://dos.fl.gov/sunbiz/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'Must file annual report through Sunbiz by May 1 each year ($61.25)',
+      'No state income tax, so no separate state tax exemption application needed',
+      'Must register with the Florida Department of Agriculture and Consumer Services before soliciting donations',
+      'Registered agent must have a street address in Florida',
+    ],
+    description:
+      'Florida offers fast nonprofit incorporation through Sunbiz, the Division of Corporations online portal. The $70 filing fee covers Articles of Incorporation with typically 3-5 business day processing. Florida has no state income tax, eliminating the need for a separate state tax exemption. However, nonprofits must file a $61.25 annual report and register for charitable solicitation before fundraising.',
+    metaTitle: 'How to Start a Nonprofit in Florida | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Florida. $70 filing fee, 3-5 day processing via Sunbiz. No state income tax. Complete FL guide.',
     steps: stepsFor(false),
   },
   {
@@ -146,9 +324,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'GA',
     filingFee: 100,
     processingTime: '7-10 business days',
-    requiresPublicationNotice: true,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: true,
+    stateTaxExemption: true,
+    annualReportFee: 50,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://sos.ga.gov/corporations-division',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'Must publish notice of incorporation in the legal newspaper of the county where the registered office is located',
+      'File annual registration with the Secretary of State ($50)',
+      'Apply for state tax exemption with the Georgia Department of Revenue',
+      'Register with the Secretary of State for charitable solicitation',
+    ],
+    description:
+      'Georgia requires a $100 filing fee plus a publication notice in the county legal newspaper, which can add $40-$100 to total costs. The state requires an annual registration ($50) and separate state tax exemption application with the Department of Revenue. Georgia mandates at least 3 board members for nonprofit corporations.',
+    metaTitle: 'How to Start a Nonprofit in Georgia | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Georgia. $100 filing fee, publication notice required. Annual $50 registration. Complete GA guide.',
     steps: stepsFor(true),
   },
   {
@@ -157,9 +352,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'HI',
     filingFee: 50,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: false,
     onlineFilingAvailable: false,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 5,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://cca.hawaii.gov/breg/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'Mail-in filing only through the Department of Commerce and Consumer Affairs',
+      'File annual report with DCCA ($5)',
+      'Register with the Attorney General before soliciting donations',
+      'Apply for state tax exemption with the Department of Taxation',
+    ],
+    description:
+      'Hawaii processes nonprofit incorporations through the Department of Commerce and Consumer Affairs. Online filing is not currently available, so applications must be submitted by mail. The $50 filing fee is affordable and annual reports cost only $5.',
+    metaTitle: 'How to Start a Nonprofit in Hawaii | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Hawaii. $50 filing fee, mail-in filing only. $5 annual report. Complete HI nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -168,9 +380,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'ID',
     filingFee: 100,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://sos.idaho.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Secretary of State (no fee)',
+      'No charitable solicitation registration requirement',
+      'Apply for state tax exemption with the Idaho State Tax Commission',
+    ],
+    description:
+      'Idaho charges a $100 filing fee for nonprofit incorporation with online filing available. Annual reports are free to file. Idaho is one of the few states that does not require charitable solicitation registration.',
+    metaTitle: 'How to Start a Nonprofit in Idaho | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Idaho. $100 filing fee, online filing, free annual reports. Complete ID nonprofit formation guide.',
     steps: stepsFor(false),
   },
   {
@@ -179,9 +407,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'IL',
     filingFee: 50,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.ilsos.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Secretary of State (no fee for nonprofits)',
+      'Apply for state tax exemption with the Illinois Department of Revenue',
+      'Register with the Attorney General Charitable Trust Bureau before soliciting donations',
+      'Illinois requires at least 3 directors who are not the same person',
+    ],
+    description:
+      'Illinois offers affordable nonprofit incorporation at $50 with no fee for annual reports. The Secretary of State processes filings within 5-10 business days with online filing available. Illinois requires at least 3 distinct board members and separate registration with the Attorney General for charitable solicitation.',
+    metaTitle: 'How to Start a Nonprofit in Illinois | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Illinois. $50 filing fee, free annual reports. Register with AG for fundraising. Complete IL guide.',
     steps: stepsFor(false),
   },
   {
@@ -190,9 +435,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'IN',
     filingFee: 30,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 10,
+    annualReportFrequency: 'Biennially',
     secretaryOfStateUrl: 'https://www.in.gov/sos/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File biennial business entity report with the Secretary of State ($10)',
+      'No charitable solicitation registration requirement',
+      'Apply for state tax exemption with the Indiana Department of Revenue',
+    ],
+    description:
+      'Indiana offers a low $30 filing fee for nonprofit incorporation with online filing. Biennial reports cost just $10. Indiana is one of the few states that does not require charitable solicitation registration.',
+    metaTitle: 'How to Start a Nonprofit in Indiana | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Indiana. $30 filing fee, online filing, no solicitation registration needed. Complete IN guide.',
     steps: stepsFor(false),
   },
   {
@@ -201,9 +462,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'IA',
     filingFee: 20,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Biennially',
     secretaryOfStateUrl: 'https://sos.iowa.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'File biennial report with the Secretary of State (no fee)',
+      'Register with the Attorney General for charitable solicitation',
+      'Apply for state tax exemption with the Iowa Department of Revenue',
+    ],
+    description:
+      'Iowa offers one of the lowest nonprofit filing fees at $20 with free biennial reports. Online filing is available through the Secretary of State. Iowa requires only one director minimum.',
+    metaTitle: 'How to Start a Nonprofit in Iowa | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Iowa. Only $20 filing fee, free biennial reports, online filing available. Complete IA guide.',
     steps: stepsFor(false),
   },
   {
@@ -212,9 +489,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'KS',
     filingFee: 20,
     processingTime: '3-5 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 40,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://sos.ks.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($40)',
+      'Register with the Secretary of State for charitable solicitation',
+      'Apply for state tax exemption with the Kansas Department of Revenue',
+    ],
+    description:
+      'Kansas has a very low $20 filing fee for nonprofit incorporation with fast 3-5 business day processing and online filing. Annual reports cost $40. Charitable solicitation registration is handled through the Secretary of State.',
+    metaTitle: 'How to Start a Nonprofit in Kansas | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Kansas. Only $20 filing fee, 3-5 day processing, online filing. Complete KS nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -223,9 +516,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'KY',
     filingFee: 8,
     processingTime: '3-5 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 15,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sos.ky.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($15)',
+      'Register with the Attorney General for charitable solicitation ($50 registration fee)',
+      'Apply for state tax exemption with the Kentucky Department of Revenue',
+    ],
+    description:
+      'Kentucky has the lowest nonprofit filing fee in the nation at just $8. Online filing is available with 3-5 business day processing. Annual reports cost $15. Charitable solicitation registration through the Attorney General costs an additional $50.',
+    metaTitle: 'How to Start a Nonprofit in Kentucky | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Kentucky. Lowest filing fee in the US at just $8. Fast processing, online filing. Complete KY guide.',
     steps: stepsFor(false),
   },
   {
@@ -234,9 +543,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'LA',
     filingFee: 75,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 25,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sos.la.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($25)',
+      'Register with the Attorney General for charitable solicitation',
+      'Apply for state tax exemption with the Louisiana Department of Revenue',
+    ],
+    description:
+      'Louisiana charges a $75 filing fee for nonprofit incorporation with online filing available through the Secretary of State. Annual reports cost $25. Louisiana requires charitable solicitation registration through the Attorney General.',
+    metaTitle: 'How to Start a Nonprofit in Louisiana | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Louisiana. $75 filing fee, online filing, $25 annual report. Complete LA nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -245,9 +570,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'ME',
     filingFee: 40,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 35,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.maine.gov/sos/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($35)',
+      'Register with the Department of Professional and Financial Regulation for charitable solicitation',
+      'Apply for state tax exemption with Maine Revenue Services',
+    ],
+    description:
+      'Maine charges a $40 filing fee for nonprofit incorporation with online filing available. Annual reports cost $35. The state requires charitable solicitation registration before fundraising.',
+    metaTitle: 'How to Start a Nonprofit in Maine | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Maine. $40 filing fee, online filing, $35 annual report. Complete ME nonprofit formation guide.',
     steps: stepsFor(false),
   },
   {
@@ -256,9 +597,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'MD',
     filingFee: 100,
     processingTime: '7-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://sos.maryland.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'File annual personal property return with the Maryland Department of Assessments and Taxation (no fee for nonprofits)',
+      'Register with the Secretary of State for charitable solicitation',
+      'Apply for state tax exemption with the Comptroller of Maryland',
+    ],
+    description:
+      'Maryland charges $100 for nonprofit incorporation with online filing through the Department of Assessments and Taxation. Annual reports are free for nonprofits. Maryland requires only one director minimum and offers convenient online filing.',
+    metaTitle: 'How to Start a Nonprofit in Maryland | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Maryland. $100 filing fee, free annual reports, online filing. Complete MD nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -267,9 +624,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'MA',
     filingFee: 35,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 15,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sec.state.ma.us/cor/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'File annual report with the Secretary of the Commonwealth ($15)',
+      'Register with the Attorney General Non-Profit Organizations/Public Charities Division (Form PC)',
+      'Apply for state tax exemption with the Massachusetts Department of Revenue',
+      'Massachusetts uses the term "resident agent" instead of "registered agent"',
+    ],
+    description:
+      'Massachusetts charges a $35 filing fee for nonprofit incorporation through the Secretary of the Commonwealth. The state requires annual filing of Form PC with the Attorney General and a $15 annual report. Massachusetts nonprofits must register with the Non-Profit Organizations/Public Charities Division before soliciting donations.',
+    metaTitle: 'How to Start a Nonprofit in Massachusetts | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Massachusetts. $35 filing fee, AG registration required (Form PC). Complete MA nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -278,9 +652,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'MI',
     filingFee: 20,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.michigan.gov/lara/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'File annual report with the Department of Licensing and Regulatory Affairs (LARA) at no cost',
+      'Register with the Attorney General Charitable Trust Section before soliciting donations',
+      'Apply for state tax exemption with the Michigan Department of Treasury',
+      'Michigan allows a single-member board for nonprofits',
+    ],
+    description:
+      'Michigan offers very affordable nonprofit incorporation at just $20 through the Department of Licensing and Regulatory Affairs (LARA). Annual reports are free. Michigan is one of the few states that allows a single board member, though three or more are recommended for IRS purposes.',
+    metaTitle: 'How to Start a Nonprofit in Michigan | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Michigan. Only $20 filing fee, free annual reports. Register with AG for fundraising. Complete MI guide.',
     steps: stepsFor(false),
   },
   {
@@ -289,9 +680,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'MN',
     filingFee: 70,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sos.state.mn.us/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual renewal with the Secretary of State (no fee)',
+      'Register with the Attorney General Charities Division before soliciting donations',
+      'Apply for state tax exemption with the Minnesota Department of Revenue',
+    ],
+    description:
+      'Minnesota charges $70 for nonprofit incorporation with free annual renewals. The Secretary of State offers online filing. Minnesota requires at least 3 board members and registration with the Attorney General for charitable solicitation.',
+    metaTitle: 'How to Start a Nonprofit in Minnesota | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Minnesota. $70 filing fee, free annual renewals, online filing. Complete MN nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -300,9 +707,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'MS',
     filingFee: 50,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: false,
     onlineFilingAvailable: false,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sos.ms.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'Mail-in filing only; online filing not currently available',
+      'File annual report with the Secretary of State (no fee)',
+      'Register with the Secretary of State for charitable solicitation',
+      'Apply for state tax exemption with the Mississippi Department of Revenue',
+    ],
+    description:
+      'Mississippi charges $50 for nonprofit incorporation but currently requires mail-in filing. Annual reports are free. The state requires charitable solicitation registration through the Secretary of State.',
+    metaTitle: 'How to Start a Nonprofit in Mississippi | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Mississippi. $50 filing fee, mail-in filing. Free annual reports. Complete MS nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -311,9 +735,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'MO',
     filingFee: 25,
     processingTime: '3-5 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'No annual report required',
     secretaryOfStateUrl: 'https://www.sos.mo.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'No annual report requirement for nonprofits',
+      'Register with the Attorney General for charitable solicitation',
+      'Apply for state tax exemption with the Missouri Department of Revenue',
+    ],
+    description:
+      'Missouri offers one of the simplest nonprofit incorporation processes with a $25 filing fee, fast 3-5 day processing, and no annual report requirement. The Secretary of State offers online filing.',
+    metaTitle: 'How to Start a Nonprofit in Missouri | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Missouri. $25 filing fee, no annual reports required, fast processing. Complete MO nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -322,9 +762,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'MT',
     filingFee: 20,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: false,
+    annualReportFee: 20,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://sosmt.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($20)',
+      'No charitable solicitation registration requirement',
+      'Montana has no state sales tax',
+    ],
+    description:
+      'Montana charges a low $20 filing fee with online filing available. Annual reports also cost $20. Montana is one of the few states that does not require charitable solicitation registration and has no state sales tax.',
+    metaTitle: 'How to Start a Nonprofit in Montana | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Montana. $20 filing fee, no solicitation registration, no sales tax. Complete MT nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -333,9 +789,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'NE',
     filingFee: 10,
     processingTime: '3-5 business days',
-    requiresPublicationNotice: true,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: true,
+    stateTaxExemption: true,
+    annualReportFee: 10,
+    annualReportFrequency: 'Biennially',
     secretaryOfStateUrl: 'https://sos.nebraska.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'Must publish notice of incorporation in a legal newspaper for 3 consecutive weeks',
+      'File biennial report with the Secretary of State ($10)',
+      'No charitable solicitation registration requirement',
+      'Apply for state tax exemption with the Nebraska Department of Revenue',
+    ],
+    description:
+      'Nebraska has an extremely low $10 filing fee but requires publication of incorporation notice in a legal newspaper for 3 consecutive weeks, which adds $100-$200 to costs. Biennial reports cost $10.',
+    metaTitle: 'How to Start a Nonprofit in Nebraska | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Nebraska. $10 filing fee, publication notice required. $10 biennial report. Complete NE guide.',
     steps: stepsFor(true),
   },
   {
@@ -344,9 +817,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'NV',
     filingFee: 50,
     processingTime: '3-5 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: false,
+    annualReportFee: 50,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.nvsos.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'File annual list of officers with the Secretary of State ($50)',
+      'No state income tax, so no separate state tax exemption needed',
+      'Register with the Secretary of State for charitable solicitation',
+    ],
+    description:
+      'Nevada offers fast nonprofit incorporation with a $50 filing fee and no state income tax. Annual officer lists cost $50. Nevada requires only one director minimum and offers strong privacy protections for nonprofit officers.',
+    metaTitle: 'How to Start a Nonprofit in Nevada | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Nevada. $50 filing fee, no state income tax, strong privacy. Complete NV nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -355,9 +844,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'NH',
     filingFee: 25,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: false,
+    annualReportFee: 25,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sos.nh.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 5,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($25)',
+      'Register with the Attorney General Charitable Trust Unit before soliciting donations',
+      'New Hampshire requires a minimum of 5 directors for voluntary corporations',
+      'No state income tax on nonprofit revenue',
+    ],
+    description:
+      'New Hampshire charges a $25 filing fee with online filing available. Notable: New Hampshire requires a minimum of 5 board members for voluntary corporations, one of the highest minimums in the country. There is no state income tax.',
+    metaTitle: 'How to Start a Nonprofit in New Hampshire | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in New Hampshire. $25 filing fee, requires 5+ board members. No state income tax. Complete NH guide.',
     steps: stepsFor(false),
   },
   {
@@ -366,9 +872,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'NJ',
     filingFee: 75,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 25,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.njportal.com/DOR/BusinessFormation',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Division of Revenue ($25)',
+      'Register with the Division of Consumer Affairs Charities Registration Section (Form CRI-200)',
+      'Apply for state tax exemption with NJ Division of Taxation (Form REG-1E)',
+      'New Jersey uses the term "trustees" instead of "directors" for nonprofits',
+    ],
+    description:
+      'New Jersey charges $75 for nonprofit incorporation through the Division of Revenue online portal. The state uses the term "trustees" rather than "directors." Annual reports cost $25. Nonprofits must register for charitable solicitation (Form CRI-200) and apply for state tax exemption (Form REG-1E) separately.',
+    metaTitle: 'How to Start a Nonprofit in New Jersey | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in New Jersey. $75 filing fee, online filing. State tax exemption via Form REG-1E. Complete NJ guide.',
     steps: stepsFor(false),
   },
   {
@@ -377,9 +900,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'NM',
     filingFee: 25,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Biennially',
     secretaryOfStateUrl: 'https://www.sos.nm.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File biennial report with the Secretary of State (no fee)',
+      'Register with the Attorney General for charitable solicitation',
+      'Apply for state tax exemption with the New Mexico Taxation and Revenue Department',
+    ],
+    description:
+      'New Mexico charges $25 for nonprofit incorporation with free biennial reports. The Secretary of State offers online filing. Charitable solicitation registration is handled through the Attorney General.',
+    metaTitle: 'How to Start a Nonprofit in New Mexico | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in New Mexico. $25 filing fee, free biennial reports, online filing. Complete NM nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -388,9 +927,28 @@ export const STATES: StateInfo[] = [
     abbreviation: 'NY',
     filingFee: 75,
     processingTime: '7-14 business days',
-    requiresPublicationNotice: true,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: true,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Biennially',
     secretaryOfStateUrl: 'https://www.dos.ny.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'Must obtain approval from the relevant state oversight agency (e.g., Attorney General, Education Department) before filing',
+      'Must publish notice of incorporation in two newspapers (one daily, one weekly) for 6 consecutive weeks',
+      'File biennial report with the Department of State (no fee)',
+      'Register with the Attorney General Charities Bureau (Form CHAR410) before soliciting donations',
+      'Apply for state tax exemption with the New York Department of Taxation and Finance',
+      'Publication requirement can cost $200-$1,500 depending on county',
+    ],
+    description:
+      'New York has one of the more complex nonprofit formation processes. The $75 filing fee is just the beginning: nonprofits must obtain approval from the relevant state oversight agency (such as the Attorney General or Education Department) before the Department of State will accept the filing. New York also requires publishing notice of incorporation in two newspapers for 6 consecutive weeks, which can cost $200-$1,500 depending on the county. Biennial reports are free.',
+    metaTitle: 'How to Start a Nonprofit in New York | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in New York. $75 filing fee plus publication costs. Agency approval required. Complete NY guide.',
     steps: stepsFor(true),
   },
   {
@@ -399,9 +957,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'NC',
     filingFee: 60,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sosnc.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'File annual report with the Secretary of State (no fee)',
+      'Register with the Secretary of State Charitable Solicitation Licensing Section before soliciting donations',
+      'Apply for state tax exemption with the NC Department of Revenue',
+      'North Carolina allows a single-member board for nonprofits',
+    ],
+    description:
+      'North Carolina charges $60 for nonprofit incorporation with free annual reports and online filing. The state allows a single board member, though the IRS recommends at least three. Charitable solicitation registration is required before fundraising. The Secretary of State offers a streamlined online filing process.',
+    metaTitle: 'How to Start a Nonprofit in North Carolina | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in North Carolina. $60 filing fee, free annual reports, online filing. Complete NC nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -410,9 +985,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'ND',
     filingFee: 40,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 25,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://sos.nd.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($25)',
+      'Register with the Secretary of State for charitable solicitation',
+      'Apply for state tax exemption with the ND Office of State Tax Commissioner',
+    ],
+    description:
+      'North Dakota charges $40 for nonprofit incorporation with online filing available. Annual reports cost $25. The state requires charitable solicitation registration through the Secretary of State.',
+    metaTitle: 'How to Start a Nonprofit in North Dakota | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in North Dakota. $40 filing fee, $25 annual report, online filing. Complete ND nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -421,9 +1012,27 @@ export const STATES: StateInfo[] = [
     abbreviation: 'OH',
     filingFee: 99,
     processingTime: '3-5 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'No annual report required',
     secretaryOfStateUrl: 'https://www.ohiosos.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'No annual report requirement for nonprofits in Ohio',
+      'Must appoint a statutory agent (Ohio term for registered agent)',
+      'Register with the Attorney General Charitable Law Section before soliciting donations',
+      'Apply for state tax exemption with the Ohio Department of Taxation',
+      'Ohio uses the term "statutory agent" instead of "registered agent"',
+    ],
+    description:
+      'Ohio charges $99 for nonprofit incorporation with fast 3-5 day processing and online filing. Notably, Ohio does not require annual reports for nonprofits, reducing ongoing compliance burden. The state uses the term "statutory agent" rather than "registered agent." Registration with the Attorney General is required for charitable solicitation.',
+    metaTitle: 'How to Start a Nonprofit in Ohio | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Ohio. $99 filing fee, no annual reports required, online filing. Complete OH nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -432,9 +1041,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'OK',
     filingFee: 25,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 25,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sos.ok.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual certificate with the Secretary of State ($25)',
+      'Register with the Secretary of State for charitable solicitation',
+      'Apply for state tax exemption with the Oklahoma Tax Commission',
+    ],
+    description:
+      'Oklahoma charges $25 for nonprofit incorporation with online filing available. Annual certificates cost $25. The state offers a relatively simple and affordable nonprofit formation process.',
+    metaTitle: 'How to Start a Nonprofit in Oklahoma | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Oklahoma. $25 filing fee, online filing, $25 annual certificate. Complete OK nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -443,9 +1068,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'OR',
     filingFee: 50,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 50,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://sos.oregon.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($50)',
+      'Register with the Attorney General Charitable Activities Section before soliciting donations',
+      'Apply for state tax exemption with the Oregon Department of Revenue',
+      'No state sales tax in Oregon',
+    ],
+    description:
+      'Oregon charges $50 for nonprofit incorporation with online filing available. Annual reports cost $50. Oregon has no state sales tax, which simplifies operations. The state requires only one director minimum.',
+    metaTitle: 'How to Start a Nonprofit in Oregon | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Oregon. $50 filing fee, online filing, no state sales tax. Complete OR nonprofit formation guide.',
     steps: stepsFor(false),
   },
   {
@@ -454,9 +1096,27 @@ export const STATES: StateInfo[] = [
     abbreviation: 'PA',
     filingFee: 125,
     processingTime: '7-10 business days',
-    requiresPublicationNotice: true,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: true,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'Decennially (every 10 years)',
     secretaryOfStateUrl: 'https://www.dos.pa.gov/',
+    requiresRegisteredAgent: false,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'Must publish notice of incorporation in two newspapers (one of general circulation, one a legal journal) in the county of the registered office',
+      'File decennial report every 10 years (no fee)',
+      'Register with the Bureau of Charitable Organizations before soliciting donations (Form BCO-10)',
+      'Apply for state tax exemption with the PA Department of Revenue (Form REV-72)',
+      'Pennsylvania does not require a registered agent (uses "registered office" concept instead)',
+    ],
+    description:
+      'Pennsylvania charges $125 for nonprofit incorporation and requires publishing notice in two newspapers in the county of the registered office. Pennsylvania is unique in that it does not require a registered agent but uses a "registered office" system. Decennial reports are required every 10 years at no cost. The state requires charitable solicitation registration (Form BCO-10) before fundraising.',
+    metaTitle: 'How to Start a Nonprofit in Pennsylvania | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Pennsylvania. $125 filing fee, publication notice required. Decennial reports. Complete PA guide.',
     steps: stepsFor(true),
   },
   {
@@ -465,9 +1125,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'RI',
     filingFee: 35,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 45,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sos.ri.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($45)',
+      'Register with the Department of Business Regulation for charitable solicitation',
+      'Apply for state tax exemption with the RI Division of Taxation',
+    ],
+    description:
+      'Rhode Island charges $35 for nonprofit incorporation with online filing available. Annual reports cost $45. The state requires charitable solicitation registration through the Department of Business Regulation.',
+    metaTitle: 'How to Start a Nonprofit in Rhode Island | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Rhode Island. $35 filing fee, online filing, $45 annual report. Complete RI nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -476,9 +1152,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'SC',
     filingFee: 25,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 0,
+    annualReportFrequency: 'No annual report required',
     secretaryOfStateUrl: 'https://sos.sc.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'No annual report requirement for nonprofits',
+      'Register with the Secretary of State for charitable solicitation',
+      'Apply for state tax exemption with the SC Department of Revenue',
+    ],
+    description:
+      'South Carolina charges just $25 for nonprofit incorporation with no annual report requirement. Online filing is available through the Secretary of State. Charitable solicitation registration is required before fundraising.',
+    metaTitle: 'How to Start a Nonprofit in South Carolina | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in South Carolina. $25 filing fee, no annual reports needed, online filing. Complete SC guide.',
     steps: stepsFor(false),
   },
   {
@@ -487,9 +1179,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'SD',
     filingFee: 30,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: false,
     onlineFilingAvailable: false,
+    requiresPublicationNotice: false,
+    stateTaxExemption: false,
+    annualReportFee: 0,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://sdsos.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'Mail-in filing only; online filing not available',
+      'File annual report with the Secretary of State (no fee)',
+      'No state income tax, so no separate state tax exemption needed',
+      'No charitable solicitation registration requirement',
+    ],
+    description:
+      'South Dakota charges $30 for nonprofit incorporation but requires mail-in filing. Annual reports are free. The state has no income tax and no charitable solicitation registration requirement, making ongoing compliance straightforward.',
+    metaTitle: 'How to Start a Nonprofit in South Dakota | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in South Dakota. $30 filing fee, no state income tax, no solicitation registration. Complete SD guide.',
     steps: stepsFor(false),
   },
   {
@@ -498,9 +1207,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'TN',
     filingFee: 100,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: false,
+    annualReportFee: 20,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://sos.tn.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($20)',
+      'Register with the Secretary of State for charitable solicitation',
+      'Tennessee has no state income tax on earned income (nonprofits benefit from this)',
+    ],
+    description:
+      'Tennessee charges $100 for nonprofit incorporation with online filing available. Annual reports cost $20. Tennessee does not levy a state income tax on earned income, simplifying the tax exemption process.',
+    metaTitle: 'How to Start a Nonprofit in Tennessee | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Tennessee. $100 filing fee, online filing, no state income tax. Complete TN nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -509,9 +1234,27 @@ export const STATES: StateInfo[] = [
     abbreviation: 'TX',
     filingFee: 25,
     processingTime: '3-5 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 5,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sos.texas.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File periodic report with the Secretary of State (minimal fee)',
+      'Apply for state franchise tax exemption with the Texas Comptroller of Public Accounts',
+      'File Form AP-204 with the Comptroller for state sales tax exemption',
+      'No state income tax, but nonprofits must apply for franchise tax exemption',
+      'Texas requires at least 3 directors for nonprofit corporations',
+    ],
+    description:
+      'Texas offers affordable nonprofit incorporation at just $25 with fast 3-5 business day processing and online filing through SOSDirect. While Texas has no state income tax, nonprofits must apply for franchise tax exemption with the Comptroller of Public Accounts. Texas requires at least 3 board members. The state also offers sales tax exemption for qualifying nonprofits through Form AP-204.',
+    metaTitle: 'How to Start a Nonprofit in Texas | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Texas. Only $25 filing fee, 3-5 day processing. No state income tax. Complete TX nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -520,9 +1263,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'UT',
     filingFee: 30,
     processingTime: '3-5 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 15,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://corporations.utah.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual renewal with the Division of Corporations ($15)',
+      'Register with the Division of Consumer Protection for charitable solicitation',
+      'Apply for state tax exemption with the Utah State Tax Commission',
+    ],
+    description:
+      'Utah charges $30 for nonprofit incorporation with fast 3-5 day processing and online filing. Annual renewals cost $15. The state requires charitable solicitation registration through the Division of Consumer Protection.',
+    metaTitle: 'How to Start a Nonprofit in Utah | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Utah. $30 filing fee, fast processing, online filing, $15 annual renewal. Complete UT guide.',
     steps: stepsFor(false),
   },
   {
@@ -531,9 +1290,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'VT',
     filingFee: 125,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 45,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://sos.vermont.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($45)',
+      'Register with the Attorney General for charitable solicitation',
+      'Apply for state tax exemption with the Vermont Department of Taxes',
+    ],
+    description:
+      'Vermont charges $125 for nonprofit incorporation, one of the higher state fees. Annual reports cost $45. Online filing is available through the Secretary of State. Vermont has a relatively straightforward formation process despite the higher fees.',
+    metaTitle: 'How to Start a Nonprofit in Vermont | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Vermont. $125 filing fee, online filing, $45 annual report. Complete VT nonprofit formation guide.',
     steps: stepsFor(false),
   },
   {
@@ -542,9 +1317,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'VA',
     filingFee: 75,
     processingTime: '3-5 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 25,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.scc.virginia.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'File annual report with the State Corporation Commission ($25)',
+      'Register with the Department of Agriculture and Consumer Services for charitable solicitation',
+      'Apply for state tax exemption with the Virginia Department of Taxation',
+      'Virginia files with the State Corporation Commission (SCC), not a Secretary of State',
+    ],
+    description:
+      'Virginia charges $75 for nonprofit incorporation through the State Corporation Commission (SCC) with fast 3-5 day processing and online filing. Annual reports cost $25. Virginia requires only one director minimum. Charitable solicitation registration is handled through the Department of Agriculture and Consumer Services.',
+    metaTitle: 'How to Start a Nonprofit in Virginia | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Virginia. $75 filing fee via SCC, 3-5 day processing, online filing. Complete VA nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -553,9 +1345,26 @@ export const STATES: StateInfo[] = [
     abbreviation: 'WA',
     filingFee: 30,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: false,
+    annualReportFee: 10,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.sos.wa.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 1,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($10)',
+      'Register with the Secretary of State Charities Program before soliciting donations',
+      'No state income tax, so no separate state tax exemption application needed',
+      'Washington does impose Business and Occupation (B&O) tax, but nonprofits may qualify for exemptions',
+    ],
+    description:
+      'Washington charges just $30 for nonprofit incorporation with online filing available. Annual reports cost $10. There is no state income tax, but Washington does impose a Business and Occupation (B&O) tax from which nonprofits may qualify for exemptions. The state requires charitable solicitation registration before fundraising.',
+    metaTitle: 'How to Start a Nonprofit in Washington | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Washington. $30 filing fee, no state income tax, $10 annual report. Complete WA nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -564,9 +1373,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'WV',
     filingFee: 25,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 25,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://sos.wv.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($25)',
+      'Register with the Secretary of State for charitable solicitation',
+      'Apply for state tax exemption with the WV State Tax Department',
+    ],
+    description:
+      'West Virginia charges $25 for nonprofit incorporation with online filing available. Annual reports cost $25. The state requires charitable solicitation registration through the Secretary of State.',
+    metaTitle: 'How to Start a Nonprofit in West Virginia | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in West Virginia. $25 filing fee, online filing, $25 annual report. Complete WV nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -575,9 +1400,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'WI',
     filingFee: 35,
     processingTime: '5-10 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: true,
+    annualReportFee: 10,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://www.wdfi.org/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Department of Financial Institutions ($10)',
+      'Register with the Department of Financial Institutions for charitable solicitation',
+      'Apply for state tax exemption with the Wisconsin Department of Revenue',
+    ],
+    description:
+      'Wisconsin charges $35 for nonprofit incorporation through the Department of Financial Institutions. Annual reports cost $10. The state requires charitable solicitation registration before fundraising.',
+    metaTitle: 'How to Start a Nonprofit in Wisconsin | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Wisconsin. $35 filing fee, online filing, $10 annual report. Complete WI nonprofit guide.',
     steps: stepsFor(false),
   },
   {
@@ -586,9 +1427,25 @@ export const STATES: StateInfo[] = [
     abbreviation: 'WY',
     filingFee: 25,
     processingTime: '5-7 business days',
-    requiresPublicationNotice: false,
+    onlineFiling: true,
     onlineFilingAvailable: true,
+    requiresPublicationNotice: false,
+    stateTaxExemption: false,
+    annualReportFee: 25,
+    annualReportFrequency: 'Annually',
     secretaryOfStateUrl: 'https://sos.wyo.gov/',
+    requiresRegisteredAgent: true,
+    minimumBoardMembers: 3,
+    specificRequirements: [
+      'File annual report with the Secretary of State ($25)',
+      'No state income tax, so no separate state tax exemption needed',
+      'No charitable solicitation registration requirement',
+    ],
+    description:
+      'Wyoming charges $25 for nonprofit incorporation with online filing available. Annual reports cost $25. The state has no income tax and no charitable solicitation registration requirement, making ongoing compliance minimal.',
+    metaTitle: 'How to Start a Nonprofit in Wyoming | TurboCharity',
+    metaDescription:
+      'Start a nonprofit in Wyoming. $25 filing fee, no state income tax, no solicitation registration. Complete WY guide.',
     steps: stepsFor(false),
   },
 ];
@@ -602,7 +1459,7 @@ export function getAllStateSlugs(): string[] {
 }
 
 /** Look up a single state by slug, or undefined if not found. */
-export function getStateBySlug(slug: string): StateInfo | undefined {
+export function getStateBySlug(slug: string): StateData | undefined {
   return STATES.find((s) => s.slug === slug);
 }
 
