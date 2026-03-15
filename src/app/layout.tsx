@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { seoMetadata, getOpenGraphMeta } from "@/data/seo-metadata";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -8,13 +9,40 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const rootSeo = seoMetadata["/"];
+const ogMeta = getOpenGraphMeta("/");
+
 export const metadata: Metadata = {
-  title: "TurboCharity \u2014 From Idea to 501(c)(3) in Days, Not Months",
-  description:
-    "AI-powered nonprofit creation platform. Incorporate, generate bylaws, and auto-fill IRS Form 1023-EZ without expensive lawyers.",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://turbocharity.com"
   ),
+  title: {
+    default: rootSeo.title,
+    template: "%s | TurboCharity",
+  },
+  description: rootSeo.description,
+  keywords: rootSeo.keywords,
+  authors: [{ name: "TurboCharity, Inc." }],
+  creator: "TurboCharity",
+  publisher: "TurboCharity, Inc.",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  ...ogMeta,
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://turbocharity.com",
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
 };
 
 export default function RootLayout({
@@ -22,9 +50,34 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const orgJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "TurboCharity",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://turbocharity.com",
+    logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://turbocharity.com"}/favicon.svg`,
+    description: rootSeo.description,
+    sameAs: [],
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer service",
+      email: "support@turbocharity.com",
+    },
+  };
+
   return (
     <html lang="en" className={inter.variable}>
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
+      </head>
+      <body
+        className={`${inter.className} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100`}
+      >
+        {children}
+      </body>
     </html>
   );
 }
