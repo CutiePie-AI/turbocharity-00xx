@@ -6,7 +6,7 @@ import Button from "@/components/Button";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const POPUP_DELAY_MS = 30_000;
 const SCROLL_THRESHOLD = 0.5;
-const SESSION_KEY = "tc_lead_popup_shown";
+const STORAGE_KEY = "tc_lead_popup_dismissed";
 
 export default function LeadMagnetPopup() {
   const [visible, setVisible] = useState(false);
@@ -16,31 +16,41 @@ export default function LeadMagnetPopup() {
   const modalRef = useRef<HTMLDivElement>(null);
   const triggeredRef = useRef(false);
 
+  /** Check if previously dismissed (persisted in localStorage) */
+  const wasDismissed = useCallback(() => {
+    try {
+      return typeof window !== "undefined" && localStorage.getItem(STORAGE_KEY) === "true";
+    } catch {
+      return false;
+    }
+  }, []);
+
   const showPopup = useCallback(() => {
     if (triggeredRef.current) return;
-    // Only show once per session
-    if (typeof window !== "undefined" && sessionStorage.getItem(SESSION_KEY)) return;
+    if (wasDismissed()) return;
     triggeredRef.current = true;
     setVisible(true);
-  }, []);
+  }, [wasDismissed]);
 
   const closePopup = useCallback(() => {
     setVisible(false);
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem(SESSION_KEY, "true");
+    try {
+      localStorage.setItem(STORAGE_KEY, "true");
+    } catch {
+      // silently handle storage errors
     }
   }, []);
 
   // Timer trigger: 30 seconds
   useEffect(() => {
-    if (typeof window !== "undefined" && sessionStorage.getItem(SESSION_KEY)) return;
+    if (wasDismissed()) return;
     const timer = setTimeout(showPopup, POPUP_DELAY_MS);
     return () => clearTimeout(timer);
-  }, [showPopup]);
+  }, [showPopup, wasDismissed]);
 
   // Scroll trigger: 50% of page
   useEffect(() => {
-    if (typeof window !== "undefined" && sessionStorage.getItem(SESSION_KEY)) return;
+    if (wasDismissed()) return;
 
     function handleScroll() {
       const scrolled =
@@ -52,7 +62,7 @@ export default function LeadMagnetPopup() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [showPopup]);
+  }, [showPopup, wasDismissed]);
 
   // Click outside to close
   useEffect(() => {
