@@ -1,91 +1,121 @@
-// ─── SEO metadata helpers ─────────────────────────────────────────────────────
+import type { Metadata } from 'next';
 
-const SITE_NAME = 'TurboCharity';
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://turbocharity.com';
+// ─── Site configuration ──────────────────────────────────────────────────────
 
-export interface PageMetadata {
+export const SITE_CONFIG = {
+  siteName: 'TurboCharity',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://turbocharity.com',
+  description:
+    'AI-powered nonprofit creation. Generate bylaws, articles of incorporation, and auto-fill IRS Form 1023-EZ without expensive lawyers.',
+  twitterHandle: '@turbocharity',
+} as const;
+
+// ─── Page metadata map ───────────────────────────────────────────────────────
+
+interface PageMeta {
   title: string;
   description: string;
-  openGraph?: {
-    title: string;
-    description: string;
-    url: string;
-  };
+  path: string;
 }
 
-const metadataMap: Record<string, PageMetadata> = {
+const PAGE_META: Record<string, PageMeta> = {
   home: {
-    title: `${SITE_NAME} — From Idea to 501(c)(3) in Days`,
-    description:
-      'AI-powered nonprofit creation. Generate bylaws, articles of incorporation, and auto-fill IRS Form 1023-EZ without expensive lawyers.',
-    openGraph: {
-      title: `${SITE_NAME} — From Idea to 501(c)(3) in Days`,
-      description:
-        'AI-powered nonprofit creation. Generate bylaws, articles of incorporation, and auto-fill IRS Form 1023-EZ without expensive lawyers.',
-      url: SITE_URL,
-    },
-  },
-  pricing: {
-    title: `Pricing — ${SITE_NAME}`,
-    description:
-      'Affordable plans to incorporate your nonprofit. Start free, or unlock full document generation and IRS filing for a one-time fee.',
-    openGraph: {
-      title: `Pricing — ${SITE_NAME}`,
-      description:
-        'Affordable plans to incorporate your nonprofit. Start free, or unlock full document generation and IRS filing for a one-time fee.',
-      url: `${SITE_URL}/pricing`,
-    },
+    title: `${SITE_CONFIG.siteName} — From Idea to 501(c)(3) in Days`,
+    description: SITE_CONFIG.description,
+    path: '',
   },
   about: {
-    title: `About — ${SITE_NAME}`,
+    title: `About — ${SITE_CONFIG.siteName}`,
     description:
       'Learn about the team behind TurboCharity and our mission to make nonprofit creation accessible to everyone.',
-    openGraph: {
-      title: `About — ${SITE_NAME}`,
-      description:
-        'Learn about the team behind TurboCharity and our mission to make nonprofit creation accessible to everyone.',
-      url: `${SITE_URL}/about`,
-    },
-  },
-  resources: {
-    title: `Resources — ${SITE_NAME}`,
-    description:
-      'Guides, templates, and expert advice to help you start, run, and grow your nonprofit organization.',
-    openGraph: {
-      title: `Resources — ${SITE_NAME}`,
-      description:
-        'Guides, templates, and expert advice to help you start, run, and grow your nonprofit organization.',
-      url: `${SITE_URL}/resources`,
-    },
+    path: '/about',
   },
   states: {
-    title: `State Filing Guides — ${SITE_NAME}`,
+    title: `State Filing Guides — ${SITE_CONFIG.siteName}`,
     description:
       'State-by-state guides to nonprofit incorporation, filing fees, processing times, and compliance requirements.',
-    openGraph: {
-      title: `State Filing Guides — ${SITE_NAME}`,
-      description:
-        'State-by-state guides to nonprofit incorporation, filing fees, processing times, and compliance requirements.',
-      url: `${SITE_URL}/states`,
-    },
+    path: '/states',
+  },
+  blog: {
+    title: `Blog — ${SITE_CONFIG.siteName}`,
+    description:
+      'Guides, tips, and insights for starting and running a nonprofit organization.',
+    path: '/blog',
+  },
+  resources: {
+    title: `Resources — ${SITE_CONFIG.siteName}`,
+    description:
+      'Guides, templates, and expert advice to help you start, run, and grow your nonprofit organization.',
+    path: '/resources',
   },
   faq: {
-    title: `FAQ — ${SITE_NAME}`,
+    title: `FAQ — ${SITE_CONFIG.siteName}`,
     description:
       'Frequently asked questions about starting a nonprofit, IRS filing, and using TurboCharity.',
-    openGraph: {
-      title: `FAQ — ${SITE_NAME}`,
-      description:
-        'Frequently asked questions about starting a nonprofit, IRS filing, and using TurboCharity.',
-      url: `${SITE_URL}/faq`,
-    },
+    path: '/faq',
+  },
+  'get-started': {
+    title: `Get Started — ${SITE_CONFIG.siteName}`,
+    description:
+      'Start your 501(c)(3) nonprofit today. Answer a few questions and let TurboCharity generate your documents.',
+    path: '/get-started',
+  },
+  pricing: {
+    title: `Pricing — ${SITE_CONFIG.siteName}`,
+    description:
+      'Affordable plans to incorporate your nonprofit. Start free, or unlock full document generation and IRS filing for a one-time fee.',
+    path: '/pricing',
+  },
+  privacy: {
+    title: `Privacy Policy — ${SITE_CONFIG.siteName}`,
+    description:
+      'TurboCharity privacy policy. Learn how we collect, use, and protect your personal information.',
+    path: '/privacy',
+  },
+  terms: {
+    title: `Terms of Service — ${SITE_CONFIG.siteName}`,
+    description:
+      'TurboCharity terms of service. Read the terms and conditions governing use of our platform.',
+    path: '/terms',
   },
 };
 
+// ─── Metadata generator ──────────────────────────────────────────────────────
+
 /**
- * Generate page-level metadata for a given page key.
- * Falls back to home metadata if the key is not found.
+ * Generate a Next.js Metadata object for a given page key.
+ * Falls back to the home page metadata when the key is not found.
  */
-export function generateMetadata(page: string): PageMetadata {
-  return metadataMap[page] ?? metadataMap.home;
+export function generatePageMeta(page: string): Metadata {
+  const meta = PAGE_META[page] ?? PAGE_META.home;
+  const url = `${SITE_CONFIG.siteUrl}${meta.path}`;
+
+  return {
+    title: meta.title,
+    description: meta.description,
+    openGraph: {
+      title: meta.title,
+      description: meta.description,
+      url,
+      siteName: SITE_CONFIG.siteName,
+      type: 'website',
+      locale: 'en_US',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: meta.title,
+      description: meta.description,
+      site: SITE_CONFIG.twitterHandle,
+    },
+    alternates: {
+      canonical: url,
+    },
+  };
+}
+
+/**
+ * @deprecated Use generatePageMeta instead.
+ */
+export function generateMetadata(page: string): Metadata {
+  return generatePageMeta(page);
 }
