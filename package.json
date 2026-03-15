@@ -1,5 +1,5 @@
 {
-  "name": "turbocharity-00xx",
+  "name": "turbocharity",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,12 @@
     "next": "14.2.0",
     "react": "^18",
     "react-dom": "^18",
-    "@supabase/supabase-js": "^2"
+    "@headlessui/react": "^2",
+    "@heroicons/react": "^2",
+    "@supabase/supabase-js": "^2",
+    "lucide-react": "^0.460",
+    "next-sitemap": "^4",
+    "tailwindcss": "^3"
   },
   "devDependencies": {
     "typescript": "^5",
