@@ -66,6 +66,35 @@ async function insertLead(
 // Public server actions
 // ═══════════════════════════════════════════════════════════════════════════════
 
+/** Generic lead submission from FormData (e.g. simple email capture forms) */
+export async function submitLead(formData: FormData): Promise<ActionResult> {
+  const rawEmail = formData.get('email');
+  const rawName = formData.get('name');
+
+  const email = sanitizeField(
+    typeof rawEmail === 'string' ? rawEmail : '',
+    254,
+  ).toLowerCase();
+  const name = typeof rawName === 'string' ? sanitizeField(rawName, 200) : null;
+
+  if (!isValidEmail(email)) {
+    return { success: false, message: 'Please enter a valid email address.' };
+  }
+  if (isRateLimited(email)) {
+    return { success: false, message: 'Please wait a moment before trying again.' };
+  }
+
+  // Log for development / fallback when Supabase is not configured
+  console.log('New lead:', { email, name, timestamp: new Date().toISOString() });
+
+  return insertLead({
+    email,
+    name,
+    source: 'form',
+    type: 'lead',
+  });
+}
+
 /** Waitlist form (homepage) */
 export async function submitWaitlistLead(formData: {
   email: string;

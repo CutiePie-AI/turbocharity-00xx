@@ -78,25 +78,25 @@ function hasGtag(): boolean {
 /**
  * Track a custom event across all configured analytics providers.
  *
- * @param eventName - The name of the event (use EVENTS constants where possible).
+ * @param name - The name of the event (use EVENTS constants where possible).
  * @param properties - Optional key/value properties attached to the event.
  */
 export function trackEvent(
-  eventName: string,
+  name: string,
   properties?: Record<string, string | number | boolean | undefined>,
 ): void {
   if (!isBrowser()) return;
 
   if (isDev) {
-    console.log('[Analytics] trackEvent', eventName, properties);
+    console.log('[Analytics] trackEvent', name, properties);
   }
 
   if (hasGtag()) {
-    window.gtag('event', eventName, properties);
+    window.gtag('event', name, properties);
   }
 
   if (window.posthog) {
-    window.posthog.capture(eventName, properties);
+    window.posthog.capture(name, properties);
   }
 }
 
@@ -106,22 +106,7 @@ export function trackEvent(
  * @param url - The pathname / URL of the page being viewed.
  */
 export function trackPageView(url: string): void {
-  if (!isBrowser()) return;
-
-  if (isDev) {
-    console.log('[Analytics] trackPageView', url);
-  }
-
-  if (hasGtag()) {
-    window.gtag('event', 'page_view', {
-      page_path: url,
-      page_location: window.location.href,
-    });
-  }
-
-  if (window.posthog) {
-    window.posthog.capture('$pageview', { page_path: url });
-  }
+  trackEvent('page_view', { page_path: url });
 }
 
 // ---------------------------------------------------------------------------
@@ -169,12 +154,16 @@ export function trackBlogView(slug: string): void {
 }
 
 /** Track a signup event. */
-export function trackSignup(email: string, source: string): void {
-  trackEvent('signup', {
-    email,
-    source,
+export function trackSignup(source: string): void {
+  trackEvent('sign_up', {
+    method: source,
     event_category: 'engagement',
   });
+}
+
+/** Track a search event. */
+export function trackSearch(query: string): void {
+  trackEvent('search', { search_term: query });
 }
 
 /** Track a CTA click. */

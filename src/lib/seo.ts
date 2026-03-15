@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-// ─── Site configuration ──────────────────────────────────────────────────────
+// --- Site configuration --------------------------------------------------
 
 export const SITE_CONFIG = {
   siteName: 'TurboCharity',
@@ -10,7 +10,7 @@ export const SITE_CONFIG = {
   twitterHandle: '@turbocharity',
 } as const;
 
-// ─── Page metadata map ───────────────────────────────────────────────────────
+// --- Page metadata map ---------------------------------------------------
 
 interface PageMeta {
   title: string;
@@ -80,7 +80,7 @@ const PAGE_META: Record<string, PageMeta> = {
   },
 };
 
-// ─── Metadata generator ──────────────────────────────────────────────────────
+// --- Metadata generators -------------------------------------------------
 
 /**
  * Generate a Next.js Metadata object for a given page key.
@@ -114,8 +114,33 @@ export function generatePageMeta(page: string): Metadata {
 }
 
 /**
- * @deprecated Use generatePageMeta instead.
+ * Generate a Metadata object from explicit title, description, and path.
+ * Useful for dynamic pages like individual blog posts or state pages.
  */
-export function generateMetadata(page: string): Metadata {
-  return generatePageMeta(page);
+export function generateMetadata(
+  title: string,
+  description: string,
+  path: string = '',
+): Metadata {
+  const url = `https://turbocharity.com${path}`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: 'TurboCharity',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title,
+      description,
+    },
+  };
 }
