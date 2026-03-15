@@ -31,8 +31,8 @@ describe('Accordion', () => {
 
     mockItems.forEach((item) => {
       const answer = screen.getByText(item.answer);
-      // The answer's parent panel should be hidden
-      expect(answer.closest('[role="region"]')).toHaveAttribute('hidden');
+      // The answer's parent panel should be aria-hidden
+      expect(answer.closest('[role="region"]')).toHaveAttribute('aria-hidden', 'true');
     });
   });
 
@@ -43,7 +43,7 @@ describe('Accordion', () => {
     fireEvent.click(firstQuestion);
 
     const firstAnswer = screen.getByText(mockItems[0].answer);
-    expect(firstAnswer.closest('[role="region"]')).not.toHaveAttribute('hidden');
+    expect(firstAnswer.closest('[role="region"]')).toHaveAttribute('aria-hidden', 'false');
   });
 
   it('clicking an open question hides its answer', () => {
@@ -54,11 +54,11 @@ describe('Accordion', () => {
     // Open the accordion
     fireEvent.click(firstQuestion);
     const answerPanel = screen.getByText(mockItems[0].answer).closest('[role="region"]');
-    expect(answerPanel).not.toHaveAttribute('hidden');
+    expect(answerPanel).toHaveAttribute('aria-hidden', 'false');
 
     // Close it again
     fireEvent.click(firstQuestion);
-    expect(answerPanel).toHaveAttribute('hidden');
+    expect(answerPanel).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('opening one question closes the previously open one', () => {
@@ -70,13 +70,13 @@ describe('Accordion', () => {
     // Open first
     fireEvent.click(firstQuestion);
     const firstPanel = screen.getByText(mockItems[0].answer).closest('[role="region"]');
-    expect(firstPanel).not.toHaveAttribute('hidden');
+    expect(firstPanel).toHaveAttribute('aria-hidden', 'false');
 
     // Open second - first should close
     fireEvent.click(secondQuestion);
     const secondPanel = screen.getByText(mockItems[1].answer).closest('[role="region"]');
-    expect(secondPanel).not.toHaveAttribute('hidden');
-    expect(firstPanel).toHaveAttribute('hidden');
+    expect(secondPanel).toHaveAttribute('aria-hidden', 'false');
+    expect(firstPanel).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('sets aria-expanded correctly on buttons', () => {

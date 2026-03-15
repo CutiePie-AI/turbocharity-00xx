@@ -2,16 +2,9 @@
 
 import { useEffect, useState, useCallback } from 'react';
 
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
 const COOKIE_CONSENT_KEY = 'tc_cookie_consent';
 
 export type ConsentStatus = 'accepted' | 'declined' | null;
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 /** Read the stored consent preference from localStorage. */
 export function getConsentStatus(): ConsentStatus {
@@ -34,18 +27,13 @@ function grantAnalyticsConsent(): void {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
 /**
- * Bottom banner that asks for cookie / analytics consent.
+ * Bottom banner with cookie notice.
  *
- * - Shows on first visit only (no stored preference).
- * - Stores the user's choice in `localStorage`.
- * - If accepted, sends a `consent update` to gtag so GA cookies are enabled.
- * - Smooth slide-up animation on mount; slides back down on dismiss.
- * - Links to the privacy policy page.
+ * - Accept/Decline buttons
+ * - Remembers choice in localStorage
+ * - Only shows once (when no stored preference exists)
+ * - Smooth slide-up animation on mount; slides back down on dismiss
  */
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
@@ -55,9 +43,7 @@ export default function CookieConsent() {
     const stored = getConsentStatus();
 
     if (stored === null) {
-      // First visit – show the banner after a short delay so it slides in.
       setVisible(true);
-      // Trigger the CSS transition on the next frame.
       const timer = setTimeout(() => setAnimateIn(true), 50);
       return () => clearTimeout(timer);
     }
@@ -69,7 +55,6 @@ export default function CookieConsent() {
 
   const dismiss = useCallback(() => {
     setAnimateIn(false);
-    // Wait for the slide-out animation before unmounting.
     const timer = setTimeout(() => setVisible(false), 300);
     return () => clearTimeout(timer);
   }, []);
@@ -107,10 +92,8 @@ export default function CookieConsent() {
     >
       <div className="border-t border-gray-200 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
         <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 px-4 py-5 sm:flex-row sm:justify-between">
-          {/* Message */}
           <p className="text-center text-sm leading-relaxed text-gray-600 sm:text-left">
-            We use cookies and similar technologies to analyse traffic and
-            improve your experience.{' '}
+            We use cookies to analyse traffic and improve your experience.{' '}
             <a
               href="/privacy"
               className="font-medium text-blue-600 underline underline-offset-2 transition-colors hover:text-blue-800"
@@ -119,7 +102,6 @@ export default function CookieConsent() {
             </a>
           </p>
 
-          {/* Actions */}
           <div className="flex shrink-0 gap-3">
             <button
               type="button"

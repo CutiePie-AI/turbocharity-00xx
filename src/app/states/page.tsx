@@ -62,7 +62,7 @@ export default function StatesPage() {
       {/* States directory with search & filters */}
       <section>
         <Container className="py-12 lg:py-16">
-          <DirectorySearch states={STATES} />
+          <DirectorySearch />
         </Container>
       </section>
 

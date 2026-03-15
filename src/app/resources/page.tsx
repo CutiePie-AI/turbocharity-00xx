@@ -32,31 +32,31 @@ const CATEGORY_ORDER: ResourceCategory[] = [
 
 const CATEGORY_META: Record<
   ResourceCategory,
-  { description: string; icon: string; badgeVariant: 'primary' | 'secondary' | 'default' | 'outline' }
+  { description: string; icon: string; badgeColor: 'green' | 'blue' | 'yellow' | 'red' | 'gray' }
 > = {
   'Getting Started': {
     description:
       'Everything you need to know to launch your nonprofit from scratch.',
     icon: 'M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25',
-    badgeVariant: 'primary',
+    badgeColor: 'blue',
   },
   Legal: {
     description:
       'Understand the legal documents and compliance requirements for nonprofits.',
     icon: 'M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z',
-    badgeVariant: 'secondary',
+    badgeColor: 'green',
   },
   Financial: {
     description:
       'Budgeting, grant writing, and financial compliance resources for nonprofits.',
     icon: 'M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z',
-    badgeVariant: 'default',
+    badgeColor: 'gray',
   },
   Growth: {
     description:
       'Strategies for fundraising, volunteer management, and scaling your impact.',
     icon: 'M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941',
-    badgeVariant: 'primary',
+    badgeColor: 'yellow',
   },
 };
 
@@ -210,7 +210,7 @@ export default function ResourcesPage() {
                   >
                     <Card hover className="flex h-full flex-col">
                       <div className="flex items-center justify-between gap-3">
-                        <Badge variant={meta.badgeVariant}>{category}</Badge>
+                        <Badge color={meta.badgeColor}>{category}</Badge>
                         <span className="text-xs text-gray-400">
                           {resource.readTime}
                         </span>

@@ -1,55 +1,58 @@
-import { ReactNode, ButtonHTMLAttributes } from "react";
+import Link from 'next/link';
 
-type ButtonVariant = "primary" | "outline" | "secondary" | "ghost";
-type ButtonSize = "sm" | "md" | "lg";
-
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
-  variant?: ButtonVariant;
-  size?: ButtonSize;
+interface ButtonProps {
+  children: React.ReactNode;
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
   href?: string;
+  onClick?: () => void;
+  type?: 'button' | 'submit';
+  disabled?: boolean;
   className?: string;
 }
 
-const variantStyles: Record<ButtonVariant, string> = {
-  primary:
-    "bg-primary text-white hover:bg-blue-700 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40",
-  outline:
-    "border-2 border-primary text-primary hover:bg-primary hover:text-white",
-  secondary:
-    "bg-secondary text-white hover:bg-emerald-600 shadow-lg shadow-emerald-500/25",
-  ghost: "text-gray-600 hover:text-primary hover:bg-gray-50",
-};
-
-const sizeStyles: Record<ButtonSize, string> = {
-  sm: "px-4 py-2 text-sm",
-  md: "px-6 py-3 text-base",
-  lg: "px-8 py-4 text-lg",
-};
-
 export default function Button({
   children,
-  variant = "primary",
-  size = "md",
+  variant = 'primary',
+  size = 'md',
   href,
-  className = "",
-  ...props
+  onClick,
+  type = 'button',
+  disabled,
+  className = '',
 }: ButtonProps) {
   const baseStyles =
-    "inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2";
+    'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
 
-  const combinedClassName = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`;
+  const variants: Record<NonNullable<ButtonProps['variant']>, string> = {
+    primary:
+      'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
+    secondary:
+      'bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-500',
+    outline:
+      'border-2 border-primary-600 text-primary-600 hover:bg-primary-50 focus:ring-primary-500',
+    ghost:
+      'text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:ring-gray-500',
+  };
+
+  const sizes: Record<NonNullable<ButtonProps['size']>, string> = {
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-5 py-2.5 text-base',
+    lg: 'px-8 py-3.5 text-lg',
+  };
+
+  const classes = `${baseStyles} ${variants[variant]} ${sizes[size]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`;
 
   if (href) {
     return (
-      <a href={href} className={combinedClassName}>
+      <Link href={href} className={classes}>
         {children}
-      </a>
+      </Link>
     );
   }
 
   return (
-    <button className={combinedClassName} {...props}>
+    <button type={type} onClick={onClick} disabled={disabled} className={classes}>
       {children}
     </button>
   );
