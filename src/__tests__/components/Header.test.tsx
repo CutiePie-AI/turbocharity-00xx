@@ -10,7 +10,7 @@ describe('Header', () => {
 
   it('renders all nav links', () => {
     render(<Header />)
-    const expectedLinks = ['How It Works', 'Features', 'Pricing', 'FAQ']
+    const expectedLinks = ['How It Works', 'States', 'Resources', 'Pricing']
     for (const linkText of expectedLinks) {
       expect(screen.getAllByText(linkText).length).toBeGreaterThanOrEqual(1)
     }
