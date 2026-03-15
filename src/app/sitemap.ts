@@ -8,18 +8,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
   // Static pages with their respective priorities
-  const staticPages: MetadataRoute.Sitemap = [
+  const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
       lastModified: now,
-      changeFrequency: 'weekly',
+      changeFrequency: 'daily',
       priority: 1.0,
-    },
-    {
-      url: `${BASE_URL}/states`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.9,
     },
     {
       url: `${BASE_URL}/blog`,
@@ -38,6 +32,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/states`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.9,
     },
     {
       url: `${BASE_URL}/get-started`,
@@ -65,21 +65,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Individual state pages
-  const statePages: MetadataRoute.Sitemap = STATES.map((state) => ({
-    url: `${BASE_URL}/states/${state.slug}`,
-    lastModified: now,
+  // Individual blog post pages
+  const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.updatedAt),
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));
 
-  // Individual blog post pages
-  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
-    url: `${BASE_URL}/blog/${post.slug}`,
-    lastModified: new Date(post.updatedAt),
-    changeFrequency: 'weekly' as const,
+  // Individual state pages
+  const stateRoutes: MetadataRoute.Sitemap = STATES.map((state) => ({
+    url: `${BASE_URL}/states/${state.slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly' as const,
     priority: 0.8,
   }));
 
-  return [...staticPages, ...statePages, ...blogPages];
+  return [...staticRoutes, ...blogRoutes, ...stateRoutes];
 }
