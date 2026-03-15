@@ -1,58 +1,58 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback, useRef, FormEvent } from "react";
-import Button from "@/components/Button";
+import { useState, useEffect, useCallback, useRef, FormEvent } from 'react';
+import Button from '@/components/Button';
+import { isValidEmail, sanitizeField } from '@/lib/validation';
+import { submitLeadMagnet } from '@/app/actions/leads';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const POPUP_DELAY_MS = 30_000;
 const SCROLL_THRESHOLD = 0.5;
-const SESSION_KEY = "tc_lead_popup_shown";
+const STORAGE_KEY = 'tc_lead_popup_dismissed';
 
 export default function LeadMagnetPopup() {
+  const [dismissed, setDismissed] = useLocalStorage(STORAGE_KEY, false);
   const [visible, setVisible] = useState(false);
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const triggeredRef = useRef(false);
 
   const showPopup = useCallback(() => {
-    if (triggeredRef.current) return;
-    // Only show once per session
-    if (typeof window !== "undefined" && sessionStorage.getItem(SESSION_KEY)) return;
+    if (triggeredRef.current || dismissed) return;
     triggeredRef.current = true;
     setVisible(true);
-  }, []);
+  }, [dismissed]);
 
   const closePopup = useCallback(() => {
     setVisible(false);
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem(SESSION_KEY, "true");
-    }
-  }, []);
+    setDismissed(true);
+  }, [setDismissed]);
 
   // Timer trigger: 30 seconds
   useEffect(() => {
-    if (typeof window !== "undefined" && sessionStorage.getItem(SESSION_KEY)) return;
+    if (dismissed) return;
     const timer = setTimeout(showPopup, POPUP_DELAY_MS);
     return () => clearTimeout(timer);
-  }, [showPopup]);
+  }, [showPopup, dismissed]);
 
   // Scroll trigger: 50% of page
   useEffect(() => {
-    if (typeof window !== "undefined" && sessionStorage.getItem(SESSION_KEY)) return;
+    if (dismissed) return;
 
     function handleScroll() {
-      const scrolled =
-        window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-      if (scrolled >= SCROLL_THRESHOLD) {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      if (total <= 0) return;
+      if (window.scrollY / total >= SCROLL_THRESHOLD) {
         showPopup();
       }
     }
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [showPopup]);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [showPopup, dismissed]);
 
   // Click outside to close
   useEffect(() => {
@@ -64,14 +64,13 @@ export default function LeadMagnetPopup() {
       }
     }
 
-    // Delay listener to prevent immediate close
     const timer = setTimeout(() => {
-      document.addEventListener("mousedown", handleClick);
+      document.addEventListener('mousedown', handleClick);
     }, 100);
 
     return () => {
       clearTimeout(timer);
-      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener('mousedown', handleClick);
     };
   }, [visible, closePopup]);
 
@@ -80,35 +79,42 @@ export default function LeadMagnetPopup() {
     if (!visible) return;
 
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") closePopup();
+      if (e.key === 'Escape') closePopup();
     }
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [visible, closePopup]);
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setError("");
+    setError('');
 
-    if (!email.trim() || !EMAIL_REGEX.test(email)) {
-      setError("Please enter a valid email address.");
+    const trimmed = email.trim();
+    if (!trimmed || !isValidEmail(trimmed)) {
+      setError('Please enter a valid email address.');
       return;
     }
 
+    setLoading(true);
     try {
-      const existing = JSON.parse(localStorage.getItem("tc_lead_emails") || "[]");
-      if (!existing.includes(email)) {
-        existing.push(email);
-        localStorage.setItem("tc_lead_emails", JSON.stringify(existing));
+      const result = await submitLeadMagnet({
+        email: sanitizeField(trimmed, 254),
+        source: 'lead_magnet_popup',
+      });
+
+      if (result.success) {
+        closePopup();
+        setToast(true);
+        setTimeout(() => setToast(false), 4000);
+      } else {
+        setError(result.message);
       }
     } catch {
-      // Silently handle storage errors
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
-
-    closePopup();
-    setToast(true);
-    setTimeout(() => setToast(false), 4000);
   }
 
   return (
@@ -116,17 +122,15 @@ export default function LeadMagnetPopup() {
       {/* Toast notification */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-[60] animate-fade-in rounded-xl bg-secondary px-5 py-3 text-sm font-semibold text-white shadow-lg">
-          Your free checklist is on the way! 🎉
+          Your free checklist is on the way!
         </div>
       )}
 
-      {/* Modal overlay */}
+      {/* Modal overlay + backdrop */}
       {visible && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          {/* Backdrop */}
-          <div className="absolute inset-0 bg-dark/40" />
+          <div className="absolute inset-0 bg-dark/40" aria-hidden="true" />
 
-          {/* Modal */}
           <div
             ref={modalRef}
             role="dialog"
@@ -157,7 +161,9 @@ export default function LeadMagnetPopup() {
 
             {/* Content */}
             <div className="text-center">
-              <span className="text-4xl">📋</span>
+              <span className="text-4xl" role="img" aria-label="checklist">
+                📋
+              </span>
               <h2
                 id="lead-popup-heading"
                 className="mt-3 text-2xl font-bold tracking-tight text-dark"
@@ -168,34 +174,37 @@ export default function LeadMagnetPopup() {
 
             <ul className="mt-5 space-y-2 text-sm text-gray-600">
               <li className="flex items-center gap-2">
-                <span className="text-secondary">✓</span> State-specific
-                requirements
+                <span className="text-secondary">✓</span>
+                State-specific requirements
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-secondary">✓</span> Document templates
+                <span className="text-secondary">✓</span>
+                Document templates
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-secondary">✓</span> IRS filing timeline
+                <span className="text-secondary">✓</span>
+                IRS filing timeline
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-secondary">✓</span> Budget worksheet
+                <span className="text-secondary">✓</span>
+                Budget worksheet
               </li>
             </ul>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-3" noValidate>
               <input
                 type="email"
-                required
                 placeholder="Enter your email"
+                maxLength={254}
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
-                  if (error) setError("");
+                  if (error) setError('');
                 }}
                 className={`w-full rounded-xl border px-4 py-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-primary ${
                   error
-                    ? "border-red-400 ring-1 ring-red-400"
-                    : "border-gray-300 bg-white text-dark placeholder-gray-400"
+                    ? 'border-red-400 ring-1 ring-red-400'
+                    : 'border-gray-300 bg-white text-dark placeholder-gray-400'
                 }`}
                 aria-label="Email address"
               />
@@ -204,8 +213,8 @@ export default function LeadMagnetPopup() {
                   {error}
                 </p>
               )}
-              <Button type="submit" size="md" className="w-full">
-                Get Free Checklist
+              <Button type="submit" size="md" className="w-full" disabled={loading}>
+                {loading ? 'Sending...' : 'Get Free Checklist'}
               </Button>
             </form>
 

@@ -1,39 +1,30 @@
-"use client";
+'use client';
 
-import { useState, FormEvent } from "react";
-import Button from "@/components/Button";
-import { submitWaitlistLead } from "@/app/actions/leads";
+import { useState, FormEvent } from 'react';
+import Button from '@/components/Button';
+import { submitWaitlistLead } from '@/app/actions/leads';
+import { isValidEmail, sanitizeField } from '@/lib/validation';
+import { STATES } from '@/data/states';
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// ─── Constants ───────────────────────────────────────────────────────────────
 
-const US_STATES = [
-  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
-  "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
-  "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
-  "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
-  "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada",
-  "New Hampshire", "New Jersey", "New Mexico", "New York",
-  "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon",
-  "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
-  "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
-  "West Virginia", "Wisconsin", "Wyoming",
-];
+const STATE_NAMES = STATES.map((s) => s.name).sort();
 
 const NONPROFIT_TYPES = [
-  "Education",
-  "Health",
-  "Arts",
-  "Environment",
-  "Social Services",
-  "Other",
-];
+  'Education',
+  'Health',
+  'Arts',
+  'Environment',
+  'Social Services',
+  'Other',
+] as const;
 
-interface WaitlistEntry {
-  name: string;
-  email: string;
-  state: string;
-  nonprofitType: string;
-  timestamp: string;
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+interface WaitlistFormProps {
+  className?: string;
+  /** Compact mode renders only email + submit for embedding in CTA sections */
+  compact?: boolean;
 }
 
 interface FormErrors {
@@ -43,36 +34,44 @@ interface FormErrors {
   nonprofitType?: string;
 }
 
-export default function WaitlistForm({ className = "" }: { className?: string }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [state, setState] = useState("");
-  const [nonprofitType, setNonprofitType] = useState("");
+// ─── Component ───────────────────────────────────────────────────────────────
+
+export default function WaitlistForm({
+  className = '',
+  compact = false,
+}: WaitlistFormProps) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [state, setState] = useState('');
+  const [nonprofitType, setNonprofitType] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [waitlistNumber, setWaitlistNumber] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [serverMessage, setServerMessage] = useState("");
+  const [serverMessage, setServerMessage] = useState('');
+
+  function clearError(key: keyof FormErrors) {
+    setErrors((prev) => {
+      if (!prev[key]) return prev;
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  }
 
   function validate(): FormErrors {
     const errs: FormErrors = {};
 
-    if (!name.trim()) {
-      errs.name = "Name is required.";
+    if (!compact) {
+      if (!name.trim()) errs.name = 'Name is required.';
+      if (!state) errs.state = 'Please select your state.';
+      if (!nonprofitType) errs.nonprofitType = 'Please select a nonprofit type.';
     }
 
     if (!email.trim()) {
-      errs.email = "Email is required.";
-    } else if (!EMAIL_REGEX.test(email)) {
-      errs.email = "Please enter a valid email address.";
-    }
-
-    if (!state) {
-      errs.state = "Please select your state.";
-    }
-
-    if (!nonprofitType) {
-      errs.nonprofitType = "Please select a nonprofit type.";
+      errs.email = 'Email is required.';
+    } else if (!isValidEmail(email)) {
+      errs.email = 'Please enter a valid email address.';
     }
 
     return errs;
@@ -82,7 +81,7 @@ export default function WaitlistForm({ className = "" }: { className?: string })
     e.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
-    setServerMessage("");
+    setServerMessage('');
 
     if (Object.keys(validationErrors).length > 0) return;
 
@@ -90,31 +89,12 @@ export default function WaitlistForm({ className = "" }: { className?: string })
 
     try {
       const result = await submitWaitlistLead({
-        email: email.trim(),
-        name: name.trim(),
-        source: "homepage_waitlist",
+        email: sanitizeField(email, 254),
+        name: compact ? undefined : sanitizeField(name, 200),
+        source: compact ? 'cta_waitlist' : 'homepage_waitlist',
       });
 
       if (result.success) {
-        // Also store locally as a fallback
-        try {
-          const entry: WaitlistEntry = {
-            name: name.trim(),
-            email: email.trim(),
-            state,
-            nonprofitType,
-            timestamp: new Date().toISOString(),
-          };
-          const existing: WaitlistEntry[] = JSON.parse(
-            localStorage.getItem("tc_waitlist") || "[]"
-          );
-          existing.push(entry);
-          localStorage.setItem("tc_waitlist", JSON.stringify(existing));
-        } catch {
-          // Silently handle storage errors
-        }
-
-        // Random waitlist position between 100 and 500
         setWaitlistNumber(Math.floor(Math.random() * 401) + 100);
         setServerMessage(result.message);
         setSubmitted(true);
@@ -122,42 +102,100 @@ export default function WaitlistForm({ className = "" }: { className?: string })
         setServerMessage(result.message);
       }
     } catch {
-      setServerMessage("Something went wrong. Please try again.");
+      setServerMessage('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
   }
 
-  const selectClasses = (hasError: boolean) =>
-    `w-full appearance-none rounded-xl border px-4 py-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-primary ${
-      hasError
-        ? "border-red-400 ring-1 ring-red-400"
-        : "border-gray-300 bg-white text-dark"
-    }`;
-
-  const inputClasses = (hasError: boolean) =>
+  const inputCls = (hasError: boolean) =>
     `w-full rounded-xl border px-4 py-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-primary ${
       hasError
-        ? "border-red-400 ring-1 ring-red-400"
-        : "border-gray-300 bg-white text-dark placeholder-gray-400"
+        ? 'border-red-400 ring-1 ring-red-400'
+        : 'border-gray-300 bg-white text-dark placeholder-gray-400'
     }`;
+
+  const selectCls = (hasError: boolean) =>
+    `w-full appearance-none rounded-xl border px-4 py-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-primary ${
+      hasError
+        ? 'border-red-400 ring-1 ring-red-400'
+        : 'border-gray-300 bg-white text-dark'
+    }`;
+
+  // ─── Success state ─────────────────────────────────────────────────────
 
   if (submitted) {
     return (
       <div
         className={`rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-8 text-center ${className}`}
       >
-        <span className="text-5xl">🎉</span>
+        <span className="text-5xl" role="img" aria-label="celebration">
+          🎉
+        </span>
         <h3 className="mt-4 text-2xl font-bold text-dark">
-          You&apos;re #{waitlistNumber} on the waitlist!
+          You&apos;re on the list!
         </h3>
         <p className="mt-2 text-sm text-gray-500">
-          We&apos;ll notify you as soon as TurboCharity launches in{" "}
-          <span className="font-semibold text-primary">{state}</span>.
+          {compact
+            ? "We'll be in touch soon."
+            : (
+                <>
+                  You&apos;re #{waitlistNumber} on the waitlist. We&apos;ll notify you
+                  when TurboCharity launches
+                  {state && (
+                    <>
+                      {' '}
+                      in <span className="font-semibold text-primary">{state}</span>
+                    </>
+                  )}
+                  .
+                </>
+              )}
         </p>
       </div>
     );
   }
+
+  // ─── Compact variant (email-only) ──────────────────────────────────────
+
+  if (compact) {
+    return (
+      <div className={className}>
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className="flex w-full flex-col gap-3 sm:flex-row"
+        >
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              clearError('email');
+            }}
+            className={`flex-1 ${inputCls(!!errors.email)}`}
+            aria-label="Email address"
+          />
+          <Button type="submit" size="md" disabled={loading}>
+            {loading ? 'Joining...' : 'Join Waitlist'}
+          </Button>
+        </form>
+        {errors.email && (
+          <p className="mt-1 text-sm font-medium text-red-500" role="alert">
+            {errors.email}
+          </p>
+        )}
+        {serverMessage && !submitted && (
+          <p className="mt-1 text-center text-sm font-medium text-red-500" role="alert">
+            {serverMessage}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  // ─── Full variant ──────────────────────────────────────────────────────
 
   return (
     <div
@@ -173,19 +211,23 @@ export default function WaitlistForm({ className = "" }: { className?: string })
       <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
         {/* Name */}
         <div>
-          <label htmlFor="wl-name" className="mb-1 block text-sm font-medium text-dark">
+          <label
+            htmlFor="wl-name"
+            className="mb-1 block text-sm font-medium text-dark"
+          >
             Full Name
           </label>
           <input
             id="wl-name"
             type="text"
             placeholder="Jane Smith"
+            maxLength={200}
             value={name}
             onChange={(e) => {
               setName(e.target.value);
-              if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
+              clearError('name');
             }}
-            className={inputClasses(!!errors.name)}
+            className={inputCls(!!errors.name)}
           />
           {errors.name && (
             <p className="mt-1 text-sm font-medium text-red-500" role="alert">
@@ -196,19 +238,23 @@ export default function WaitlistForm({ className = "" }: { className?: string })
 
         {/* Email */}
         <div>
-          <label htmlFor="wl-email" className="mb-1 block text-sm font-medium text-dark">
+          <label
+            htmlFor="wl-email"
+            className="mb-1 block text-sm font-medium text-dark"
+          >
             Email Address
           </label>
           <input
             id="wl-email"
             type="email"
             placeholder="jane@example.com"
+            maxLength={254}
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
-              if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
+              clearError('email');
             }}
-            className={inputClasses(!!errors.email)}
+            className={inputCls(!!errors.email)}
           />
           {errors.email && (
             <p className="mt-1 text-sm font-medium text-red-500" role="alert">
@@ -219,7 +265,10 @@ export default function WaitlistForm({ className = "" }: { className?: string })
 
         {/* State */}
         <div>
-          <label htmlFor="wl-state" className="mb-1 block text-sm font-medium text-dark">
+          <label
+            htmlFor="wl-state"
+            className="mb-1 block text-sm font-medium text-dark"
+          >
             State
           </label>
           <select
@@ -227,14 +276,14 @@ export default function WaitlistForm({ className = "" }: { className?: string })
             value={state}
             onChange={(e) => {
               setState(e.target.value);
-              if (errors.state) setErrors((prev) => ({ ...prev, state: undefined }));
+              clearError('state');
             }}
-            className={selectClasses(!!errors.state)}
+            className={selectCls(!!errors.state)}
           >
             <option value="" disabled>
               Select your state
             </option>
-            {US_STATES.map((s) => (
+            {STATE_NAMES.map((s) => (
               <option key={s} value={s}>
                 {s}
               </option>
@@ -260,10 +309,9 @@ export default function WaitlistForm({ className = "" }: { className?: string })
             value={nonprofitType}
             onChange={(e) => {
               setNonprofitType(e.target.value);
-              if (errors.nonprofitType)
-                setErrors((prev) => ({ ...prev, nonprofitType: undefined }));
+              clearError('nonprofitType');
             }}
-            className={selectClasses(!!errors.nonprofitType)}
+            className={selectCls(!!errors.nonprofitType)}
           >
             <option value="" disabled>
               Select type
@@ -282,11 +330,14 @@ export default function WaitlistForm({ className = "" }: { className?: string })
         </div>
 
         <Button type="submit" size="md" className="w-full" disabled={loading}>
-          {loading ? "Joining..." : "Join the Waitlist"}
+          {loading ? 'Joining...' : 'Join the Waitlist'}
         </Button>
 
         {serverMessage && !submitted && (
-          <p className="mt-2 text-center text-sm font-medium text-red-500" role="alert">
+          <p
+            className="mt-2 text-center text-sm font-medium text-red-500"
+            role="alert"
+          >
             {serverMessage}
           </p>
         )}
