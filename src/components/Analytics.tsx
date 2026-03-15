@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import Script from 'next/script';
 import { initAnalytics, trackPageView } from '@/lib/analytics';
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY;
 
 export default function Analytics() {
@@ -23,13 +23,15 @@ export default function Analytics() {
     }
   }, [pathname]);
 
+  if (!GA_MEASUREMENT_ID && !POSTHOG_KEY) return null;
+
   return (
     <>
       {/* Google Analytics 4 */}
-      {GA_ID && (
+      {GA_MEASUREMENT_ID && (
         <>
           <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
             strategy="afterInteractive"
           />
           <Script id="google-analytics" strategy="afterInteractive">
@@ -37,7 +39,10 @@ export default function Analytics() {
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', '${GA_ID}');
+              gtag('config', '${GA_MEASUREMENT_ID}', {
+                page_title: document.title,
+                send_page_view: true,
+              });
             `}
           </Script>
         </>

@@ -1,11 +1,21 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
+type GTagEvent = {
+  action: string;
+  category: string;
+  label?: string;
+  value?: number;
+};
+
+type AnalyticsProperties = Record<string, string | number | boolean | undefined>;
 
 declare global {
   interface Window {
-    gtag?: (...args: any[]) => void;
+    gtag: (...args: [string, ...unknown[]]) => void;
+    dataLayer: unknown[];
     posthog?: {
-      capture: (event: string, properties?: Record<string, any>) => void;
-      identify: (distinctId: string, properties?: Record<string, any>) => void;
+      capture: (event: string, properties?: AnalyticsProperties) => void;
+      identify: (distinctId: string, properties?: AnalyticsProperties) => void;
     };
   }
 }
@@ -21,11 +31,23 @@ function isBrowser(): boolean {
 }
 
 /**
+ * Track a structured GA event with category/action/label/value.
+ */
+export function trackGTagEvent({ action, category, label, value }: GTagEvent) {
+  if (!isBrowser() || !window.gtag) return;
+  window.gtag('event', action, {
+    event_category: category,
+    event_label: label,
+    value: value,
+  });
+}
+
+/**
  * Track a custom event across all configured analytics providers.
  */
 export function trackEvent(
   name: string,
-  properties?: Record<string, any>,
+  properties?: AnalyticsProperties,
 ): void {
   if (!isBrowser()) return;
 
@@ -58,6 +80,60 @@ export function trackPageView(url: string): void {
 
   if (window.posthog) {
     window.posthog.capture('$pageview', { page_path: url });
+  }
+}
+
+/**
+ * Track a waitlist signup event.
+ */
+export function trackWaitlistSignup(source: string): void {
+  trackGTagEvent({
+    action: 'waitlist_signup',
+    category: 'engagement',
+    label: source,
+  });
+
+  if (isBrowser() && window.posthog) {
+    window.posthog.capture('waitlist_signup', {
+      source,
+      event_category: 'engagement',
+    });
+  }
+}
+
+/**
+ * Track a newsletter signup event.
+ */
+export function trackNewsletterSignup(source: string): void {
+  trackGTagEvent({
+    action: 'newsletter_signup',
+    category: 'engagement',
+    label: source,
+  });
+
+  if (isBrowser() && window.posthog) {
+    window.posthog.capture('newsletter_signup', {
+      source,
+      event_category: 'engagement',
+    });
+  }
+}
+
+/**
+ * Track a blog view event.
+ */
+export function trackBlogView(slug: string): void {
+  trackGTagEvent({
+    action: 'blog_view',
+    category: 'content',
+    label: slug,
+  });
+
+  if (isBrowser() && window.posthog) {
+    window.posthog.capture('blog_view', {
+      slug,
+      event_category: 'content',
+    });
   }
 }
 
