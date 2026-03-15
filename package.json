@@ -1,6 +1,7 @@
 {
-  "name": "turbocharity-00xx",
+  "name": "turbocharity",
   "version": "0.1.0",
+  "description": "From idea to 501(c)(3) in days, not months. AI-powered nonprofit creation platform.",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,14 +9,18 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@supabase/supabase-js": "^2",
+    "framer-motion": "^11.15.0",
+    "lucide-react": "^0.468.0",
     "next": "14.2.0",
     "react": "^18",
     "react-dom": "^18",
-    "@supabase/supabase-js": "^2"
+    "react-hook-form": "^7.54.0"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
-    "@types/react": "^18"
+    "@types/react": "^18",
+    "typescript": "^5"
   }
 }
