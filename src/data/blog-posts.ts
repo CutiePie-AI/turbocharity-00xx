@@ -7,6 +7,7 @@ export interface BlogPost {
   author: string;
   publishedAt: string; // ISO date
   updatedAt: string;
+  category: string;
   tags: string[];
   readingTime: number; // minutes
   featuredImage?: string;
@@ -22,6 +23,7 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-15T00:00:00Z',
     updatedAt: '2025-01-15T00:00:00Z',
+    category: 'Getting Started',
     tags: ['501c3', 'nonprofit formation', 'guide', 'IRS'],
     readingTime: 7
   },
@@ -34,6 +36,7 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-18T00:00:00Z',
     updatedAt: '2025-01-18T00:00:00Z',
+    category: 'State Guides',
     tags: ['incorporation costs', 'state filing', 'nonprofit budget'],
     readingTime: 6
   },
@@ -46,6 +49,7 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-22T00:00:00Z',
     updatedAt: '2025-01-22T00:00:00Z',
+    category: 'IRS Filing',
     tags: ['IRS', 'Form 1023-EZ', 'tax-exempt status', 'filing guide'],
     readingTime: 5
   },
@@ -58,6 +62,7 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-25T00:00:00Z',
     updatedAt: '2025-01-25T00:00:00Z',
+    category: 'Getting Started',
     tags: ['students', 'high school', 'college', 'nonprofit formation', 'fiscal sponsor'],
     readingTime: 6
   },
@@ -70,9 +75,75 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-28T00:00:00Z',
     updatedAt: '2025-01-28T00:00:00Z',
+    category: 'Legal Documents',
     tags: ['bylaws', 'nonprofit governance', 'IRS requirements', 'template'],
     readingTime: 6
-  }
+  },
+  {
+    slug: 'nonprofit-board-of-directors-guide',
+    title: 'Nonprofit Board of Directors: Roles, Responsibilities, and Best Practices',
+    metaDescription: 'Learn how to build an effective nonprofit board of directors. Covers roles, legal duties, recruitment strategies, and meeting best practices.',
+    excerpt: 'Your board of directors is the backbone of your nonprofit. Learn how to recruit, organize, and empower an effective board.',
+    content: `<h2>Why Your Board Matters</h2><p>A nonprofit board of directors provides governance, strategic direction, and fiduciary oversight. In most states, you need at least 3 board members to incorporate as a nonprofit. The IRS expects an independent, engaged board as part of your 501(c)(3) application.</p><h2>Key Board Roles</h2><p>Every nonprofit board should have at minimum a President (or Chair), Secretary, and Treasurer. The President leads meetings and sets the agenda. The Secretary maintains records and minutes. The Treasurer oversees finances and ensures proper accounting.</p><h2>Legal Duties</h2><p>Board members have three legal duties: the duty of care (making informed decisions), the duty of loyalty (acting in the organization\'s best interest), and the duty of obedience (ensuring the organization follows its mission and the law).</p><h2>Recruitment Tips</h2><p>Look for board members who bring diverse skills — legal, financial, marketing, and community connections. Avoid stacking your board with friends and family. The IRS scrutinizes boards that lack independence.</p>`,
+    author: 'TurboCharity Team',
+    publishedAt: '2025-02-01T00:00:00Z',
+    updatedAt: '2025-02-01T00:00:00Z',
+    category: 'Governance',
+    tags: ['board of directors', 'nonprofit governance', 'leadership'],
+    readingTime: 5
+  },
+  {
+    slug: 'charitable-solicitation-registration-guide',
+    title: 'Charitable Solicitation Registration: A State-by-State Guide',
+    metaDescription: 'Most states require nonprofits to register before fundraising. Learn which states require registration and how to stay compliant.',
+    excerpt: 'Before you start fundraising, make sure you\'re legally registered. Most states require charitable solicitation registration.',
+    content: `<h2>What Is Charitable Solicitation Registration?</h2><p>Charitable solicitation registration is a state requirement for nonprofits that plan to raise money from the public. About 40 states plus DC require some form of registration before you can legally solicit donations.</p><h2>Which States Require It?</h2><p>Most states require registration, with notable exceptions including Idaho, Indiana, Montana, Nebraska, South Dakota, Vermont, and Wyoming. However, requirements change frequently, so always verify current rules.</p><h2>How to Register</h2><p>Each state has its own registration form, fees, and renewal schedule. Many states accept the Unified Registration Statement (URS) as an alternative to their own forms. Filing fees range from $0 to $300 depending on the state.</p><h2>Penalties for Non-Compliance</h2><p>Fundraising without proper registration can result in fines, cease-and-desist orders, and damage to your organization\'s reputation. Some states impose penalties of $1,000 or more per violation.</p>`,
+    author: 'TurboCharity Team',
+    publishedAt: '2025-02-05T00:00:00Z',
+    updatedAt: '2025-02-05T00:00:00Z',
+    category: 'Compliance',
+    tags: ['charitable solicitation', 'fundraising', 'state compliance', 'registration'],
+    readingTime: 5
+  },
+  {
+    slug: 'nonprofit-tax-filing-requirements-form-990',
+    title: 'Nonprofit Tax Filing: Understanding Form 990 Requirements',
+    metaDescription: 'Learn about IRS Form 990 requirements for nonprofits. Covers 990-N, 990-EZ, and full 990 thresholds, deadlines, and common mistakes.',
+    excerpt: 'Even tax-exempt nonprofits must file annual returns with the IRS. Here\'s what you need to know about Form 990.',
+    content: `<h2>Annual Filing Requirements</h2><p>Even though 501(c)(3) organizations are tax-exempt, most must file an annual information return with the IRS. Failure to file for three consecutive years results in automatic revocation of your tax-exempt status.</p><h2>Which Form Do You File?</h2><p>Form 990-N (e-Postcard): For organizations with gross receipts normally $50,000 or less. Form 990-EZ: For organizations with gross receipts less than $200,000 and total assets less than $500,000. Form 990: For larger organizations above these thresholds.</p><h2>Filing Deadlines</h2><p>Form 990 is due on the 15th day of the 5th month after the end of your fiscal year. For calendar-year organizations, that\'s May 15. You can request a 6-month extension using Form 8868.</p><h2>Common Mistakes</h2><p>The most common mistakes include missing the deadline, reporting incorrect revenue figures, failing to report compensation of officers, and not attaching required schedules.</p>`,
+    author: 'TurboCharity Team',
+    publishedAt: '2025-02-10T00:00:00Z',
+    updatedAt: '2025-02-10T00:00:00Z',
+    category: 'IRS Filing',
+    tags: ['Form 990', 'tax filing', 'IRS', 'annual reporting'],
+    readingTime: 6
+  },
+  {
+    slug: 'nonprofit-fundraising-strategies-beginners',
+    title: 'Nonprofit Fundraising Strategies for Beginners: 10 Proven Methods',
+    metaDescription: 'Discover 10 proven fundraising strategies for new nonprofits. From online campaigns to grant writing, learn how to fund your mission effectively.',
+    excerpt: 'Fundraising doesn\'t have to be intimidating. These 10 strategies will help your new nonprofit build a sustainable funding base.',
+    content: `<h2>Start With Your Network</h2><p>Your personal network is your first and most important fundraising resource. Friends, family, colleagues, and community connections are most likely to support your mission early on. A personal ask is 10x more effective than a mass email.</p><h2>Online Fundraising Platforms</h2><p>Platforms like GoFundMe Charity, Facebook Fundraisers, and Donorbox make it easy to accept online donations. Set up a dedicated donation page on your website and share it across social media.</p><h2>Grant Writing</h2><p>Grants from foundations and government agencies can provide significant funding. Start with local community foundations and small family foundations. Websites like Grants.gov, Foundation Directory Online, and Candid help you find opportunities.</p><h2>Events and Campaigns</h2><p>Fundraising events — virtual or in-person — create energy and community around your cause. Start small with a house party or online auction before attempting large galas.</p><h2>Corporate Partnerships</h2><p>Local businesses often support nonprofits through sponsorships, in-kind donations, and employee matching programs. Approach businesses whose values align with your mission.</p>`,
+    author: 'TurboCharity Team',
+    publishedAt: '2025-02-15T00:00:00Z',
+    updatedAt: '2025-02-15T00:00:00Z',
+    category: 'Fundraising',
+    tags: ['fundraising', 'donations', 'grants', 'nonprofit growth'],
+    readingTime: 7
+  },
+  {
+    slug: 'nonprofit-vs-llc-choosing-the-right-structure',
+    title: 'Nonprofit vs LLC: Choosing the Right Structure for Your Mission',
+    metaDescription: 'Should you form a nonprofit or an LLC? Compare tax benefits, liability protection, fundraising ability, and governance requirements side by side.',
+    excerpt: 'Not every mission-driven organization needs to be a nonprofit. Learn when an LLC might be the better choice.',
+    content: `<h2>Understanding the Difference</h2><p>A nonprofit corporation (501(c)(3)) and a limited liability company (LLC) serve fundamentally different purposes. Nonprofits exist to serve a charitable mission and cannot distribute profits to owners. LLCs are flexible business structures that can pursue both profit and social impact.</p><h2>Tax Benefits</h2><p>501(c)(3) nonprofits are exempt from federal income tax and can receive tax-deductible donations. LLCs pay taxes on their income (pass-through to owners) and donations to LLCs are not tax-deductible for donors.</p><h2>Fundraising</h2><p>Nonprofits can apply for grants, accept tax-deductible donations, and access institutional funding. LLCs can raise money through investment, revenue, and loans but cannot offer donors a tax deduction.</p><h2>Governance</h2><p>Nonprofits require a board of directors and must follow strict governance rules. LLCs have flexible management structures and fewer compliance requirements.</p><h2>When to Choose a Nonprofit</h2><p>Choose a nonprofit if your primary goal is charitable, you need tax-deductible donations, you plan to apply for grants, and you\'re okay with not taking profits. Choose an LLC if you want to balance social impact with profit, need more operational flexibility, or plan to seek investors.</p>`,
+    author: 'TurboCharity Team',
+    publishedAt: '2025-02-20T00:00:00Z',
+    updatedAt: '2025-02-20T00:00:00Z',
+    category: 'Getting Started',
+    tags: ['nonprofit vs LLC', 'business structure', 'incorporation', 'tax-exempt'],
+    readingTime: 6
+  },
 ];
 
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
