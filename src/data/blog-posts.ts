@@ -1,3 +1,18 @@
+export type BlogCategory =
+  | 'Getting Started'
+  | 'Legal Guide'
+  | 'Fundraising'
+  | 'Tax Compliance'
+  | 'State Guides';
+
+export const BLOG_CATEGORIES: BlogCategory[] = [
+  'Getting Started',
+  'Legal Guide',
+  'Fundraising',
+  'Tax Compliance',
+  'State Guides',
+];
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -7,6 +22,7 @@ export interface BlogPost {
   author: string;
   publishedAt: string; // ISO date
   updatedAt: string;
+  category: BlogCategory;
   tags: string[];
   readingTime: number; // minutes
   featuredImage?: string;
@@ -22,6 +38,7 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-15T00:00:00Z',
     updatedAt: '2025-01-15T00:00:00Z',
+    category: 'Getting Started',
     tags: ['501c3', 'nonprofit formation', 'guide', 'IRS'],
     readingTime: 7
   },
@@ -34,6 +51,7 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-18T00:00:00Z',
     updatedAt: '2025-01-18T00:00:00Z',
+    category: 'State Guides',
     tags: ['incorporation costs', 'state filing', 'nonprofit budget'],
     readingTime: 6
   },
@@ -46,6 +64,7 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-22T00:00:00Z',
     updatedAt: '2025-01-22T00:00:00Z',
+    category: 'Tax Compliance',
     tags: ['IRS', 'Form 1023-EZ', 'tax-exempt status', 'filing guide'],
     readingTime: 5
   },
@@ -58,6 +77,7 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-25T00:00:00Z',
     updatedAt: '2025-01-25T00:00:00Z',
+    category: 'Getting Started',
     tags: ['students', 'high school', 'college', 'nonprofit formation', 'fiscal sponsor'],
     readingTime: 6
   },
@@ -70,6 +90,7 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-28T00:00:00Z',
     updatedAt: '2025-01-28T00:00:00Z',
+    category: 'Legal Guide',
     tags: ['bylaws', 'nonprofit governance', 'IRS requirements', 'template'],
     readingTime: 6
   }
