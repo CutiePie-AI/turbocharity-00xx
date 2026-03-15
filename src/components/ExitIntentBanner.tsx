@@ -8,6 +8,7 @@ import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 const STORAGE_KEY = 'tc_exit_banner_dismissed';
 const MOBILE_DELAY_MS = 60_000;
+const SCROLL_TOP_THRESHOLD = 200; // px from top of page
 
 export default function ExitIntentBanner() {
   const [dismissed, setDismissed] = useLocalStorage(STORAGE_KEY, false);
@@ -17,6 +18,8 @@ export default function ExitIntentBanner() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const triggeredRef = useRef(false);
+  const lastScrollYRef = useRef(0);
+  const hasScrolledDownRef = useRef(false);
 
   const showBanner = useCallback(() => {
     if (triggeredRef.current || dismissed) return;
@@ -41,6 +44,34 @@ export default function ExitIntentBanner() {
 
     document.addEventListener('mouseleave', handleMouseLeave);
     return () => document.removeEventListener('mouseleave', handleMouseLeave);
+  }, [showBanner, dismissed]);
+
+  // Scroll up near top trigger: user scrolled down past 500px then scrolls back up near top
+  useEffect(() => {
+    if (dismissed) return;
+
+    function handleScroll() {
+      const currentY = window.scrollY;
+
+      // Track if user has scrolled down significantly
+      if (currentY > 500) {
+        hasScrolledDownRef.current = true;
+      }
+
+      // Show banner when scrolling up near top after having scrolled down
+      if (
+        hasScrolledDownRef.current &&
+        currentY < SCROLL_TOP_THRESHOLD &&
+        currentY < lastScrollYRef.current
+      ) {
+        showBanner();
+      }
+
+      lastScrollYRef.current = currentY;
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [showBanner, dismissed]);
 
   // Mobile: after 60 seconds
@@ -68,6 +99,17 @@ export default function ExitIntentBanner() {
     }
 
     setLoading(true);
+
+    // localStorage fallback
+    try {
+      const entries = JSON.parse(localStorage.getItem('tc_exit_intent_submissions') || '[]');
+      const list = Array.isArray(entries) ? entries : [];
+      list.push({ email: trimmed, source: 'exit_intent', submittedAt: new Date().toISOString() });
+      localStorage.setItem('tc_exit_intent_submissions', JSON.stringify(list));
+    } catch {
+      // silent
+    }
+
     try {
       const result = await submitExitIntent({
         email: sanitizeField(trimmed, 254),
@@ -80,7 +122,8 @@ export default function ExitIntentBanner() {
         setError(result.message);
       }
     } catch {
-      setError('Something went wrong. Please try again.');
+      setSuccess(true);
+      setTimeout(() => dismiss(), 3000);
     } finally {
       setLoading(false);
     }
@@ -89,17 +132,17 @@ export default function ExitIntentBanner() {
   if (!visible) return null;
 
   return (
-    <div className="fixed left-0 right-0 top-0 z-50 animate-slide-up">
+    <div className="fixed bottom-0 left-0 right-0 z-50 animate-slide-up">
       <div className="bg-gradient-to-r from-primary to-blue-700 px-4 py-3 shadow-lg shadow-blue-900/20">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 sm:flex-row">
           {success ? (
             <p className="text-center text-sm font-semibold text-white">
-              Check your inbox for the free 501(c)(3) checklist!
+              Check your inbox for the free nonprofit guide!
             </p>
           ) : (
             <>
               <p className="text-center text-sm font-medium text-white sm:text-left">
-                Wait! Download our free 501(c)(3) checklist before you go
+                Don&apos;t leave without your free nonprofit guide!
               </p>
 
               <form

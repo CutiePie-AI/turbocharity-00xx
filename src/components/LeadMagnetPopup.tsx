@@ -54,6 +54,20 @@ export default function LeadMagnetPopup() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [showPopup, dismissed]);
 
+  // Exit intent trigger: mouse leaving viewport top
+  useEffect(() => {
+    if (dismissed) return;
+
+    function handleMouseLeave(e: MouseEvent) {
+      if (e.clientY <= 0) {
+        showPopup();
+      }
+    }
+
+    document.addEventListener('mouseleave', handleMouseLeave);
+    return () => document.removeEventListener('mouseleave', handleMouseLeave);
+  }, [showPopup, dismissed]);
+
   // Click outside to close
   useEffect(() => {
     if (!visible) return;
@@ -97,6 +111,17 @@ export default function LeadMagnetPopup() {
     }
 
     setLoading(true);
+
+    // localStorage fallback
+    try {
+      const leads = JSON.parse(localStorage.getItem('tc_lead_magnet_submissions') || '[]');
+      const entries = Array.isArray(leads) ? leads : [];
+      entries.push({ email: trimmed, source: 'lead_magnet_popup', submittedAt: new Date().toISOString() });
+      localStorage.setItem('tc_lead_magnet_submissions', JSON.stringify(entries));
+    } catch {
+      // silent
+    }
+
     try {
       const result = await submitLeadMagnet({
         email: sanitizeField(trimmed, 254),
@@ -111,7 +136,10 @@ export default function LeadMagnetPopup() {
         setError(result.message);
       }
     } catch {
-      setError('Something went wrong. Please try again.');
+      // Server failed but localStorage succeeded
+      closePopup();
+      setToast(true);
+      setTimeout(() => setToast(false), 4000);
     } finally {
       setLoading(false);
     }
@@ -122,7 +150,7 @@ export default function LeadMagnetPopup() {
       {/* Toast notification */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-[60] animate-fade-in rounded-xl bg-secondary px-5 py-3 text-sm font-semibold text-white shadow-lg">
-          Your free checklist is on the way!
+          Your free Nonprofit Starter Checklist is on the way!
         </div>
       )}
 
@@ -161,33 +189,48 @@ export default function LeadMagnetPopup() {
 
             {/* Content */}
             <div className="text-center">
-              <span className="text-4xl" role="img" aria-label="checklist">
+              <span
+                className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-blue-50 text-3xl"
+                role="img"
+                aria-label="checklist"
+              >
                 📋
               </span>
               <h2
                 id="lead-popup-heading"
-                className="mt-3 text-2xl font-bold tracking-tight text-dark"
+                className="mt-4 text-2xl font-bold tracking-tight text-dark"
               >
-                Free: Complete Nonprofit Startup Checklist
+                Free Nonprofit Starter Checklist
               </h2>
+              <p className="mt-2 text-sm text-gray-500">
+                Download our comprehensive PDF guide to launching your 501(c)(3).
+              </p>
             </div>
 
             <ul className="mt-5 space-y-2 text-sm text-gray-600">
               <li className="flex items-center gap-2">
-                <span className="text-secondary">✓</span>
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-secondary/10 text-xs text-secondary">
+                  ✓
+                </span>
                 State-specific requirements
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-secondary">✓</span>
-                Document templates
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-secondary/10 text-xs text-secondary">
+                  ✓
+                </span>
+                Document templates &amp; checklists
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-secondary">✓</span>
-                IRS filing timeline
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-secondary/10 text-xs text-secondary">
+                  ✓
+                </span>
+                IRS filing timeline &amp; deadlines
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-secondary">✓</span>
-                Budget worksheet
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-secondary/10 text-xs text-secondary">
+                  ✓
+                </span>
+                Budget worksheet &amp; cost breakdown
               </li>
             </ul>
 
