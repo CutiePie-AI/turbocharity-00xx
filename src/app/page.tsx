@@ -1,52 +1,35 @@
-import type { Metadata } from "next";
-import HeroSection from "@/components/home/HeroSection";
-import HowItWorksSection from "@/components/home/HowItWorksSection";
-import StateDirectoryPreview from "@/components/home/StateDirectoryPreview";
-import TestimonialsSection from "@/components/home/TestimonialsSection";
-import PricingPreview from "@/components/home/PricingPreview";
-import BlogPreview from "@/components/home/BlogPreview";
-import CTASection from "@/components/home/CTASection";
-import FAQPreview from "@/components/home/FAQPreview";
+import type { Metadata } from 'next';
+import HomePage from './HomePage';
 
 export const metadata: Metadata = {
-  title: "TurboCharity — From Idea to 501(c)(3) in Days, Not Months",
+  title: 'TurboCharity - Start Your Nonprofit Fast | 501(c)(3) Formation Guide',
   description:
-    "AI-powered nonprofit creation that walks you through state-specific incorporation, generates compliant bylaws, and auto-fills IRS Form 1023-EZ — saving you $2,000-$5,000 in legal fees.",
+    'From idea to 501(c)(3) in days, not months. Free state-by-state guides, templates, and AI-powered tools to help you start a nonprofit without expensive lawyers.',
   keywords: [
-    "nonprofit formation",
-    "501c3",
-    "start a nonprofit",
-    "IRS Form 1023-EZ",
-    "nonprofit incorporation",
-    "bylaws generator",
-    "nonprofit legal documents",
+    'nonprofit formation',
+    '501c3',
+    'start a nonprofit',
+    'IRS Form 1023-EZ',
+    'nonprofit incorporation',
+    'bylaws generator',
+    'nonprofit legal documents',
+    'state-by-state guide',
   ],
   openGraph: {
-    title: "TurboCharity — From Idea to 501(c)(3) in Days, Not Months",
+    title: 'TurboCharity - Start Your Nonprofit Fast | 501(c)(3) Formation Guide',
     description:
-      "AI-powered nonprofit creation. State-specific incorporation, compliant bylaws, and auto-filled IRS Form 1023-EZ.",
-    type: "website",
-    url: "https://turbocharity.com",
+      'From idea to 501(c)(3) in days, not months. Free state-by-state guides, templates, and AI-powered tools.',
+    type: 'website',
+    url: 'https://turbocharity.com',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "TurboCharity — From Idea to 501(c)(3) in Days, Not Months",
+    card: 'summary_large_image',
+    title: 'TurboCharity - Start Your Nonprofit Fast | 501(c)(3) Formation Guide',
     description:
-      "AI-powered nonprofit creation. Save $2,000-$5,000 in legal fees.",
+      'From idea to 501(c)(3) in days, not months. Free guides, templates, and AI-powered tools.',
   },
 };
 
 export default function Home() {
-  return (
-    <main>
-      <HeroSection />
-      <HowItWorksSection />
-      <StateDirectoryPreview />
-      <TestimonialsSection />
-      <PricingPreview />
-      <BlogPreview />
-      <FAQPreview />
-      <CTASection />
-    </main>
-  );
+  return <HomePage />;
 }
