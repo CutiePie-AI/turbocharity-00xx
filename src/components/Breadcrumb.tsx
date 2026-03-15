@@ -26,7 +26,7 @@ function ChevronSeparator() {
 
 export default function Breadcrumb({ items }: BreadcrumbProps) {
   return (
-    <nav aria-label="breadcrumb">
+    <nav aria-label="Breadcrumb">
       <ol className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
@@ -35,7 +35,10 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
             <li key={item.label} className="flex items-center gap-2">
               {index > 0 && <ChevronSeparator />}
               {isLast || !item.href ? (
-                <span className="font-medium text-dark" aria-current={isLast ? 'page' : undefined}>
+                <span
+                  className="font-medium text-dark"
+                  aria-current={isLast ? 'page' : undefined}
+                >
                   {item.label}
                 </span>
               ) : (

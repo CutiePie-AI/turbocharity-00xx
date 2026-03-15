@@ -20,6 +20,15 @@ const mockState: StateInfo = {
     'Apply for an EIN from the IRS',
     'File IRS Form 1023-EZ for 501(c)(3) status',
   ],
+  stateTaxExemption: true,
+  annualReportFee: 20,
+  annualReportFrequency: 'Biennially',
+  requiresRegisteredAgent: true,
+  minimumBoardMembers: 1,
+  specificRequirements: ['Must file Form 3500 or 3500A for California tax exemption'],
+  description: 'Starting a nonprofit in California (CA) requires filing Articles of Incorporation.',
+  metaTitle: 'How to Start a Nonprofit in California (2026 Guide) | TurboCharity',
+  metaDescription: 'Complete guide to starting a nonprofit in California.',
 };
 
 describe('StateCard', () => {

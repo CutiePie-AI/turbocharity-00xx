@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Container from '@/components/Container';
 import Breadcrumb from '@/components/Breadcrumb';
 import StateSidebar from '@/components/StateSidebar';
+import ShareButtons from '@/components/ShareButtons';
 import StructuredData from '@/components/StructuredData';
 import { STATES, getAllStateSlugs, getStateBySlug, getStateRegion, type StateInfo } from '@/lib/states';
 
@@ -24,11 +25,11 @@ export function generateMetadata({ params }: PageProps): Metadata {
   if (!state) return {};
 
   return {
-    title: `How to Start a Nonprofit in ${state.name} | TurboCharity`,
-    description: `Step-by-step guide to forming a nonprofit in ${state.name}. Filing fee: $${state.filingFee}. Processing time: ${state.processingTime}. ${state.onlineFilingAvailable ? 'Online filing available.' : 'Mail-in filing required.'} Complete ${state.abbreviation} nonprofit incorporation guide.`,
+    title: state.metaTitle,
+    description: state.metaDescription,
     openGraph: {
-      title: `How to Start a Nonprofit in ${state.name} | TurboCharity`,
-      description: `Start a nonprofit in ${state.name} — $${state.filingFee} filing fee, ${state.processingTime} processing. Complete step-by-step guide.`,
+      title: state.metaTitle,
+      description: state.metaDescription,
     },
   };
 }
@@ -36,15 +37,7 @@ export function generateMetadata({ params }: PageProps): Metadata {
 /* ---------- Helpers ---------- */
 
 function getOverview(state: StateInfo): string {
-  const onlinePart = state.onlineFilingAvailable
-    ? `${state.name} offers convenient online filing through the Secretary of State's office, making the incorporation process straightforward.`
-    : `${state.name} currently requires mail-in filing for nonprofit incorporation, so plan for additional processing time.`;
-
-  const noticePart = state.requiresPublicationNotice
-    ? ` Note that ${state.name} requires a publication notice as part of the incorporation process, which may add to your timeline and costs.`
-    : '';
-
-  return `Filing a nonprofit corporation in ${state.name} (${state.abbreviation}) requires submitting Articles of Incorporation to the state along with a $${state.filingFee} filing fee. ${onlinePart}${noticePart} Typical processing takes ${state.processingTime}.`;
+  return state.description;
 }
 
 function getFilingSteps(state: StateInfo): string[] {
@@ -53,9 +46,9 @@ function getFilingSteps(state: StateInfo): string[] {
     `Appoint a registered agent with a physical address in ${state.name} to receive legal documents on behalf of your organization.`,
     `Prepare and file your Articles of Incorporation with the ${state.name} Secretary of State, including your nonprofit's purpose, registered agent, and incorporator information.${state.onlineFilingAvailable ? ' You can file online for faster processing.' : ' Submit your filing via mail to the Secretary of State.'}`,
     `Pay the $${state.filingFee} state filing fee.${state.requiresPublicationNotice ? ` Publish the required notice of incorporation in a ${state.name}-approved newspaper.` : ''}`,
-    `Draft your corporate bylaws and hold an organizational meeting to elect your initial board of directors and adopt the bylaws.`,
+    `Draft your corporate bylaws and hold an organizational meeting to elect your initial board of directors (minimum ${state.minimumBoardMembers} members) and adopt the bylaws.`,
     `Apply for a Federal Employer Identification Number (EIN) from the IRS — this is free and can be done online at irs.gov.`,
-    `File IRS Form 1023 or 1023-EZ to apply for 501(c)(3) federal tax-exempt status for your ${state.name} nonprofit.`,
+    `File IRS Form 1023 or 1023-EZ to apply for 501(c)(3) federal tax-exempt status for your ${state.name} nonprofit.${state.stateTaxExemption ? ` Also apply for ${state.name} state tax exemption.` : ''}`,
   ];
 }
 
@@ -63,7 +56,6 @@ function getRelatedStates(currentSlug: string): StateInfo[] {
   const currentRegion = getStateRegion(currentSlug);
   const related: StateInfo[] = [];
 
-  // First, pick states from the same region
   const sameRegion = STATES.filter(
     (s) => s.slug !== currentSlug && getStateRegion(s.slug) === currentRegion,
   );
@@ -72,7 +64,6 @@ function getRelatedStates(currentSlug: string): StateInfo[] {
     related.push(s);
   }
 
-  // Fill remaining with popular states
   const popularSlugs = ['california', 'texas', 'new-york', 'florida', 'delaware', 'illinois'];
   for (const slug of popularSlugs) {
     if (related.length >= 3) break;
@@ -83,6 +74,53 @@ function getRelatedStates(currentSlug: string): StateInfo[] {
   }
 
   return related.slice(0, 3);
+}
+
+function buildArticleSchema(state: StateInfo) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `How to Start a Nonprofit in ${state.name}`,
+    description: state.metaDescription,
+    author: {
+      '@type': 'Organization',
+      name: 'TurboCharity',
+      url: 'https://turbocharity.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'TurboCharity',
+      url: 'https://turbocharity.com',
+    },
+    mainEntityOfPage: `https://turbocharity.com/states/${state.slug}`,
+  };
+}
+
+function buildBreadcrumbSchema(state: StateInfo) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://turbocharity.com',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'States',
+        item: 'https://turbocharity.com/states',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: state.name,
+        item: `https://turbocharity.com/states/${state.slug}`,
+      },
+    ],
+  };
 }
 
 function buildHowToSchema(state: StateInfo, steps: string[]) {
@@ -129,16 +167,23 @@ export default function StatePage({ params }: PageProps) {
   const steps = getFilingSteps(state);
   const relatedStates = getRelatedStates(state.slug);
   const howToSchema = buildHowToSchema(state, steps);
+  const articleSchema = buildArticleSchema(state);
+  const breadcrumbSchema = buildBreadcrumbSchema(state);
 
   const breadcrumbItems = [
     { label: 'Home', href: '/' },
-    { label: 'State Guides', href: '/states' },
+    { label: 'States', href: '/states' },
     { label: state.name },
   ];
+
+  const pageUrl = `https://turbocharity.com/states/${state.slug}`;
+  const pageTitle = `How to Start a Nonprofit in ${state.name}`;
 
   return (
     <main className="min-h-screen bg-gray-50/60">
       <StructuredData data={howToSchema} />
+      <StructuredData data={articleSchema} />
+      <StructuredData data={breadcrumbSchema} />
 
       {/* Breadcrumb */}
       <div className="border-b border-gray-100 bg-white">
@@ -200,13 +245,9 @@ export default function StatePage({ params }: PageProps) {
               </div>
               <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-center">
                 <p className="text-lg font-bold text-dark">
-                  {state.requiresPublicationNotice ? (
-                    <span className="text-amber-600">Yes</span>
-                  ) : (
-                    <span className="text-secondary">No</span>
-                  )}
+                  {state.minimumBoardMembers}+
                 </p>
-                <p className="mt-1 text-xs font-medium text-gray-500">Publication Required</p>
+                <p className="mt-1 text-xs font-medium text-gray-500">Board Members</p>
               </div>
             </div>
           </div>
@@ -248,6 +289,37 @@ export default function StatePage({ params }: PageProps) {
               </ul>
             </section>
 
+            {/* State-Specific Requirements */}
+            {state.specificRequirements.length > 0 && (
+              <section>
+                <h2 className="text-2xl font-extrabold text-dark">
+                  {state.name}-Specific Requirements
+                </h2>
+                <p className="mt-2 text-gray-600">
+                  Additional requirements unique to {state.name}:
+                </p>
+                <ul className="mt-6 space-y-3">
+                  {state.specificRequirements.map((req) => (
+                    <li
+                      key={req}
+                      className="flex items-start gap-3 rounded-lg border border-amber-100 bg-amber-50/50 p-4"
+                    >
+                      <svg
+                        className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <p className="text-sm leading-relaxed text-gray-700">{req}</p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
             {/* Step-by-Step Guide */}
             <section>
               <h2 className="text-2xl font-extrabold text-dark">
@@ -279,9 +351,7 @@ export default function StatePage({ params }: PageProps) {
                   <thead>
                     <tr className="border-b border-gray-100 bg-gray-50">
                       <th className="px-5 py-3 text-sm font-semibold text-gray-600">Fee Type</th>
-                      <th className="px-5 py-3 text-right text-sm font-semibold text-gray-600">
-                        Cost
-                      </th>
+                      <th className="px-5 py-3 text-right text-sm font-semibold text-gray-600">Cost</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
@@ -293,14 +363,16 @@ export default function StatePage({ params }: PageProps) {
                         ${state.filingFee}
                       </td>
                     </tr>
-                    <tr>
-                      <td className="px-5 py-3.5 text-sm font-medium text-dark">
-                        Expedited Processing (optional)
-                      </td>
-                      <td className="px-5 py-3.5 text-right text-sm font-semibold text-dark">
-                        ${Math.round(state.filingFee * 1.5)} - ${state.filingFee * 3}
-                      </td>
-                    </tr>
+                    {state.annualReportFee > 0 && (
+                      <tr>
+                        <td className="px-5 py-3.5 text-sm font-medium text-dark">
+                          Annual Report Fee ({state.annualReportFrequency})
+                        </td>
+                        <td className="px-5 py-3.5 text-right text-sm font-semibold text-dark">
+                          ${state.annualReportFee}
+                        </td>
+                      </tr>
+                    )}
                     {state.requiresPublicationNotice && (
                       <tr>
                         <td className="px-5 py-3.5 text-sm font-medium text-dark">
@@ -351,37 +423,15 @@ export default function StatePage({ params }: PageProps) {
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 transition-colors hover:border-primary/30 hover:bg-primary/5"
                 >
-                  <svg
-                    className="h-5 w-5 flex-shrink-0 text-primary"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                    />
+                  <svg className="h-5 w-5 flex-shrink-0 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                   </svg>
                   <div>
-                    <p className="font-semibold text-dark">
-                      {state.name} Secretary of State
-                    </p>
+                    <p className="font-semibold text-dark">{state.name} Secretary of State</p>
                     <p className="text-sm text-gray-500">{state.secretaryOfStateUrl}</p>
                   </div>
-                  <svg
-                    className="ml-auto h-4 w-4 flex-shrink-0 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
+                  <svg className="ml-auto h-4 w-4 flex-shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                 </a>
                 <a
@@ -390,37 +440,15 @@ export default function StatePage({ params }: PageProps) {
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 transition-colors hover:border-primary/30 hover:bg-primary/5"
                 >
-                  <svg
-                    className="h-5 w-5 flex-shrink-0 text-primary"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                    />
+                  <svg className="h-5 w-5 flex-shrink-0 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                   </svg>
                   <div>
                     <p className="font-semibold text-dark">IRS 501(c)(3) Application</p>
-                    <p className="text-sm text-gray-500">
-                      Apply for federal tax-exempt status
-                    </p>
+                    <p className="text-sm text-gray-500">Apply for federal tax-exempt status</p>
                   </div>
-                  <svg
-                    className="ml-auto h-4 w-4 flex-shrink-0 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
+                  <svg className="ml-auto h-4 w-4 flex-shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                 </a>
                 <a
@@ -429,40 +457,23 @@ export default function StatePage({ params }: PageProps) {
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 transition-colors hover:border-primary/30 hover:bg-primary/5"
                 >
-                  <svg
-                    className="h-5 w-5 flex-shrink-0 text-primary"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                    />
+                  <svg className="h-5 w-5 flex-shrink-0 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                   </svg>
                   <div>
                     <p className="font-semibold text-dark">IRS EIN Application</p>
-                    <p className="text-sm text-gray-500">
-                      Get a free Employer Identification Number
-                    </p>
+                    <p className="text-sm text-gray-500">Get a free Employer Identification Number</p>
                   </div>
-                  <svg
-                    className="ml-auto h-4 w-4 flex-shrink-0 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
+                  <svg className="ml-auto h-4 w-4 flex-shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                 </a>
               </div>
+            </section>
+
+            {/* Share Buttons */}
+            <section className="rounded-xl border border-gray-200 bg-white p-6">
+              <ShareButtons url={pageUrl} title={pageTitle} />
             </section>
           </div>
 
