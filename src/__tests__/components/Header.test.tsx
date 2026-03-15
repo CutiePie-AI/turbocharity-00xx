@@ -10,15 +10,15 @@ describe('Header', () => {
 
   it('renders all nav links', () => {
     render(<Header />)
-    const expectedLinks = ['How It Works', 'Features', 'Pricing', 'FAQ']
+    const expectedLinks = ['State Guides', 'Resources', 'Blog', 'FAQ']
     for (const linkText of expectedLinks) {
       expect(screen.getAllByText(linkText).length).toBeGreaterThanOrEqual(1)
     }
   })
 
-  it('renders CTA button Start Free', () => {
+  it('renders CTA button Start Your Nonprofit', () => {
     render(<Header />)
-    const startButtons = screen.getAllByText('Start Free')
+    const startButtons = screen.getAllByText(/Start Your Nonprofit/)
     expect(startButtons.length).toBeGreaterThanOrEqual(1)
   })
 })

@@ -16,7 +16,7 @@ describe('Button', () => {
   it('applies secondary variant styles', () => {
     render(<Button variant="secondary">Secondary</Button>)
     const button = screen.getByText('Secondary')
-    expect(button.className).toContain('bg-secondary')
+    expect(button.className).toContain('border-primary')
   })
 
   it('renders as link when href provided', () => {

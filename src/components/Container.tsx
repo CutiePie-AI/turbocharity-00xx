@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { type ReactNode } from 'react';
 
 interface ContainerProps {
   children: ReactNode;
@@ -6,13 +6,18 @@ interface ContainerProps {
   as?: keyof JSX.IntrinsicElements;
 }
 
+/**
+ * Centered max-width container with responsive horizontal padding.
+ */
 export default function Container({
   children,
-  className = "",
-  as: Component = "div",
+  className = '',
+  as: Component = 'div',
 }: ContainerProps) {
   return (
-    <Component className={`mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>
+    <Component
+      className={`mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}
+    >
       {children}
     </Component>
   );
