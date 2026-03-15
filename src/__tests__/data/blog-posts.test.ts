@@ -1,8 +1,8 @@
 import { blogPosts, getBlogPostBySlug, getAllBlogSlugs } from '@/data/blog-posts';
 
 describe('Blog Posts Data', () => {
-  test('should have exactly 5 blog posts', () => {
-    expect(blogPosts).toHaveLength(5);
+  test('should have exactly 12 blog posts', () => {
+    expect(blogPosts).toHaveLength(12);
   });
 
   test('each post should have required fields', () => {
@@ -43,7 +43,7 @@ describe('Blog Posts Data', () => {
 
   test('getAllBlogSlugs returns all slugs', () => {
     const slugs = getAllBlogSlugs();
-    expect(slugs).toHaveLength(5);
+    expect(slugs).toHaveLength(12);
     expect(slugs).toContain(blogPosts[0].slug);
   });
 

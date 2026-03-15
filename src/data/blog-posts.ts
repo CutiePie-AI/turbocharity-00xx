@@ -3,12 +3,14 @@ export interface BlogPost {
   title: string;
   metaDescription: string;
   excerpt: string;
-  content: string; // HTML content
+  content: string;
   author: string;
-  publishedAt: string; // ISO date
+  publishedAt: string;
   updatedAt: string;
+  category: 'Getting Started' | 'Legal Guide' | 'Fundraising' | 'Tax Compliance' | 'State Guides';
   tags: string[];
-  readingTime: number; // minutes
+  readingTime: number;
+  readTime: string;
   featuredImage?: string;
 }
 
@@ -22,8 +24,10 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-15T00:00:00Z',
     updatedAt: '2025-01-15T00:00:00Z',
+    category: 'Getting Started',
     tags: ['501c3', 'nonprofit formation', 'guide', 'IRS'],
-    readingTime: 7
+    readingTime: 7,
+    readTime: '7 min read',
   },
   {
     slug: 'nonprofit-incorporation-costs-by-state-2025',
@@ -34,8 +38,10 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-18T00:00:00Z',
     updatedAt: '2025-01-18T00:00:00Z',
+    category: 'Getting Started',
     tags: ['incorporation costs', 'state filing', 'nonprofit budget'],
-    readingTime: 6
+    readingTime: 6,
+    readTime: '6 min read',
   },
   {
     slug: 'irs-form-1023-ez-eligibility-and-filing-guide',
@@ -46,8 +52,10 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-22T00:00:00Z',
     updatedAt: '2025-01-22T00:00:00Z',
+    category: 'Tax Compliance',
     tags: ['IRS', 'Form 1023-EZ', 'tax-exempt status', 'filing guide'],
-    readingTime: 5
+    readingTime: 5,
+    readTime: '5 min read',
   },
   {
     slug: 'student-nonprofit-guide-high-school-college',
@@ -58,8 +66,10 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-25T00:00:00Z',
     updatedAt: '2025-01-25T00:00:00Z',
+    category: 'Getting Started',
     tags: ['students', 'high school', 'college', 'nonprofit formation', 'fiscal sponsor'],
-    readingTime: 6
+    readingTime: 6,
+    readTime: '6 min read',
   },
   {
     slug: 'nonprofit-bylaws-template-what-to-include',
@@ -70,15 +80,119 @@ export const blogPosts: BlogPost[] = [
     author: 'TurboCharity Team',
     publishedAt: '2025-01-28T00:00:00Z',
     updatedAt: '2025-01-28T00:00:00Z',
+    category: 'Legal Guide',
     tags: ['bylaws', 'nonprofit governance', 'IRS requirements', 'template'],
-    readingTime: 6
-  }
+    readingTime: 6,
+    readTime: '6 min read',
+  },
+  {
+    slug: '501c3-vs-501c4-differences-explained',
+    title: '501(c)(3) vs 501(c)(4): Key Differences Every Founder Should Know',
+    metaDescription: 'Understand the critical differences between 501(c)(3) and 501(c)(4) organizations. Compare tax benefits, lobbying rules, and donor deductions.',
+    excerpt: 'Choosing between a 501(c)(3) and 501(c)(4) is one of the first major decisions for nonprofit founders. The wrong choice can limit your fundraising and political activities for years.',
+    content: `<h2>The Fundamental Difference</h2><p>Both 501(c)(3) and 501(c)(4) organizations are tax-exempt under the Internal Revenue Code, but they serve different purposes and come with different rules. A 501(c)(3) is organized for charitable, religious, educational, or scientific purposes. A 501(c)(4) is organized for social welfare, which can include civic leagues, advocacy groups, and community organizations.</p><h2>Tax Deductions for Donors</h2><p>This is the biggest practical difference. Donations to 501(c)(3) organizations are tax-deductible for donors, making it much easier to attract individual and corporate giving. Donations to 501(c)(4) organizations are not tax-deductible. If fundraising from individual donors is central to your strategy, 501(c)(3) status is almost always the better choice.</p><h2>Political and Lobbying Activities</h2><p>501(c)(3) organizations face strict limitations on political activity. They are absolutely prohibited from supporting or opposing political candidates, and lobbying cannot be a "substantial part" of their activities. 501(c)(4) organizations have far more flexibility — they can engage in unlimited lobbying and even some political campaign activity, as long as it\'s not their primary purpose.</p><h2>Which Should You Choose?</h2><p>Choose 501(c)(3) if your primary activities are charitable, educational, or religious, and you want donors to receive tax deductions. Choose 501(c)(4) if your primary focus is advocacy, lobbying, or promoting social welfare causes where political engagement is essential. Some organizations create both — a 501(c)(3) for charitable work and a 501(c)(4) affiliate for advocacy.</p><h2>The Application Process</h2><p>501(c)(3) organizations must apply to the IRS using Form 1023 or 1023-EZ and receive a determination letter. 501(c)(4) organizations can self-declare their status by filing Form 8976 (notice of intent) and Form 990 annually, though filing Form 1024-A for a determination letter is recommended for certainty.</p>`,
+    author: 'TurboCharity Team',
+    publishedAt: '2025-02-03T00:00:00Z',
+    updatedAt: '2025-02-03T00:00:00Z',
+    category: 'Legal Guide',
+    tags: ['501c3', '501c4', 'tax-exempt', 'lobbying', 'political activity'],
+    readingTime: 6,
+    readTime: '6 min read',
+  },
+  {
+    slug: 'board-of-directors-requirements-nonprofit',
+    title: 'Nonprofit Board of Directors: Requirements, Roles, and Best Practices',
+    metaDescription: 'Learn nonprofit board of directors requirements by state, minimum board size, fiduciary duties, and how to recruit effective board members.',
+    excerpt: 'Your board of directors is the legal backbone of your nonprofit. Understanding state requirements and governance best practices will set your organization up for long-term success.',
+    content: `<h2>What Does a Nonprofit Board Do?</h2><p>A nonprofit board of directors provides governance and strategic oversight for the organization. Board members have three primary fiduciary duties: the duty of care (making informed decisions), the duty of loyalty (acting in the organization\'s best interest, not personal interest), and the duty of obedience (ensuring the organization follows its mission and the law). The board is legally responsible for the organization.</p><h2>State Requirements for Board Size</h2><p>Most states require a minimum of three board members for a nonprofit corporation. However, some states like California require only one director, while others may require more. Regardless of the legal minimum, governance experts recommend at least five to seven board members to ensure diverse perspectives and effective committee structures. Board members typically serve terms of one to three years.</p><h2>Key Roles: Officers</h2><p>At minimum, most nonprofits need a President (or Chair), a Secretary, and a Treasurer. The President leads board meetings and provides organizational leadership. The Secretary maintains records and meeting minutes. The Treasurer oversees financial management and reporting. Some states allow one person to hold multiple officer positions, but this is generally discouraged for good governance.</p><h2>Recruiting Effective Board Members</h2><p>Look for board members who bring diverse skills: legal expertise, financial acumen, fundraising connections, industry knowledge, and community ties. Avoid "rubber stamp" boards where members simply approve whatever leadership proposes. Every board member should actively participate in meetings, serve on committees, and contribute to fundraising efforts — whether through direct donations or connecting the organization to potential supporters.</p><h2>Common Board Governance Mistakes</h2><p>The most frequent governance failures include: not having a conflict of interest policy (the IRS essentially requires one), failing to hold regular board meetings, allowing the executive director to dominate the board, not maintaining meeting minutes, and board members who do not understand their fiduciary duties. Annual board training and clear expectations set during onboarding can prevent most of these issues.</p>`,
+    author: 'TurboCharity Team',
+    publishedAt: '2025-02-10T00:00:00Z',
+    updatedAt: '2025-02-10T00:00:00Z',
+    category: 'Legal Guide',
+    tags: ['board of directors', 'governance', 'fiduciary duty', 'nonprofit leadership'],
+    readingTime: 7,
+    readTime: '7 min read',
+  },
+  {
+    slug: 'fundraising-compliance-guide-nonprofits',
+    title: 'Fundraising Compliance: State Registration and Legal Requirements',
+    metaDescription: 'Navigate nonprofit fundraising compliance across all 50 states. Learn about charitable solicitation registration, reporting, and avoiding common violations.',
+    excerpt: 'Before you raise your first dollar, you need to understand state fundraising laws. Most states require registration before you can legally solicit donations — and the penalties for non-compliance are serious.',
+    content: `<h2>What Is Charitable Solicitation Registration?</h2><p>Charitable solicitation registration is a state-level requirement that nonprofits must complete before they can legally ask for donations in that state. Currently, 41 states plus the District of Columbia require some form of registration. The purpose is to protect donors from fraud and ensure transparency in charitable fundraising. Even online fundraising can trigger registration requirements in multiple states.</p><h2>Which States Require Registration?</h2><p>Most states require registration, but the specifics vary widely. Some states like California and New York have strict and detailed requirements with annual reporting. Others like Idaho and Montana have minimal or no registration requirements. If you fundraise nationally or online, you may need to register in every state where you solicit donations. The Unified Registration Statement (URS) is accepted by many states and simplifies multi-state registration.</p><h2>Annual Reporting and Renewals</h2><p>Registration is not a one-time event. Most states require annual renewal, often tied to your fiscal year end. You will typically need to submit your IRS Form 990, audited financial statements (if your revenue exceeds a threshold), and state-specific reporting forms. Missing a renewal deadline can result in penalties, loss of registration, and the inability to legally fundraise in that state.</p><h2>Online Fundraising Considerations</h2><p>Online fundraising platforms like GoFundMe, Facebook Fundraisers, and your own website can trigger registration requirements in states where your donors reside. The Charleston Principles, developed by the National Association of State Charity Officials, provide guidance on when online solicitation triggers state registration. Generally, if you specifically target residents of a state or receive repeated contributions from that state, you should register.</p><h2>Penalties for Non-Compliance</h2><p>Consequences for fundraising without proper registration can include fines, cease-and-desist orders, and even criminal penalties in extreme cases. State attorneys general have increased enforcement of charitable solicitation laws. Beyond legal risk, non-compliance can damage your reputation with donors and grant-making institutions that check registration status.</p>`,
+    author: 'TurboCharity Team',
+    publishedAt: '2025-02-17T00:00:00Z',
+    updatedAt: '2025-02-17T00:00:00Z',
+    category: 'Fundraising',
+    tags: ['fundraising', 'compliance', 'charitable solicitation', 'state registration'],
+    readingTime: 7,
+    readTime: '7 min read',
+  },
+  {
+    slug: 'starting-nonprofit-california-guide',
+    title: 'How to Start a Nonprofit in California: Complete 2025 Guide',
+    metaDescription: 'Step-by-step guide to starting a nonprofit in California. Covers incorporation, CA Franchise Tax Board exemption, AG registration, and Form CT-1.',
+    excerpt: 'California is the most popular state for nonprofit formation, but it has unique requirements including Franchise Tax Board exemption and Attorney General registration. Here is everything you need to know.',
+    content: `<h2>Why California?</h2><p>California is home to more nonprofits than any other state, with over 180,000 registered charitable organizations. The state has a $30 filing fee — one of the lowest in the nation — and processes applications in 3-5 business days. However, California has additional state-level requirements beyond federal 501(c)(3) status that every founder must understand.</p><h2>Step 1: Incorporate with the Secretary of State</h2><p>File Articles of Incorporation for a California Nonprofit Public Benefit Corporation with the Secretary of State. The filing fee is $30, and you can file online through the bizfile portal. Your articles must include specific language required for tax exemption, including an irrevocable dedication of assets to charitable purposes and a dissolution clause directing assets to another 501(c)(3).</p><h2>Step 2: State Tax Exemption</h2><p>After receiving federal 501(c)(3) status, you must separately apply for California state tax exemption with the Franchise Tax Board using Form 3500 (or Form 3500A for organizations that already have their IRS determination letter). California grants its own tax-exempt status independent of the IRS — do not assume federal exemption automatically applies at the state level.</p><h2>Step 3: Register with the Attorney General</h2><p>All California charitable nonprofits must register with the Attorney General\'s Registry of Charitable Trusts within 30 days of receiving assets. File the initial registration form (CT-1) along with your organizing documents. You will also need to file an annual report (Form RRF-1) and your IRS Form 990 with the AG\'s office each year.</p><h2>Ongoing Compliance</h2><p>California nonprofits must file a biennial Statement of Information (Form SI-100) with the Secretary of State, an annual Form 199 or 199N with the Franchise Tax Board, and annual reports with the Attorney General. California also has strict rules about board member compensation, record inspection rights, and self-dealing transactions. TurboCharity helps California founders navigate all of these requirements automatically.</p>`,
+    author: 'TurboCharity Team',
+    publishedAt: '2025-03-01T00:00:00Z',
+    updatedAt: '2025-03-01T00:00:00Z',
+    category: 'State Guides',
+    tags: ['California', 'state guide', 'nonprofit formation', 'Franchise Tax Board', 'Attorney General'],
+    readingTime: 7,
+    readTime: '7 min read',
+  },
+  {
+    slug: 'starting-nonprofit-texas-guide',
+    title: 'How to Start a Nonprofit in Texas: Complete 2025 Guide',
+    metaDescription: 'Step-by-step guide to starting a nonprofit in Texas. Covers Certificate of Formation, state tax exemption, and Texas-specific compliance requirements.',
+    excerpt: 'Texas offers one of the most affordable and straightforward nonprofit formation processes in the country. With a $25 filing fee and no state income tax, the Lone Star State is ideal for charitable organizations.',
+    content: `<h2>Why Texas?</h2><p>Texas is the second-largest state by population and has a thriving nonprofit sector with over 100,000 registered organizations. The state filing fee is just $25, processing takes only 3-5 business days, and there is no state income tax — meaning one less tax filing for your nonprofit. Texas also does not require a publication notice, keeping startup costs low.</p><h2>Step 1: File Your Certificate of Formation</h2><p>In Texas, the equivalent of Articles of Incorporation is called a Certificate of Formation. File it with the Texas Secretary of State using form 202 (for a nonprofit corporation). You can file online through the SOSDirect system. Your certificate must include the specific purpose of the corporation, the names and addresses of the initial directors (minimum three), and the registered agent information.</p><h2>Step 2: Get Your Federal Tax Exemption</h2><p>Apply for 501(c)(3) status with the IRS using Form 1023 or 1023-EZ. Most small Texas nonprofits qualify for the streamlined 1023-EZ with its $275 filing fee. Ensure your mission statement and Certificate of Formation language align with IRS requirements for tax-exempt charitable organizations.</p><h2>Step 3: Apply for Texas State Tax Exemption</h2><p>Even though Texas has no state income tax, you should apply for state sales tax exemption and franchise tax exemption with the Texas Comptroller of Public Accounts. File Form AP-204 for sales tax exemption on purchases your nonprofit makes. This can save significant money on supplies, equipment, and services.</p><h2>Ongoing Texas Compliance</h2><p>Texas nonprofits must file a periodic report with the Secretary of State (every four years, or annually depending on the entity type), maintain their registered agent, and file annual Form 990 returns with the IRS. Texas does not have a separate state charitable solicitation registration requirement, making fundraising compliance simpler than in most states. TurboCharity tracks all your Texas deadlines and generates compliance reminders automatically.</p>`,
+    author: 'TurboCharity Team',
+    publishedAt: '2025-03-08T00:00:00Z',
+    updatedAt: '2025-03-08T00:00:00Z',
+    category: 'State Guides',
+    tags: ['Texas', 'state guide', 'nonprofit formation', 'Certificate of Formation', 'Comptroller'],
+    readingTime: 6,
+    readTime: '6 min read',
+  },
+  {
+    slug: 'starting-nonprofit-new-york-guide',
+    title: 'How to Start a Nonprofit in New York: Complete 2025 Guide',
+    metaDescription: 'Step-by-step guide to starting a nonprofit in New York. Covers incorporation, publication requirements, Attorney General registration, and CHAR500.',
+    excerpt: 'New York has some of the most complex nonprofit formation requirements in the country, including a mandatory publication notice and Attorney General oversight. This guide breaks it all down step by step.',
+    content: `<h2>Why New York — and What to Know First</h2><p>New York is home to some of the world\'s most impactful nonprofits, but forming one here requires extra steps and higher costs compared to most states. The $75 filing fee is moderate, but the mandatory newspaper publication requirement can add $200-$1,000 or more to your costs. Understanding these requirements upfront helps you budget and plan accordingly.</p><h2>Step 1: File Your Certificate of Incorporation</h2><p>File a Certificate of Incorporation for a Not-for-Profit Corporation with the New York Department of State. The filing fee is $75. Under the revised New York Not-for-Profit Corporation Law, you must designate your organization as a Type A (civic, non-charitable), Type B (charitable), Type C (both), or Type D (government-related). Most 501(c)(3) organizations will be Type B or Type C.</p><h2>Step 2: Meet the Publication Requirement</h2><p>New York requires you to publish a notice of incorporation in two newspapers — one daily and one weekly — in the county where your principal office is located, for six consecutive weeks. The county clerk designates which newspapers qualify. This is one of the most expensive and time-consuming steps, but it is legally required. After publication, file a Certificate of Publication with the Department of State.</p><h2>Step 3: Register with the Attorney General</h2><p>All charitable nonprofits in New York must register with the Charities Bureau of the New York Attorney General before soliciting donations. File Form CHAR410 (initial registration) along with your organizing documents. Annual filing of Form CHAR500 is also required, along with your IRS Form 990 and audited financial statements if your revenue exceeds $750,000.</p><h2>Ongoing Compliance</h2><p>New York nonprofits must file a biennial report with the Department of State, annual CHAR500 with the Attorney General, and federal Form 990 with the IRS. The state has strict rules about board size (minimum three members), related party transactions, and executive compensation. TurboCharity generates all required New York documents and tracks your compliance deadlines to ensure you stay in good standing.</p>`,
+    author: 'TurboCharity Team',
+    publishedAt: '2025-03-15T00:00:00Z',
+    updatedAt: '2025-03-15T00:00:00Z',
+    category: 'State Guides',
+    tags: ['New York', 'state guide', 'nonprofit formation', 'publication requirement', 'Attorney General'],
+    readingTime: 7,
+    readTime: '7 min read',
+  },
+  {
+    slug: 'nonprofit-budgeting-basics-financial-planning',
+    title: 'Nonprofit Budgeting Basics: Financial Planning for New Organizations',
+    metaDescription: 'Learn how to create a nonprofit budget from scratch. Covers startup costs, operating budgets, cash flow planning, and financial reporting for 501(c)(3) orgs.',
+    excerpt: 'A solid budget is the foundation of every successful nonprofit. Whether you are pre-revenue or managing your first grants, these budgeting fundamentals will keep your organization financially healthy.',
+    content: `<h2>Why Budgeting Matters for Nonprofits</h2><p>A nonprofit budget is more than a financial document — it is a strategic plan expressed in numbers. Grant makers, board members, and donors all want to see that your organization manages money responsibly. The IRS also reviews your financial information as part of the 501(c)(3) application process and requires annual financial reporting on Form 990. Starting with strong budgeting habits early will save you headaches as your organization grows.</p><h2>Startup Costs to Plan For</h2><p>Before your nonprofit earns its first dollar, you will have expenses. Common startup costs include: state incorporation fees ($8-$300 depending on your state), IRS Form 1023-EZ filing fee ($275), registered agent service ($0-$300/year), accounting software ($0-$50/month), website and email hosting ($0-$30/month), and potential legal consultation. TurboCharity helps minimize these costs by automating document generation and filing guidance.</p><h2>Creating Your Operating Budget</h2><p>An operating budget projects your income and expenses for a fiscal year. On the income side, list all expected revenue sources: individual donations, grants, events, program fees, and in-kind contributions. On the expense side, categorize spending into program expenses (directly serving your mission), management and general expenses (administration), and fundraising expenses. The IRS and donors look at these ratios — aim for at least 65-75% of spending on program activities.</p><h2>Cash Flow Planning</h2><p>Revenue and expenses rarely arrive and depart evenly throughout the year. Many nonprofits receive the majority of donations in Q4 (October-December) but have expenses year-round. Create a monthly cash flow projection to identify potential shortfalls. Maintain a reserve fund of at least 3-6 months of operating expenses when possible. This financial cushion prevents you from making desperate decisions during lean months.</p><h2>Financial Reporting and Transparency</h2><p>Nonprofits are required to file IRS Form 990 (or 990-EZ for smaller organizations) annually, and this return is publicly available. Embrace transparency by sharing financial summaries with your board at every meeting, making your 990 available on your website, and providing donors with clear impact-per-dollar metrics. Strong financial stewardship builds donor trust and makes your organization more competitive for grants.</p>`,
+    author: 'TurboCharity Team',
+    publishedAt: '2025-04-01T00:00:00Z',
+    updatedAt: '2025-04-01T00:00:00Z',
+    category: 'Tax Compliance',
+    tags: ['budgeting', 'financial planning', 'Form 990', 'startup costs', 'cash flow'],
+    readingTime: 7,
+    readTime: '7 min read',
+  },
 ];
 
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
-  return blogPosts.find(post => post.slug === slug);
+  return blogPosts.find((post) => post.slug === slug);
+}
+
+export function getBlogsByCategory(category: BlogPost['category']): BlogPost[] {
+  return blogPosts.filter((post) => post.category === category);
 }
 
 export function getAllBlogSlugs(): string[] {
-  return blogPosts.map(post => post.slug);
+  return blogPosts.map((post) => post.slug);
 }

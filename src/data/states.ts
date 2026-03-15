@@ -7,6 +7,8 @@ export interface StateInfo {
   requiresPublicationNotice: boolean;
   onlineFilingAvailable: boolean;
   secretaryOfStateUrl: string;
+  description: string;
+  steps: string[];
 }
 
 export const STATES: StateInfo[] = [
@@ -19,6 +21,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.alabama.gov/',
+    description:
+      'Alabama offers a straightforward process for forming a nonprofit corporation through the Secretary of State. With a $200 filing fee and no publication requirement, Alabama nonprofits can be up and running within a week. The state also provides online filing for faster processing of Articles of Incorporation.',
+    steps: [
+      'Choose a unique name for your nonprofit and verify availability with the Alabama Secretary of State.',
+      'Appoint a registered agent with a physical address in Alabama.',
+      'Draft and file your Articles of Incorporation with the Alabama Secretary of State ($200 filing fee).',
+      'Obtain an Employer Identification Number (EIN) from the IRS at no cost.',
+      'Draft your nonprofit bylaws and conflict of interest policy.',
+      'Hold an organizational meeting to adopt bylaws, appoint officers, and elect your board of directors.',
+      'Apply for 501(c)(3) tax-exempt status with the IRS using Form 1023 or 1023-EZ.',
+    ],
   },
   {
     slug: 'alaska',
@@ -29,6 +42,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.commerce.alaska.gov/web/cbpl/',
+    description:
+      'Alaska nonprofit formation is handled through the Division of Corporations, Business, and Professional Licensing. While the $250 filing fee is among the higher in the nation, Alaska does not require a publication notice. Processing typically takes 10-15 business days with online filing available.',
+    steps: [
+      'Select a name for your nonprofit and check availability through Alaska\'s business name database.',
+      'Designate a registered agent located in Alaska.',
+      'File Articles of Incorporation with the Alaska Division of Corporations ($250 filing fee).',
+      'Apply for a federal EIN through the IRS website.',
+      'Create your bylaws covering board governance, meeting procedures, and officer roles.',
+      'Conduct an initial board meeting to adopt bylaws and appoint officers.',
+      'File IRS Form 1023 or 1023-EZ to obtain federal tax-exempt status.',
+    ],
   },
   {
     slug: 'arizona',
@@ -39,6 +63,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: true,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://azsos.gov/',
+    description:
+      'Arizona is one of the most affordable states for nonprofit incorporation with a filing fee of just $40. However, Arizona requires a publication notice in an approved newspaper after filing your Articles of Incorporation. The Arizona Corporation Commission processes filings within 5-10 business days.',
+    steps: [
+      'Choose a unique nonprofit name and verify its availability with the Arizona Corporation Commission.',
+      'Appoint a statutory agent with an Arizona street address.',
+      'File your Articles of Incorporation with the Arizona Corporation Commission ($40 fee).',
+      'Publish your Articles of Incorporation in an Arizona-approved newspaper within 60 days of filing.',
+      'Obtain an EIN from the IRS for tax identification purposes.',
+      'Draft comprehensive bylaws and hold your organizational board meeting.',
+      'File IRS Form 1023 or 1023-EZ to apply for 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'arkansas',
@@ -49,6 +84,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.arkansas.gov/',
+    description:
+      'Arkansas provides a simple and affordable nonprofit formation process with a $50 filing fee. The Arkansas Secretary of State processes online filings within 5-7 business days. No publication notice is required, making it a cost-effective state for establishing your charitable organization.',
+    steps: [
+      'Search the Arkansas Secretary of State database to ensure your chosen nonprofit name is available.',
+      'Appoint a registered agent with an Arkansas address.',
+      'Prepare and file Articles of Incorporation with the Arkansas Secretary of State ($50 fee).',
+      'Apply for your federal EIN from the IRS.',
+      'Draft bylaws that comply with Arkansas nonprofit corporation law.',
+      'Hold an organizational meeting to elect directors, adopt bylaws, and appoint officers.',
+      'Submit IRS Form 1023 or 1023-EZ for federal tax-exempt recognition.',
+    ],
   },
   {
     slug: 'california',
@@ -59,6 +105,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.ca.gov/',
+    description:
+      'California has one of the lowest nonprofit filing fees in the country at just $30 and processes applications in 3-5 business days. As the most populous state, California has specific requirements under its Nonprofit Public Benefit Corporation Law, including rules about board composition and record inspection rights.',
+    steps: [
+      'Choose a corporate name and check availability via the California Secretary of State business search.',
+      'Designate an agent for service of process with a California street address.',
+      'File Articles of Incorporation with the California Secretary of State ($30 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws compliant with the California Nonprofit Public Benefit Corporation Law.',
+      'Hold your initial board of directors meeting to adopt bylaws and elect officers.',
+      'File IRS Form 1023 or 1023-EZ for 501(c)(3) status, then apply for California state tax exemption (Form 3500 or 3500A) with the Franchise Tax Board.',
+    ],
   },
   {
     slug: 'colorado',
@@ -69,6 +126,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.state.co.us/',
+    description:
+      'Colorado offers an efficient online filing system through the Secretary of State with a $50 fee for nonprofit Articles of Incorporation. The state does not require a publication notice, and most filings are processed within 5-7 business days. Colorado also requires periodic reports to maintain good standing.',
+    steps: [
+      'Search the Colorado Secretary of State business database for name availability.',
+      'Appoint a registered agent with a Colorado street address.',
+      'File Articles of Incorporation online with the Colorado Secretary of State ($50 fee).',
+      'Apply for an EIN through the IRS website.',
+      'Create bylaws in accordance with the Colorado Revised Nonprofit Corporation Act.',
+      'Conduct your organizational meeting to adopt bylaws and appoint officers.',
+      'File for federal 501(c)(3) status using IRS Form 1023 or 1023-EZ.',
+    ],
   },
   {
     slug: 'connecticut',
@@ -79,6 +147,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://portal.ct.gov/sots',
+    description:
+      'Connecticut nonprofit incorporation is managed through the Secretary of the State with a $50 filing fee. The process is straightforward with online filing available, and no publication notice is needed. Connecticut law requires nonprofits to file an annual report to maintain their active status.',
+    steps: [
+      'Verify your proposed nonprofit name is available through the Connecticut Secretary of the State.',
+      'Appoint a registered agent located in Connecticut.',
+      'File your Certificate of Incorporation with the Connecticut Secretary of the State ($50 fee).',
+      'Obtain a federal EIN from the IRS at no charge.',
+      'Draft bylaws that comply with the Connecticut Revised Nonstock Corporation Act.',
+      'Hold an organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'Apply for 501(c)(3) tax-exempt status with the IRS.',
+    ],
   },
   {
     slug: 'delaware',
@@ -89,6 +168,38 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://corp.delaware.gov/',
+    description:
+      'Delaware is renowned for its business-friendly legal framework, and its nonprofit formation process is equally streamlined. With an $89 filing fee and 3-5 business day processing, Delaware offers a well-established corporate law system. The state does not require a publication notice for nonprofit incorporation.',
+    steps: [
+      'Choose a corporate name and verify availability through Delaware\'s Division of Corporations.',
+      'Designate a registered agent with a physical Delaware address.',
+      'File your Certificate of Incorporation with the Delaware Division of Corporations ($89 fee).',
+      'Obtain an EIN from the IRS.',
+      'Prepare bylaws that comply with the Delaware General Corporation Law for nonstock corporations.',
+      'Hold your initial board meeting to adopt bylaws and elect officers.',
+      'File IRS Form 1023 or 1023-EZ to obtain 501(c)(3) tax-exempt status.',
+    ],
+  },
+  {
+    slug: 'district-of-columbia',
+    name: 'District of Columbia',
+    abbreviation: 'DC',
+    filingFee: 80,
+    processingTime: '5-10 business days',
+    requiresPublicationNotice: false,
+    onlineFilingAvailable: true,
+    secretaryOfStateUrl: 'https://dcra.dc.gov/service/domestic-nonprofit-corporation',
+    description:
+      'The District of Columbia provides a unique opportunity to incorporate a nonprofit in the nation\'s capital. With an $80 filing fee and no publication requirement, DC is a popular choice for organizations focused on national policy and advocacy. Filing is handled through the Department of Consumer and Regulatory Affairs.',
+    steps: [
+      'Check name availability through the DC Department of Consumer and Regulatory Affairs (DCRA).',
+      'Appoint a registered agent with a DC address.',
+      'File Articles of Incorporation with DCRA ($80 filing fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws that comply with the DC Nonprofit Corporation Act.',
+      'Hold an organizational meeting to adopt bylaws, elect the board, and appoint officers.',
+      'Apply for 501(c)(3) tax-exempt status with the IRS using Form 1023 or 1023-EZ.',
+    ],
   },
   {
     slug: 'florida',
@@ -99,6 +210,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://dos.fl.gov/sunbiz/',
+    description:
+      'Florida offers a fast and efficient nonprofit filing process through the Sunbiz portal at a $70 fee. The state processes filings in as little as 3-5 business days with no publication requirement. Florida is one of the most popular states for nonprofit formation due to its lack of state income tax and business-friendly environment.',
+    steps: [
+      'Search for name availability using the Florida Sunbiz portal.',
+      'Designate a registered agent with a Florida street address.',
+      'File Articles of Incorporation online through Sunbiz ($70 fee).',
+      'Apply for a federal EIN from the IRS.',
+      'Draft bylaws in compliance with the Florida Not For Profit Corporation Act.',
+      'Hold your initial board meeting to adopt bylaws, elect officers, and approve any initial resolutions.',
+      'File IRS Form 1023 or 1023-EZ for federal 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'georgia',
@@ -109,6 +231,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: true,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.ga.gov/corporations-division',
+    description:
+      'Georgia nonprofit formation requires a $100 filing fee and includes a publication notice requirement. After filing Articles of Incorporation with the Georgia Secretary of State, you must publish a notice in your county\'s legal organ newspaper. Processing typically takes 7-10 business days.',
+    steps: [
+      'Check name availability through the Georgia Secretary of State Corporations Division.',
+      'Appoint a registered agent with a Georgia address.',
+      'File Articles of Incorporation with the Georgia Secretary of State ($100 fee).',
+      'Publish a notice of incorporation in the legal organ of the county where your registered office is located.',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws compliant with the Georgia Nonprofit Corporation Code and hold your organizational meeting.',
+      'Apply for 501(c)(3) status with the IRS using Form 1023 or 1023-EZ.',
+    ],
   },
   {
     slug: 'hawaii',
@@ -119,6 +252,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: false,
     secretaryOfStateUrl: 'https://cca.hawaii.gov/breg/',
+    description:
+      'Hawaii nonprofit incorporation is handled through the Department of Commerce and Consumer Affairs with a $50 filing fee. While the state does not offer online filing, the process is straightforward and typically takes 5-10 business days. No publication notice is required for nonprofit formation in Hawaii.',
+    steps: [
+      'Verify name availability through the Hawaii Department of Commerce and Consumer Affairs (DCCA).',
+      'Appoint a registered agent with a Hawaii address.',
+      'Prepare and mail Articles of Incorporation to the DCCA Business Registration Division ($50 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws in accordance with Hawaii nonprofit corporation law.',
+      'Conduct your organizational board meeting to adopt bylaws and elect officers.',
+      'File IRS Form 1023 or 1023-EZ to obtain 501(c)(3) tax-exempt recognition.',
+    ],
   },
   {
     slug: 'idaho',
@@ -129,6 +273,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.idaho.gov/',
+    description:
+      'Idaho provides an accessible nonprofit formation process through its Secretary of State with a $100 filing fee. Online filing is available and most applications are processed within 5-7 business days. Idaho does not require a publication notice, keeping formation costs manageable for new charitable organizations.',
+    steps: [
+      'Search the Idaho Secretary of State business entity database for name availability.',
+      'Appoint a registered agent with a physical Idaho address.',
+      'File Articles of Incorporation online with the Idaho Secretary of State ($100 fee).',
+      'Apply for an EIN from the IRS.',
+      'Draft bylaws that comply with the Idaho Nonprofit Corporation Act.',
+      'Hold an organizational meeting to adopt bylaws, elect your board, and appoint officers.',
+      'Submit IRS Form 1023 or 1023-EZ for 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'illinois',
@@ -139,6 +294,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.ilsos.gov/',
+    description:
+      'Illinois nonprofit formation is managed through the Secretary of State with a $50 filing fee. The state offers online filing and processes applications in 5-10 business days. Illinois has its own General Not For Profit Corporation Act that governs nonprofit operations and governance requirements.',
+    steps: [
+      'Check name availability through the Illinois Secretary of State.',
+      'Designate a registered agent with an Illinois address.',
+      'File Articles of Incorporation with the Illinois Secretary of State ($50 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Prepare bylaws in compliance with the Illinois General Not For Profit Corporation Act.',
+      'Hold your organizational meeting to adopt bylaws, appoint officers, and conduct initial business.',
+      'Apply for 501(c)(3) status using IRS Form 1023 or 1023-EZ, and file for Illinois state tax exemption.',
+    ],
   },
   {
     slug: 'indiana',
@@ -149,6 +315,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.in.gov/sos/',
+    description:
+      'Indiana offers one of the lowest nonprofit filing fees in the country at just $30. The Indiana Secretary of State provides efficient online filing with processing in 5-7 business days. No publication notice is required, and Indiana law allows for flexible nonprofit governance structures.',
+    steps: [
+      'Verify name availability through the Indiana Secretary of State INBiz portal.',
+      'Appoint a registered agent with an Indiana address.',
+      'File Articles of Incorporation online through INBiz ($30 fee).',
+      'Obtain an EIN from the IRS.',
+      'Draft bylaws in compliance with the Indiana Nonprofit Corporation Act of 1991.',
+      'Conduct an organizational meeting to adopt bylaws and elect officers.',
+      'File IRS Form 1023 or 1023-EZ for federal tax-exempt status.',
+    ],
   },
   {
     slug: 'iowa',
@@ -159,6 +336,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.iowa.gov/',
+    description:
+      'Iowa is one of the most affordable states for nonprofit incorporation with a filing fee of just $20. The Iowa Secretary of State processes filings within 5-10 business days with online filing available. Iowa follows the Revised Iowa Nonprofit Corporation Act for governance of charitable organizations.',
+    steps: [
+      'Search for name availability through the Iowa Secretary of State business database.',
+      'Designate a registered agent with an Iowa address.',
+      'File Articles of Incorporation with the Iowa Secretary of State ($20 fee).',
+      'Apply for a federal EIN from the IRS.',
+      'Draft bylaws that comply with the Revised Iowa Nonprofit Corporation Act.',
+      'Hold your organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'Submit IRS Form 1023 or 1023-EZ for 501(c)(3) tax-exempt recognition.',
+    ],
   },
   {
     slug: 'kansas',
@@ -169,6 +357,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.ks.gov/',
+    description:
+      'Kansas provides a fast and affordable nonprofit incorporation process at just $20 with 3-5 business day processing. The Kansas Secretary of State offers online filing for nonprofit Articles of Incorporation. No publication notice is required, making Kansas one of the easiest and cheapest states to start a nonprofit.',
+    steps: [
+      'Check name availability through the Kansas Secretary of State business filings.',
+      'Appoint a resident agent with a Kansas address.',
+      'File Articles of Incorporation with the Kansas Secretary of State ($20 fee).',
+      'Obtain an EIN from the IRS.',
+      'Create bylaws in compliance with the Kansas General Corporation Code for nonprofits.',
+      'Hold an organizational meeting to adopt bylaws, appoint officers, and elect the initial board.',
+      'Apply for 501(c)(3) status with the IRS using Form 1023 or 1023-EZ.',
+    ],
   },
   {
     slug: 'kentucky',
@@ -179,6 +378,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.ky.gov/',
+    description:
+      'Kentucky has the lowest nonprofit filing fee in the entire United States at just $8, making it the most affordable state for incorporation. The Kentucky Secretary of State offers online filing with 3-5 business day processing. No publication notice is required for nonprofit formation.',
+    steps: [
+      'Search for name availability through the Kentucky Secretary of State online database.',
+      'Designate a registered agent with a Kentucky address.',
+      'File Articles of Incorporation with the Kentucky Secretary of State ($8 fee).',
+      'Obtain a federal EIN from the IRS at no cost.',
+      'Draft bylaws compliant with the Kentucky Nonprofit Corporation Acts.',
+      'Hold your organizational meeting to adopt bylaws and appoint officers.',
+      'File IRS Form 1023 or 1023-EZ to apply for federal 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'louisiana',
@@ -189,6 +399,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.la.gov/',
+    description:
+      'Louisiana nonprofit incorporation is managed through the Secretary of State with a $75 filing fee. The state offers online filing and processes applications within 5-7 business days. Louisiana nonprofits are governed by the Louisiana Nonprofit Corporation Law, which follows civil law traditions unique to the state.',
+    steps: [
+      'Check name availability through the Louisiana Secretary of State business search.',
+      'Appoint a registered agent with a Louisiana address.',
+      'File Articles of Incorporation with the Louisiana Secretary of State ($75 fee).',
+      'Obtain an EIN from the IRS.',
+      'Draft bylaws in compliance with the Louisiana Nonprofit Corporation Law.',
+      'Conduct an organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'Apply for 501(c)(3) status using IRS Form 1023 or 1023-EZ.',
+    ],
   },
   {
     slug: 'maine',
@@ -199,6 +420,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.maine.gov/sos/',
+    description:
+      'Maine offers an affordable nonprofit formation process with a $40 filing fee through the Secretary of State. Online filing is available and processing takes 5-10 business days. Maine does not require a publication notice, and its nonprofit corporation act provides clear guidelines for governance and operations.',
+    steps: [
+      'Verify your proposed name is available through the Maine Secretary of State.',
+      'Designate a registered agent with a Maine address.',
+      'File Articles of Incorporation with the Maine Secretary of State ($40 fee).',
+      'Apply for a federal EIN from the IRS.',
+      'Prepare bylaws compliant with the Maine Nonprofit Corporation Act.',
+      'Hold your organizational meeting to adopt bylaws and appoint officers.',
+      'File IRS Form 1023 or 1023-EZ for 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'maryland',
@@ -209,6 +441,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.maryland.gov/',
+    description:
+      'Maryland nonprofit incorporation is filed through the State Department of Assessments and Taxation with a $100 fee. Processing takes 7-10 business days and online filing is available. Maryland has specific requirements for nonprofit governance, including mandatory provisions in the Articles of Incorporation for tax-exempt organizations.',
+    steps: [
+      'Check name availability through the Maryland State Department of Assessments and Taxation (SDAT).',
+      'Designate a resident agent with a Maryland address.',
+      'File Articles of Incorporation with SDAT ($100 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws compliant with the Maryland Corporations and Associations Code.',
+      'Hold your organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'Apply for 501(c)(3) status with the IRS, and file for Maryland state tax exemption.',
+    ],
   },
   {
     slug: 'massachusetts',
@@ -219,6 +462,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sec.state.ma.us/cor/',
+    description:
+      'Massachusetts provides an affordable nonprofit filing process at $35 through the Secretary of the Commonwealth. The state processes applications within 5-10 business days with online filing available. Massachusetts has strong nonprofit oversight through its Attorney General and requires annual reporting for public charities.',
+    steps: [
+      'Search for name availability through the Massachusetts Secretary of the Commonwealth.',
+      'Appoint a registered agent with a Massachusetts address.',
+      'File Articles of Organization with the Corporations Division ($35 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws in compliance with Massachusetts nonprofit corporation law (Chapter 180).',
+      'Hold your organizational meeting to adopt bylaws and elect officers.',
+      'File IRS Form 1023 or 1023-EZ for 501(c)(3) status, and register with the Massachusetts Attorney General.',
+    ],
   },
   {
     slug: 'michigan',
@@ -229,6 +483,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.michigan.gov/lara/',
+    description:
+      'Michigan is one of the most affordable states for nonprofit incorporation with a filing fee of just $20. The Department of Licensing and Regulatory Affairs (LARA) processes filings within 5-7 business days. Michigan does not require a publication notice and offers online filing for convenience.',
+    steps: [
+      'Check name availability through Michigan LARA Corporations Division.',
+      'Designate a registered agent with a Michigan address.',
+      'File Articles of Incorporation with LARA ($20 fee).',
+      'Apply for a federal EIN from the IRS.',
+      'Draft bylaws compliant with the Michigan Nonprofit Corporation Act.',
+      'Conduct your organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'Submit IRS Form 1023 or 1023-EZ for federal 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'minnesota',
@@ -239,6 +504,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.state.mn.us/',
+    description:
+      'Minnesota nonprofit formation is handled through the Secretary of State with a $70 filing fee. The state offers online filing and processes applications in 5-10 business days. Minnesota has a robust nonprofit sector and the Minnesota Nonprofit Corporation Act provides detailed guidance on governance and operations.',
+    steps: [
+      'Search for name availability through the Minnesota Secretary of State.',
+      'Appoint a registered agent with a Minnesota address.',
+      'File Articles of Incorporation with the Minnesota Secretary of State ($70 fee).',
+      'Obtain an EIN from the IRS.',
+      'Prepare bylaws in compliance with the Minnesota Nonprofit Corporation Act (Chapter 317A).',
+      'Hold an organizational meeting to adopt bylaws, elect the board, and appoint officers.',
+      'Apply for 501(c)(3) status with the IRS using Form 1023 or 1023-EZ.',
+    ],
   },
   {
     slug: 'mississippi',
@@ -249,6 +525,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: false,
     secretaryOfStateUrl: 'https://www.sos.ms.gov/',
+    description:
+      'Mississippi nonprofit incorporation requires a $50 filing fee through the Secretary of State. While online filing is not currently available, processing takes 5-7 business days by mail. No publication notice is required, and Mississippi follows the Mississippi Nonprofit Corporation Act for governance standards.',
+    steps: [
+      'Verify name availability through the Mississippi Secretary of State.',
+      'Designate a registered agent with a Mississippi address.',
+      'Prepare and mail Articles of Incorporation to the Mississippi Secretary of State ($50 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws compliant with the Mississippi Nonprofit Corporation Act.',
+      'Hold your organizational meeting to adopt bylaws and appoint officers.',
+      'File IRS Form 1023 or 1023-EZ to apply for 501(c)(3) status.',
+    ],
   },
   {
     slug: 'missouri',
@@ -259,6 +546,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.mo.gov/',
+    description:
+      'Missouri provides a fast and affordable path to nonprofit incorporation with a $25 filing fee and 3-5 business day processing. The Missouri Secretary of State offers online filing, and no publication notice is needed. Missouri law under Chapter 355 governs nonprofit corporations in the state.',
+    steps: [
+      'Check name availability through the Missouri Secretary of State business services.',
+      'Appoint a registered agent with a Missouri address.',
+      'File Articles of Incorporation with the Missouri Secretary of State ($25 fee).',
+      'Apply for a federal EIN from the IRS.',
+      'Draft bylaws that comply with Missouri Chapter 355 (Nonprofit Corporation Law).',
+      'Conduct an organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'Submit IRS Form 1023 or 1023-EZ for federal tax-exempt status.',
+    ],
   },
   {
     slug: 'montana',
@@ -269,6 +567,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sosmt.gov/',
+    description:
+      'Montana offers one of the lowest filing fees in the country at $20 for nonprofit Articles of Incorporation. The Secretary of State provides online filing with 5-7 business day processing. Montana does not require a publication notice, making it an economical choice for starting a nonprofit.',
+    steps: [
+      'Search for name availability through the Montana Secretary of State business entity search.',
+      'Designate a registered agent with a Montana address.',
+      'File Articles of Incorporation with the Montana Secretary of State ($20 fee).',
+      'Obtain an EIN from the IRS.',
+      'Create bylaws in compliance with the Montana Nonprofit Corporation Act.',
+      'Hold an organizational meeting to adopt bylaws and appoint officers.',
+      'Apply for 501(c)(3) tax-exempt status with the IRS using Form 1023 or 1023-EZ.',
+    ],
   },
   {
     slug: 'nebraska',
@@ -279,6 +588,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: true,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.nebraska.gov/',
+    description:
+      'Nebraska has one of the lowest nonprofit filing fees at just $10, though the state does require a publication notice in a local newspaper. The Nebraska Secretary of State offers online filing with 3-5 business day processing. Nonprofits must comply with the Nebraska Nonprofit Corporation Act.',
+    steps: [
+      'Check name availability through the Nebraska Secretary of State.',
+      'Appoint a registered agent with a Nebraska address.',
+      'File Articles of Incorporation with the Nebraska Secretary of State ($10 fee).',
+      'Publish the required notice of incorporation in a Nebraska newspaper for three consecutive weeks.',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws and hold your organizational meeting to elect directors and appoint officers.',
+      'File IRS Form 1023 or 1023-EZ to apply for 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'nevada',
@@ -289,6 +609,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.nvsos.gov/',
+    description:
+      'Nevada is known for its business-friendly environment and offers nonprofit incorporation for $50 with fast 3-5 business day processing. No publication notice is required, and the Secretary of State provides comprehensive online filing. Nevada has no state income tax, which simplifies ongoing compliance for nonprofits.',
+    steps: [
+      'Search for name availability through the Nevada Secretary of State business name database.',
+      'Designate a registered agent with a Nevada street address.',
+      'File Articles of Incorporation with the Nevada Secretary of State ($50 fee).',
+      'Apply for a federal EIN from the IRS.',
+      'Draft bylaws compliant with the Nevada Revised Statutes for nonprofit corporations.',
+      'Conduct your organizational meeting to adopt bylaws and elect officers.',
+      'Submit IRS Form 1023 or 1023-EZ for federal 501(c)(3) tax-exempt recognition.',
+    ],
   },
   {
     slug: 'new-hampshire',
@@ -299,6 +630,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.nh.gov/',
+    description:
+      'New Hampshire provides an affordable and straightforward nonprofit incorporation process at $25 through the Secretary of State. Processing takes 5-7 business days with online filing available. New Hampshire has no state income tax or sales tax, simplifying the tax landscape for charitable organizations.',
+    steps: [
+      'Verify name availability through the New Hampshire Secretary of State Corporation Division.',
+      'Appoint a registered agent with a New Hampshire address.',
+      'File Articles of Agreement with the New Hampshire Secretary of State ($25 fee).',
+      'Obtain an EIN from the IRS.',
+      'Prepare bylaws compliant with the New Hampshire Voluntary Corporations and Associations Act.',
+      'Hold your organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'Apply for 501(c)(3) status using IRS Form 1023 or 1023-EZ.',
+    ],
   },
   {
     slug: 'new-jersey',
@@ -309,6 +651,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.njportal.com/DOR/BusinessFormation',
+    description:
+      'New Jersey nonprofit formation is handled through the Division of Revenue and Enterprise Services with a $75 filing fee. Online filing is available and processing takes 5-10 business days. New Jersey requires nonprofits to register for charitable solicitation before fundraising in the state.',
+    steps: [
+      'Check name availability through the New Jersey Division of Revenue business name search.',
+      'Designate a registered agent with a New Jersey address.',
+      'File a Certificate of Incorporation with the NJ Division of Revenue ($75 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws in compliance with the New Jersey Nonprofit Corporation Act (Title 15A).',
+      'Hold your organizational meeting to adopt bylaws and elect officers.',
+      'File IRS Form 1023 or 1023-EZ for 501(c)(3) status, then register for charitable solicitation with the NJ Charities Registration Section.',
+    ],
   },
   {
     slug: 'new-mexico',
@@ -319,6 +672,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.nm.gov/',
+    description:
+      'New Mexico offers an affordable nonprofit incorporation process at $25 through the Secretary of State. Online filing is available with 5-10 business day processing. No publication notice is required, and New Mexico nonprofits benefit from the state\'s straightforward regulatory environment.',
+    steps: [
+      'Search for name availability through the New Mexico Secretary of State.',
+      'Appoint a registered agent with a New Mexico address.',
+      'File Articles of Incorporation with the New Mexico Secretary of State ($25 fee).',
+      'Apply for a federal EIN from the IRS.',
+      'Prepare bylaws compliant with the New Mexico Nonprofit Corporation Act.',
+      'Conduct an organizational meeting to adopt bylaws, elect the board, and appoint officers.',
+      'Submit IRS Form 1023 or 1023-EZ to apply for 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'new-york',
@@ -329,6 +693,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: true,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.dos.ny.gov/',
+    description:
+      'New York nonprofit formation involves additional steps compared to many states, including a publication requirement and potential Attorney General approval. The $75 filing fee is moderate, but newspaper publication costs can add $200-$1,000+. Processing takes 7-14 business days through the Department of State.',
+    steps: [
+      'Check name availability through the New York Department of State Division of Corporations.',
+      'Designate a registered agent with a New York address.',
+      'File a Certificate of Incorporation with the New York Department of State ($75 fee).',
+      'Publish a notice of incorporation in two newspapers (one daily, one weekly) in the county of your principal office for six consecutive weeks.',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws compliant with the New York Not-for-Profit Corporation Law and hold your organizational meeting.',
+      'Apply for 501(c)(3) status with the IRS, then register with the NY Attorney General Charities Bureau.',
+    ],
   },
   {
     slug: 'north-carolina',
@@ -339,6 +714,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sosnc.gov/',
+    description:
+      'North Carolina nonprofit incorporation costs $60 through the Secretary of State with 5-7 business day processing. Online filing is available and no publication notice is required. North Carolina has a thriving nonprofit sector and follows the North Carolina Nonprofit Corporation Act for governance standards.',
+    steps: [
+      'Search for name availability through the North Carolina Secretary of State.',
+      'Appoint a registered agent with a North Carolina address.',
+      'File Articles of Incorporation with the NC Secretary of State ($60 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Prepare bylaws in compliance with the North Carolina Nonprofit Corporation Act (Chapter 55A).',
+      'Hold an organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'File IRS Form 1023 or 1023-EZ for 501(c)(3) status and register for charitable solicitation in NC.',
+    ],
   },
   {
     slug: 'north-dakota',
@@ -349,6 +735,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.nd.gov/',
+    description:
+      'North Dakota provides an affordable nonprofit formation process at $40 through the Secretary of State. Online filing is available with 5-10 business day processing. No publication notice is required, and the state follows the North Dakota Nonprofit Corporation Act for governance of charitable organizations.',
+    steps: [
+      'Check name availability through the North Dakota Secretary of State business records search.',
+      'Designate a registered agent with a North Dakota address.',
+      'File Articles of Incorporation with the North Dakota Secretary of State ($40 fee).',
+      'Apply for a federal EIN from the IRS.',
+      'Draft bylaws compliant with the North Dakota Nonprofit Corporation Act.',
+      'Hold your organizational meeting to adopt bylaws and appoint officers.',
+      'Submit IRS Form 1023 or 1023-EZ for federal 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'ohio',
@@ -359,6 +756,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.ohiosos.gov/',
+    description:
+      'Ohio nonprofit formation is handled through the Secretary of State with a $99 filing fee. The state offers online filing and fast 3-5 business day processing. No publication notice is required, and Ohio\'s Nonprofit Corporation Law provides a well-established framework for charitable organizations.',
+    steps: [
+      'Verify name availability through the Ohio Secretary of State business search.',
+      'Appoint a statutory agent with an Ohio address.',
+      'File Articles of Incorporation with the Ohio Secretary of State ($99 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws in compliance with Ohio Revised Code Chapter 1702 (Nonprofit Corporation Law).',
+      'Conduct your organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'Apply for 501(c)(3) tax-exempt status with the IRS using Form 1023 or 1023-EZ.',
+    ],
   },
   {
     slug: 'oklahoma',
@@ -369,6 +777,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.ok.gov/',
+    description:
+      'Oklahoma offers an affordable nonprofit formation process with a $25 filing fee and 5-7 business day processing through the Secretary of State. Online filing is available and no publication notice is required. Oklahoma follows the Oklahoma General Corporation Act for nonprofit governance.',
+    steps: [
+      'Check name availability through the Oklahoma Secretary of State.',
+      'Appoint a registered agent with an Oklahoma address.',
+      'File a Certificate of Incorporation with the Oklahoma Secretary of State ($25 fee).',
+      'Obtain an EIN from the IRS.',
+      'Prepare bylaws that comply with Oklahoma nonprofit corporation law.',
+      'Hold your organizational meeting to adopt bylaws, elect the board, and appoint officers.',
+      'File IRS Form 1023 or 1023-EZ to apply for federal 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'oregon',
@@ -379,6 +798,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.oregon.gov/',
+    description:
+      'Oregon nonprofit incorporation is managed through the Secretary of State at a $50 filing fee. Online filing is available with 5-10 business day processing. Oregon does not require a publication notice and has an active nonprofit sector governed by the Oregon Nonprofit Corporation Act.',
+    steps: [
+      'Search for name availability through the Oregon Secretary of State business registry.',
+      'Designate a registered agent with an Oregon address.',
+      'File Articles of Incorporation with the Oregon Secretary of State ($50 fee).',
+      'Apply for a federal EIN from the IRS.',
+      'Draft bylaws compliant with the Oregon Nonprofit Corporation Act (ORS Chapter 65).',
+      'Hold an organizational meeting to adopt bylaws and appoint officers.',
+      'Submit IRS Form 1023 or 1023-EZ for 501(c)(3) tax-exempt recognition.',
+    ],
   },
   {
     slug: 'pennsylvania',
@@ -389,6 +819,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: true,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.dos.pa.gov/',
+    description:
+      'Pennsylvania nonprofit formation requires a $125 filing fee and includes a publication notice requirement. After filing Articles of Incorporation with the Department of State, you must publish notice in two newspapers. Processing takes 7-10 business days, and the state has detailed requirements under the Pennsylvania Nonprofit Corporation Law.',
+    steps: [
+      'Check name availability through the Pennsylvania Department of State business entity search.',
+      'Appoint a registered office (not a PO Box) in Pennsylvania.',
+      'File Articles of Incorporation with the Pennsylvania Department of State ($125 fee).',
+      'Publish a notice of incorporation in two newspapers in the county of your registered office (one of general circulation, one a legal journal).',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws compliant with the Pennsylvania Nonprofit Corporation Law of 1988 and hold your organizational meeting.',
+      'Apply for 501(c)(3) status with the IRS, then register with the PA Bureau of Charitable Organizations.',
+    ],
   },
   {
     slug: 'rhode-island',
@@ -399,6 +840,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.ri.gov/',
+    description:
+      'Rhode Island offers an affordable nonprofit incorporation process at $35 through the Secretary of State. Online filing is available with 5-7 business day processing. No publication notice is required, making Rhode Island a cost-effective state for launching a charitable organization.',
+    steps: [
+      'Verify name availability through the Rhode Island Secretary of State business database.',
+      'Designate a resident agent with a Rhode Island address.',
+      'File Articles of Incorporation with the Rhode Island Secretary of State ($35 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Prepare bylaws in compliance with the Rhode Island Nonprofit Corporation Act.',
+      'Hold your organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'File IRS Form 1023 or 1023-EZ for federal 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'south-carolina',
@@ -409,6 +861,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.sc.gov/',
+    description:
+      'South Carolina provides a straightforward and affordable nonprofit formation process at $25 through the Secretary of State. Online filing is available with 5-7 business day processing. The state requires annual reports and follows the South Carolina Nonprofit Corporation Act.',
+    steps: [
+      'Check name availability through the South Carolina Secretary of State.',
+      'Appoint a registered agent with a South Carolina address.',
+      'File Articles of Incorporation with the South Carolina Secretary of State ($25 fee).',
+      'Apply for a federal EIN from the IRS.',
+      'Draft bylaws compliant with the South Carolina Nonprofit Corporation Act.',
+      'Conduct an organizational meeting to adopt bylaws, elect your board, and appoint officers.',
+      'Submit IRS Form 1023 or 1023-EZ to apply for 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'south-dakota',
@@ -419,6 +882,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: false,
     secretaryOfStateUrl: 'https://sdsos.gov/',
+    description:
+      'South Dakota nonprofit incorporation requires a $30 filing fee through the Secretary of State. While online filing is not currently available, processing takes 5-10 business days. South Dakota has no state income tax, which simplifies ongoing compliance for nonprofit organizations operating in the state.',
+    steps: [
+      'Search for name availability through the South Dakota Secretary of State.',
+      'Designate a registered agent with a South Dakota address.',
+      'Prepare and mail Articles of Incorporation to the South Dakota Secretary of State ($30 fee).',
+      'Obtain an EIN from the IRS.',
+      'Create bylaws in compliance with South Dakota nonprofit corporation law.',
+      'Hold your organizational meeting to adopt bylaws and appoint officers.',
+      'Apply for 501(c)(3) status with the IRS using Form 1023 or 1023-EZ.',
+    ],
   },
   {
     slug: 'tennessee',
@@ -429,6 +903,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.tn.gov/',
+    description:
+      'Tennessee nonprofit incorporation is managed through the Secretary of State with a $100 filing fee. Online filing is available and processing takes 5-7 business days. Tennessee does not require a publication notice and follows the Tennessee Nonprofit Corporation Act for governance and operational standards.',
+    steps: [
+      'Verify name availability through the Tennessee Secretary of State business search.',
+      'Appoint a registered agent with a Tennessee address.',
+      'File a Charter with the Tennessee Secretary of State ($100 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws in compliance with the Tennessee Nonprofit Corporation Act.',
+      'Hold your organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'File IRS Form 1023 or 1023-EZ for federal 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'texas',
@@ -439,6 +924,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.texas.gov/',
+    description:
+      'Texas is one of the most popular and affordable states for nonprofit formation with a $25 filing fee and fast 3-5 business day processing. The Texas Secretary of State provides online filing, and no publication notice is required. Texas has no state income tax, reducing the ongoing administrative burden for nonprofits.',
+    steps: [
+      'Check name availability through the Texas Secretary of State SOSDirect system.',
+      'Designate a registered agent with a Texas address.',
+      'File a Certificate of Formation with the Texas Secretary of State ($25 fee).',
+      'Apply for a federal EIN from the IRS at no cost.',
+      'Prepare bylaws compliant with the Texas Business Organizations Code (Chapter 22).',
+      'Conduct your organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'Submit IRS Form 1023 or 1023-EZ for 501(c)(3) status, then apply for Texas state tax exemption with the Comptroller.',
+    ],
   },
   {
     slug: 'utah',
@@ -449,6 +945,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://corporations.utah.gov/',
+    description:
+      'Utah offers a fast and affordable nonprofit formation process with a $30 filing fee and 3-5 business day processing. The Division of Corporations provides online filing for convenience. Utah does not require a publication notice, and the state follows the Revised Nonprofit Corporation Act.',
+    steps: [
+      'Verify name availability through the Utah Division of Corporations and Commercial Code.',
+      'Appoint a registered agent with a Utah address.',
+      'File Articles of Incorporation with the Utah Division of Corporations ($30 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Draft bylaws in compliance with the Utah Revised Nonprofit Corporation Act.',
+      'Hold your organizational meeting to adopt bylaws and appoint officers.',
+      'Apply for 501(c)(3) tax-exempt status with the IRS using Form 1023 or 1023-EZ.',
+    ],
   },
   {
     slug: 'vermont',
@@ -459,6 +966,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.vermont.gov/',
+    description:
+      'Vermont nonprofit incorporation is handled through the Secretary of State with a $125 filing fee, one of the higher rates in New England. Online filing is available and processing takes 5-10 business days. Vermont does not require a publication notice and has a supportive environment for charitable organizations.',
+    steps: [
+      'Check name availability through the Vermont Secretary of State business database.',
+      'Designate a registered agent with a Vermont address.',
+      'File Articles of Association with the Vermont Secretary of State ($125 fee).',
+      'Obtain an EIN from the IRS.',
+      'Prepare bylaws compliant with the Vermont Nonprofit Corporation Act (Title 11B).',
+      'Hold your organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'File IRS Form 1023 or 1023-EZ for federal 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'virginia',
@@ -469,6 +987,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.scc.virginia.gov/',
+    description:
+      'Virginia nonprofit incorporation is managed through the State Corporation Commission with a $75 filing fee and fast 3-5 business day processing. Online filing is available, and no publication notice is required. Virginia has a well-established nonprofit sector with clear governance requirements under the Virginia Nonstock Corporation Act.',
+    steps: [
+      'Search for name availability through the Virginia State Corporation Commission (SCC).',
+      'Appoint a registered agent with a Virginia address.',
+      'File Articles of Incorporation with the Virginia SCC ($75 fee).',
+      'Apply for a federal EIN from the IRS.',
+      'Draft bylaws in compliance with the Virginia Nonstock Corporation Act.',
+      'Conduct your organizational meeting to adopt bylaws, elect the board, and appoint officers.',
+      'Submit IRS Form 1023 or 1023-EZ for 501(c)(3) status and register with the Virginia Department of Agriculture for charitable solicitation.',
+    ],
   },
   {
     slug: 'washington',
@@ -479,6 +1008,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.wa.gov/',
+    description:
+      'Washington State offers an affordable nonprofit formation process at $30 through the Secretary of State. Online filing is available and processing takes 5-7 business days. Washington has no state income tax and follows the Washington Nonprofit Corporation Act for governance of charitable organizations.',
+    steps: [
+      'Verify name availability through the Washington Secretary of State Corporations Division.',
+      'Designate a registered agent with a Washington address.',
+      'File Articles of Incorporation with the Washington Secretary of State ($30 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Prepare bylaws compliant with the Washington Nonprofit Corporation Act (RCW 24.03A).',
+      'Hold an organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'Apply for 501(c)(3) status with the IRS using Form 1023 or 1023-EZ, then register for charitable solicitation in WA.',
+    ],
   },
   {
     slug: 'west-virginia',
@@ -489,6 +1029,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.wv.gov/',
+    description:
+      'West Virginia provides an affordable nonprofit formation process at $25 through the Secretary of State. Online filing is available with 5-7 business day processing. No publication notice is required, and the state follows the West Virginia Nonprofit Corporation Act for governance of charitable organizations.',
+    steps: [
+      'Check name availability through the West Virginia Secretary of State business database.',
+      'Appoint a registered agent with a West Virginia address.',
+      'File Articles of Incorporation with the West Virginia Secretary of State ($25 fee).',
+      'Obtain an EIN from the IRS.',
+      'Draft bylaws in compliance with the West Virginia Nonprofit Corporation Act.',
+      'Hold your organizational meeting to adopt bylaws and appoint officers.',
+      'File IRS Form 1023 or 1023-EZ to apply for federal 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'wisconsin',
@@ -499,6 +1050,17 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.wdfi.org/',
+    description:
+      'Wisconsin nonprofit incorporation is filed through the Department of Financial Institutions (DFI) at a $35 fee. Online filing is available with 5-10 business day processing. No publication notice is required, and Wisconsin follows Chapter 187 and the Wisconsin Nonstock Corporation Law for nonprofit governance.',
+    steps: [
+      'Search for name availability through the Wisconsin DFI corporate records database.',
+      'Designate a registered agent with a Wisconsin address.',
+      'File Articles of Incorporation with the Wisconsin Department of Financial Institutions ($35 fee).',
+      'Apply for a federal EIN from the IRS.',
+      'Prepare bylaws compliant with the Wisconsin Nonstock Corporation Law.',
+      'Conduct an organizational meeting to adopt bylaws, elect directors, and appoint officers.',
+      'Submit IRS Form 1023 or 1023-EZ for federal 501(c)(3) tax-exempt status.',
+    ],
   },
   {
     slug: 'wyoming',
@@ -509,8 +1071,27 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.wyo.gov/',
+    description:
+      'Wyoming is a business-friendly state offering nonprofit incorporation for $25 with 5-7 business day processing. The Secretary of State provides online filing, and no publication notice is required. Wyoming has no state income tax and follows the Wyoming Nonprofit Corporation Act for governance requirements.',
+    steps: [
+      'Verify name availability through the Wyoming Secretary of State business center.',
+      'Appoint a registered agent with a Wyoming address.',
+      'File Articles of Incorporation with the Wyoming Secretary of State ($25 fee).',
+      'Obtain a federal EIN from the IRS.',
+      'Create bylaws in compliance with the Wyoming Nonprofit Corporation Act.',
+      'Hold your organizational meeting to adopt bylaws, elect the board, and appoint officers.',
+      'Apply for 501(c)(3) tax-exempt status with the IRS using Form 1023 or 1023-EZ.',
+    ],
   },
 ];
 
 /** @deprecated Use STATES instead */
 export const states = STATES;
+
+export function getStateBySlug(slug: string): StateInfo | undefined {
+  return STATES.find((state) => state.slug === slug);
+}
+
+export function getAllStateSlugs(): string[] {
+  return STATES.map((state) => state.slug);
+}
