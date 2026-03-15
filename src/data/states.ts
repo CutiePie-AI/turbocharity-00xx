@@ -7,6 +7,26 @@ export interface StateInfo {
   requiresPublicationNotice: boolean;
   onlineFilingAvailable: boolean;
   secretaryOfStateUrl: string;
+  steps: string[];
+}
+
+const DEFAULT_STEPS: string[] = [
+  'Choose a name and verify availability with the Secretary of State',
+  'Appoint a registered agent in the state',
+  'File Articles of Incorporation with the Secretary of State',
+  'Draft bylaws and conflict-of-interest policy',
+  'Hold an organizational board meeting and appoint officers',
+  'Apply for an EIN from the IRS',
+  'File IRS Form 1023-EZ for 501(c)(3) tax-exempt status',
+];
+
+const PUBLICATION_STEP =
+  'Publish a notice of incorporation in a local newspaper as required by state law';
+
+function stepsFor(requiresPublication: boolean): string[] {
+  return requiresPublication
+    ? [...DEFAULT_STEPS.slice(0, 3), PUBLICATION_STEP, ...DEFAULT_STEPS.slice(3)]
+    : DEFAULT_STEPS;
 }
 
 export const STATES: StateInfo[] = [
@@ -19,6 +39,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.alabama.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'alaska',
@@ -29,6 +50,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.commerce.alaska.gov/web/cbpl/',
+    steps: stepsFor(false),
   },
   {
     slug: 'arizona',
@@ -39,6 +61,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: true,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://azsos.gov/',
+    steps: stepsFor(true),
   },
   {
     slug: 'arkansas',
@@ -49,6 +72,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.arkansas.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'california',
@@ -59,6 +83,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.ca.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'colorado',
@@ -69,6 +94,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.state.co.us/',
+    steps: stepsFor(false),
   },
   {
     slug: 'connecticut',
@@ -79,6 +105,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://portal.ct.gov/sots',
+    steps: stepsFor(false),
   },
   {
     slug: 'delaware',
@@ -89,6 +116,18 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://corp.delaware.gov/',
+    steps: stepsFor(false),
+  },
+  {
+    slug: 'district-of-columbia',
+    name: 'District of Columbia',
+    abbreviation: 'DC',
+    filingFee: 80,
+    processingTime: '5-10 business days',
+    requiresPublicationNotice: false,
+    onlineFilingAvailable: true,
+    secretaryOfStateUrl: 'https://dcra.dc.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'florida',
@@ -99,6 +138,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://dos.fl.gov/sunbiz/',
+    steps: stepsFor(false),
   },
   {
     slug: 'georgia',
@@ -109,6 +149,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: true,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.ga.gov/corporations-division',
+    steps: stepsFor(true),
   },
   {
     slug: 'hawaii',
@@ -119,6 +160,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: false,
     secretaryOfStateUrl: 'https://cca.hawaii.gov/breg/',
+    steps: stepsFor(false),
   },
   {
     slug: 'idaho',
@@ -129,6 +171,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.idaho.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'illinois',
@@ -139,6 +182,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.ilsos.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'indiana',
@@ -149,6 +193,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.in.gov/sos/',
+    steps: stepsFor(false),
   },
   {
     slug: 'iowa',
@@ -159,6 +204,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.iowa.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'kansas',
@@ -169,6 +215,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.ks.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'kentucky',
@@ -179,6 +226,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.ky.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'louisiana',
@@ -189,6 +237,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.la.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'maine',
@@ -199,6 +248,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.maine.gov/sos/',
+    steps: stepsFor(false),
   },
   {
     slug: 'maryland',
@@ -209,6 +259,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.maryland.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'massachusetts',
@@ -219,6 +270,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sec.state.ma.us/cor/',
+    steps: stepsFor(false),
   },
   {
     slug: 'michigan',
@@ -229,6 +281,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.michigan.gov/lara/',
+    steps: stepsFor(false),
   },
   {
     slug: 'minnesota',
@@ -239,6 +292,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.state.mn.us/',
+    steps: stepsFor(false),
   },
   {
     slug: 'mississippi',
@@ -249,6 +303,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: false,
     secretaryOfStateUrl: 'https://www.sos.ms.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'missouri',
@@ -259,6 +314,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.mo.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'montana',
@@ -269,6 +325,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sosmt.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'nebraska',
@@ -279,6 +336,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: true,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.nebraska.gov/',
+    steps: stepsFor(true),
   },
   {
     slug: 'nevada',
@@ -289,6 +347,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.nvsos.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'new-hampshire',
@@ -299,6 +358,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.nh.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'new-jersey',
@@ -309,6 +369,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.njportal.com/DOR/BusinessFormation',
+    steps: stepsFor(false),
   },
   {
     slug: 'new-mexico',
@@ -319,6 +380,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.nm.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'new-york',
@@ -329,6 +391,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: true,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.dos.ny.gov/',
+    steps: stepsFor(true),
   },
   {
     slug: 'north-carolina',
@@ -339,6 +402,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sosnc.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'north-dakota',
@@ -349,6 +413,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.nd.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'ohio',
@@ -359,6 +424,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.ohiosos.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'oklahoma',
@@ -369,6 +435,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.ok.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'oregon',
@@ -379,6 +446,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.oregon.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'pennsylvania',
@@ -389,6 +457,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: true,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.dos.pa.gov/',
+    steps: stepsFor(true),
   },
   {
     slug: 'rhode-island',
@@ -399,6 +468,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.ri.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'south-carolina',
@@ -409,6 +479,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.sc.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'south-dakota',
@@ -419,6 +490,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: false,
     secretaryOfStateUrl: 'https://sdsos.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'tennessee',
@@ -429,6 +501,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.tn.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'texas',
@@ -439,6 +512,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.texas.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'utah',
@@ -449,6 +523,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://corporations.utah.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'vermont',
@@ -459,6 +534,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.vermont.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'virginia',
@@ -469,6 +545,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.scc.virginia.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'washington',
@@ -479,6 +556,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.sos.wa.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'west-virginia',
@@ -489,6 +567,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.wv.gov/',
+    steps: stepsFor(false),
   },
   {
     slug: 'wisconsin',
@@ -499,6 +578,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://www.wdfi.org/',
+    steps: stepsFor(false),
   },
   {
     slug: 'wyoming',
@@ -509,6 +589,7 @@ export const STATES: StateInfo[] = [
     requiresPublicationNotice: false,
     onlineFilingAvailable: true,
     secretaryOfStateUrl: 'https://sos.wyo.gov/',
+    steps: stepsFor(false),
   },
 ];
 
@@ -537,6 +618,7 @@ const REGION_MAP: Record<string, Region> = {
   georgia: 'Southeast', kentucky: 'Southeast', louisiana: 'Southeast',
   mississippi: 'Southeast', 'north-carolina': 'Southeast', 'south-carolina': 'Southeast',
   tennessee: 'Southeast', virginia: 'Southeast', 'west-virginia': 'Southeast',
+  'district-of-columbia': 'Southeast',
   illinois: 'Midwest', indiana: 'Midwest', iowa: 'Midwest',
   kansas: 'Midwest', michigan: 'Midwest', minnesota: 'Midwest',
   missouri: 'Midwest', nebraska: 'Midwest', 'north-dakota': 'Midwest',
