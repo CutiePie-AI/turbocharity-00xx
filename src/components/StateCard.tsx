@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import type { StateInfo } from '@/lib/states';
+import Link from "next/link";
+import type { StateInfo } from "@/data/states";
 
 interface StateCardProps {
   state: StateInfo;
