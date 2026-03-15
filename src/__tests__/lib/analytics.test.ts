@@ -1,10 +1,46 @@
-import { trackEvent, trackSignup, trackPageView, trackCTAClick } from '@/lib/analytics';
+import { trackEvent, trackSignup, trackPageView, trackCTAClick, initAnalytics } from '@/lib/analytics';
 
 describe('analytics helpers', () => {
   beforeEach(() => {
     // Reset gtag and posthog on window before each test
     delete (window as Record<string, unknown>).gtag;
     delete (window as Record<string, unknown>).posthog;
+  });
+
+  describe('functions execute without error when providers are absent', () => {
+    it('trackEvent executes without error', () => {
+      expect(() => trackEvent('test_event')).not.toThrow();
+    });
+
+    it('trackPageView executes without error', () => {
+      expect(() => trackPageView('/test')).not.toThrow();
+    });
+
+    it('trackSignup executes without error', () => {
+      expect(() => trackSignup('user@example.com', 'test')).not.toThrow();
+    });
+
+    it('trackCTAClick executes without error', () => {
+      expect(() => trackCTAClick('cta_test', '/page')).not.toThrow();
+    });
+
+    it('initAnalytics executes without error', () => {
+      expect(() => initAnalytics()).not.toThrow();
+    });
+  });
+
+  describe('functions handle missing window providers gracefully', () => {
+    it('trackEvent does not throw when gtag and posthog are undefined', () => {
+      expect(window.gtag).toBeUndefined();
+      expect(window.posthog).toBeUndefined();
+      expect(() => trackEvent('safe_event', { key: 'value' })).not.toThrow();
+    });
+
+    it('trackPageView does not throw when gtag and posthog are undefined', () => {
+      expect(window.gtag).toBeUndefined();
+      expect(window.posthog).toBeUndefined();
+      expect(() => trackPageView('/safe-page')).not.toThrow();
+    });
   });
 
   it('trackEvent does not throw when window.gtag is undefined', () => {
