@@ -9,8 +9,20 @@ const config: Config = {
       colors: {
         primary: "#2563EB",
         secondary: "#10B981",
-        accent: "#F59E0B",
+        accent: "#10B981",
         dark: "#1E293B",
+        brand: {
+          50: "#eff6ff",
+          100: "#dbeafe",
+          200: "#bfdbfe",
+          300: "#93c5fd",
+          400: "#60a5fa",
+          500: "#2563EB",
+          600: "#2554c7",
+          700: "#1e40af",
+          800: "#1e3a8a",
+          900: "#1e3050",
+        },
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
