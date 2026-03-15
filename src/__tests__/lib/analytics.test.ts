@@ -11,12 +11,12 @@ describe('Analytics', () => {
       } else {
         delete (window as Record<string, unknown>).gtag;
       }
+      delete (window as Record<string, unknown>).posthog;
     }
   });
 
   describe('trackEvent', () => {
     it('does not throw when window.gtag is undefined', () => {
-      // Ensure gtag is not defined
       delete (window as Record<string, unknown>).gtag;
 
       expect(() => {
@@ -50,6 +50,44 @@ describe('Analytics', () => {
         cta_name: 'hero',
         page: '/home',
       });
+    });
+
+    it('handles missing gtag gracefully without errors', () => {
+      delete (window as Record<string, unknown>).gtag;
+
+      expect(() => {
+        trackEvent(EVENTS.WAITLIST_SIGNUP, { source: 'test' });
+      }).not.toThrow();
+    });
+
+    it('calls posthog.capture when posthog is available', () => {
+      const mockCapture = jest.fn();
+      window.posthog = { capture: mockCapture, identify: jest.fn() };
+
+      trackEvent('posthog_event', { key: 'value' });
+
+      expect(mockCapture).toHaveBeenCalledWith('posthog_event', { key: 'value' });
+    });
+
+    it('calls both gtag and posthog when both are available', () => {
+      const mockGtag = jest.fn();
+      const mockCapture = jest.fn();
+      window.gtag = mockGtag;
+      window.posthog = { capture: mockCapture, identify: jest.fn() };
+
+      trackEvent('dual_event', { source: 'both' });
+
+      expect(mockGtag).toHaveBeenCalledWith('event', 'dual_event', { source: 'both' });
+      expect(mockCapture).toHaveBeenCalledWith('dual_event', { source: 'both' });
+    });
+
+    it('works with no properties', () => {
+      const mockGtag = jest.fn();
+      window.gtag = mockGtag;
+
+      trackEvent('simple_event');
+
+      expect(mockGtag).toHaveBeenCalledWith('event', 'simple_event', undefined);
     });
   });
 

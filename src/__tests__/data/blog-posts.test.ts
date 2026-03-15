@@ -27,6 +27,14 @@ describe('Blog Posts Data', () => {
 
       expect(post.category).toBeTruthy();
       expect(typeof post.category).toBe('string');
+
+      expect(post.metaDescription).toBeTruthy();
+      expect(typeof post.metaDescription).toBe('string');
+
+      expect(Array.isArray(post.tags)).toBe(true);
+      expect(post.tags.length).toBeGreaterThan(0);
+
+      expect(typeof post.readingTime).toBe('number');
     });
   });
 
@@ -53,6 +61,18 @@ describe('Blog Posts Data', () => {
     expect(getBlogPostBySlug('this-slug-does-not-exist')).toBeUndefined();
   });
 
+  test('getBlogPostBySlug returns undefined for empty string', () => {
+    expect(getBlogPostBySlug('')).toBeUndefined();
+  });
+
+  test('content is non-empty for each post', () => {
+    blogPosts.forEach((post) => {
+      expect(post.content.length).toBeGreaterThan(0);
+      // Content should contain HTML tags since it is HTML content
+      expect(post.content).toContain('<');
+    });
+  });
+
   test('getAllBlogSlugs returns all slugs', () => {
     const slugs = getAllBlogSlugs();
     expect(slugs.length).toBe(blogPosts.length);
@@ -65,7 +85,6 @@ describe('Blog Posts Data', () => {
     blogPosts.forEach((post) => {
       const date = new Date(post.publishedAt);
       expect(date.toString()).not.toBe('Invalid Date');
-      // Verify it round-trips as ISO
       expect(date.toISOString()).toBe(post.publishedAt);
     });
   });
