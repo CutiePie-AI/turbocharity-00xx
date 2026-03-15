@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description:
       "From idea to 501(c)(3) in days, not months. Generate bylaws, articles of incorporation, and IRS forms with AI.",
     type: "website",
-    url: "https://turbocharity.org",
+    url: "https://turbocharity.com",
   },
   twitter: {
     card: "summary_large_image",
