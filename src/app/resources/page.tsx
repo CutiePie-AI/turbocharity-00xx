@@ -5,7 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import Badge from '@/components/Badge';
 import Card from '@/components/ui/Card';
 import StructuredData from '@/components/StructuredData';
-import { RESOURCES, type ResourceCategory } from '@/lib/resources';
+import { RESOURCES, type ResourceCategory } from '@/data/resources';
 
 /* ────────────────────────────── Metadata ────────────────────────────── */
 
@@ -118,6 +118,27 @@ function CategoryIcon({ d }: { d: string }) {
   );
 }
 
+/* ────────────────────────────── External Link Icon ──────────────────── */
+
+function ExternalLinkIcon() {
+  return (
+    <svg
+      className="h-3.5 w-3.5"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+      />
+    </svg>
+  );
+}
+
 /* ────────────────────────────── Page ────────────────────────────────── */
 
 export default function ResourcesPage() {
@@ -206,11 +227,17 @@ export default function ResourcesPage() {
                   <Link
                     key={resource.slug}
                     href={`/resources/${resource.slug}`}
+                    rel="noopener"
                     className="group block"
                   >
                     <Card hover className="flex h-full flex-col">
                       <div className="flex items-center justify-between gap-3">
-                        <Badge variant={meta.badgeVariant}>{category}</Badge>
+                        <div className="flex items-center gap-2">
+                          <Badge variant={meta.badgeVariant}>{category}</Badge>
+                          <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-semibold text-green-700">
+                            Free
+                          </span>
+                        </div>
                         <span className="text-xs text-gray-400">
                           {resource.readTime}
                         </span>
@@ -249,6 +276,110 @@ export default function ResourcesPage() {
           </section>
         );
       })}
+
+      {/* ───────────── External Resources Section ───────────── */}
+      <section className="border-b border-gray-100">
+        <Container className="py-14 lg:py-18">
+          <div className="flex items-start gap-4">
+            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+                />
+              </svg>
+            </div>
+            <div>
+              <h2 className="text-2xl font-extrabold tracking-tight text-dark sm:text-3xl">
+                External Resources
+              </h2>
+              <p className="mt-1 max-w-2xl text-gray-600">
+                Trusted third-party tools and official government resources for nonprofit founders.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                title: 'IRS Tax Exempt Organization Search',
+                description: 'Search for existing tax-exempt organizations and verify 501(c)(3) status on the official IRS database.',
+                url: 'https://www.irs.gov/charities-non-profits/tax-exempt-organization-search',
+                free: true,
+              },
+              {
+                title: 'IRS Form 1023-EZ (Pay.gov)',
+                description: 'File IRS Form 1023-EZ online for streamlined 501(c)(3) tax-exempt status application.',
+                url: 'https://www.pay.gov/public/form/start/29759424',
+                free: false,
+              },
+              {
+                title: 'GuideStar / Candid',
+                description: 'Research nonprofit organizations, access Form 990 data, and benchmark your nonprofit against peers.',
+                url: 'https://www.guidestar.org/',
+                free: true,
+              },
+              {
+                title: 'Grants.gov',
+                description: 'Find and apply for federal grants. The official source for all federally available grant opportunities.',
+                url: 'https://www.grants.gov/',
+                free: true,
+              },
+              {
+                title: 'National Council of Nonprofits',
+                description: 'Resources, tools, and advocacy for nonprofit organizations across the United States.',
+                url: 'https://www.councilofnonprofits.org/',
+                free: true,
+              },
+              {
+                title: 'VolunteerMatch',
+                description: 'Connect with volunteers passionate about your cause. Post opportunities and manage your volunteer program.',
+                url: 'https://www.volunteermatch.org/',
+                free: true,
+              },
+            ].map((item) => (
+              <a
+                key={item.title}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block"
+              >
+                <Card hover className="flex h-full flex-col">
+                  <div className="flex items-center justify-between gap-3">
+                    <Badge variant="outline">External</Badge>
+                    {item.free && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-semibold text-green-700">
+                        Free
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="mt-4 text-lg font-bold text-dark group-hover:text-primary transition-colors">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-600">
+                    {item.description}
+                  </p>
+
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-transform group-hover:translate-x-1">
+                    Visit site
+                    <ExternalLinkIcon />
+                  </span>
+                </Card>
+              </a>
+            ))}
+          </div>
+        </Container>
+      </section>
 
       {/* ───────────── CTA Section ───────────── */}
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 py-20 text-white sm:py-28">

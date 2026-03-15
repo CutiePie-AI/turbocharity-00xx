@@ -7,6 +7,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import Container from '@/components/Container';
 import ShareButtons from '@/components/ShareButtons';
 import StructuredData from '@/components/StructuredData';
+import WaitlistForm from '@/components/WaitlistForm';
 
 const BASE_URL = 'https://turbocharity.com';
 
@@ -371,6 +372,10 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
           </section>
         )}
+        {/* ── Waitlist CTA ─────────────────────────────────────────────── */}
+        <section className="mx-auto mt-16 max-w-3xl">
+          <WaitlistForm />
+        </section>
       </Container>
 
       {/* Scoped styles for HTML content rendering */}

@@ -15,7 +15,7 @@ function formatDate(isoDate: string): string {
 
 export default function BlogCard({ post }: BlogCardProps) {
   return (
-    <article className="group flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md">
+    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg hover:shadow-blue-500/10">
       {/* Category & reading time header */}
       <div className="flex items-center justify-between border-b border-gray-50 px-6 py-3">
         <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">

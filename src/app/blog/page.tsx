@@ -9,11 +9,11 @@ import { SITE_CONFIG } from '@/lib/seo';
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
-  title: 'Nonprofit Startup Blog | TurboCharity',
+  title: 'Nonprofit Formation Blog | TurboCharity',
   description:
     'Expert guides, tips, and insights on starting a nonprofit, 501(c)(3) formation, and charity management.',
   openGraph: {
-    title: 'Nonprofit Startup Blog | TurboCharity',
+    title: 'Nonprofit Formation Blog | TurboCharity',
     description:
       'Expert guides, tips, and insights on starting a nonprofit, 501(c)(3) formation, and charity management.',
     url: `${SITE_CONFIG.siteUrl}/blog`,
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Nonprofit Startup Blog | TurboCharity',
+    title: 'Nonprofit Formation Blog | TurboCharity',
     description:
       'Expert guides, tips, and insights on starting a nonprofit, 501(c)(3) formation, and charity management.',
     site: SITE_CONFIG.twitterHandle,
@@ -39,7 +39,7 @@ function buildStructuredData() {
   return {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Nonprofit Startup Blog | TurboCharity',
+    name: 'Nonprofit Formation Blog | TurboCharity',
     description:
       'Expert guides, tips, and insights on starting a nonprofit, 501(c)(3) formation, and charity management.',
     url: `${SITE_CONFIG.siteUrl}/blog`,

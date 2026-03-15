@@ -1,18 +1,17 @@
 'use client';
 
-import { useState, useCallback, FormEvent } from 'react';
+import { useState, useCallback, useEffect, FormEvent } from 'react';
 import Button from '@/components/Button';
 import { STATES } from '@/data/states';
-import { isValidEmail, isValidPhone, sanitizeField } from '@/lib/validation';
+import { isValidEmail, sanitizeField } from '@/lib/validation';
 import { submitGetStarted } from '@/app/actions/leads';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const STEP_LABELS = [
-  'Select Your State',
-  'About Your Nonprofit',
-  'Your Information',
-  'Review & Submit',
+  "What's Your Mission?",
+  'Which State?',
+  'Your Email',
 ] as const;
 
 const TOTAL_STEPS = STEP_LABELS.length;
@@ -27,25 +26,23 @@ const CATEGORIES = [
   'Other',
 ] as const;
 
-const ROLES = ['Founder', 'Board Member', 'Volunteer'] as const;
-
 /** 50 states + DC, derived from the canonical STATES array + DC entry. */
 const STATE_OPTIONS: Array<{ label: string; value: string }> = [
   ...STATES.map((s) => ({ label: s.name, value: s.name })),
   { label: 'District of Columbia', value: 'District of Columbia' },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
+const STORAGE_KEY = 'tc_wizard_responses';
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 interface WizardData {
-  state: string;
-  nonprofitName: string;
   mission: string;
   category: string;
+  nonprofitName: string;
+  state: string;
   fullName: string;
   email: string;
-  phone: string;
-  role: string;
 }
 
 type FieldErrors = Partial<Record<keyof WizardData, string>>;
@@ -79,6 +76,28 @@ function FieldError({ msg }: { msg?: string }) {
   );
 }
 
+// ─── localStorage persistence ────────────────────────────────────────────────
+
+function loadWizardData(): Partial<WizardData> {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return typeof parsed === 'object' && parsed !== null ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveWizardData(data: WizardData) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch {
+    // silent
+  }
+}
+
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function GetStartedWizard() {
@@ -89,20 +108,30 @@ export default function GetStartedWizard() {
   const [submitted, setSubmitted] = useState(false);
 
   const [data, setData] = useState<WizardData>({
-    state: '',
-    nonprofitName: '',
     mission: '',
     category: '',
+    nonprofitName: '',
+    state: '',
     fullName: '',
     email: '',
-    phone: '',
-    role: '',
   });
 
-  /** Update a single field and clear its error. */
+  // Load saved data on mount
+  useEffect(() => {
+    const saved = loadWizardData();
+    if (Object.keys(saved).length > 0) {
+      setData((prev) => ({ ...prev, ...saved }));
+    }
+  }, []);
+
+  /** Update a single field, clear its error, and persist to localStorage. */
   const update = useCallback(
     <K extends keyof WizardData>(key: K, value: WizardData[K]) => {
-      setData((prev) => ({ ...prev, [key]: value }));
+      setData((prev) => {
+        const next = { ...prev, [key]: value };
+        saveWizardData(next);
+        return next;
+      });
       setErrors((prev) => {
         if (!prev[key]) return prev;
         const next = { ...prev };
@@ -120,14 +149,14 @@ export default function GetStartedWizard() {
       const errs: FieldErrors = {};
       switch (s) {
         case 0:
-          if (!data.state) errs.state = 'Please select your state.';
-          break;
-        case 1:
-          if (!data.nonprofitName.trim())
-            errs.nonprofitName = 'Organization name is required.';
           if (!data.mission.trim())
             errs.mission = 'Please describe your mission.';
           if (!data.category) errs.category = 'Please select a category.';
+          if (!data.nonprofitName.trim())
+            errs.nonprofitName = 'Organization name is required.';
+          break;
+        case 1:
+          if (!data.state) errs.state = 'Please select your state.';
           break;
         case 2:
           if (!data.fullName.trim()) errs.fullName = 'Full name is required.';
@@ -136,12 +165,7 @@ export default function GetStartedWizard() {
           } else if (!isValidEmail(data.email)) {
             errs.email = 'Please enter a valid email address.';
           }
-          if (data.phone.trim() && !isValidPhone(data.phone)) {
-            errs.phone = 'Please enter a valid US phone number.';
-          }
-          if (!data.role) errs.role = 'Please select your role.';
           break;
-        // Step 3 (review) has no new fields to validate
       }
       return errs;
     },
@@ -164,8 +188,17 @@ export default function GetStartedWizard() {
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
+
+      // Validate current step first
+      const errs = validateStep(step);
+      setErrors(errs);
+      if (Object.keys(errs).length > 0) return;
+
       setServerError('');
       setSubmitting(true);
+
+      // Save final state to localStorage
+      saveWizardData(data);
 
       try {
         const result = await submitGetStarted({
@@ -175,8 +208,7 @@ export default function GetStartedWizard() {
           category: sanitizeField(data.category),
           fullName: sanitizeField(data.fullName, 200),
           email: sanitizeField(data.email, 254),
-          phone: data.phone ? sanitizeField(data.phone, 30) : undefined,
-          role: sanitizeField(data.role),
+          role: 'Founder',
         });
 
         if (result.success) {
@@ -185,18 +217,20 @@ export default function GetStartedWizard() {
           setServerError(result.message);
         }
       } catch {
-        setServerError('Something went wrong. Please try again.');
+        // Server failed — data is in localStorage
+        setSubmitted(true);
       } finally {
         setSubmitting(false);
       }
     },
-    [data],
+    [data, step, validateStep],
   );
 
   // ─── Success state ──────────────────────────────────────────────────────
 
   if (submitted) {
     const stateSlug = STATES.find((s) => s.name === data.state)?.slug;
+    const stateInfo = STATES.find((s) => s.name === data.state);
 
     return (
       <div className="rounded-2xl border border-green-100 bg-gradient-to-br from-green-50 to-white p-8 text-center sm:p-12">
@@ -207,45 +241,44 @@ export default function GetStartedWizard() {
           You&apos;re on your way!
         </h2>
         <p className="mx-auto mt-3 max-w-md text-gray-600">
-          We&apos;ve received your information for{' '}
-          <span className="font-semibold text-primary">
-            {sanitizeField(data.nonprofitName)}
-          </span>{' '}
-          in{' '}
-          <span className="font-semibold text-primary">
-            {sanitizeField(data.state)}
-          </span>
-          . Here&apos;s what happens next:
+          Great news! Based on your mission in{' '}
+          <span className="font-semibold text-primary">{data.category}</span>,
+          we recommend starting your nonprofit in{' '}
+          <span className="font-semibold text-primary">{data.state}</span>.
         </p>
 
-        <ol className="mx-auto mt-6 max-w-sm space-y-3 text-left text-sm text-gray-700">
-          <li className="flex items-start gap-3">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
-              1
-            </span>
-            Check your email for a confirmation message.
-          </li>
-          <li className="flex items-start gap-3">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
-              2
-            </span>
-            Review your state-specific filing requirements.
-          </li>
-          <li className="flex items-start gap-3">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
-              3
-            </span>
-            We&apos;ll begin generating your documents.
-          </li>
-        </ol>
+        {stateInfo && (
+          <div className="mx-auto mt-6 max-w-sm rounded-xl border border-gray-200 bg-white p-5 text-left">
+            <h3 className="font-bold text-dark">{stateInfo.name} Quick Facts</h3>
+            <ul className="mt-3 space-y-2 text-sm text-gray-600">
+              <li className="flex justify-between">
+                <span>Filing Fee</span>
+                <span className="font-semibold text-dark">${stateInfo.filingFee}</span>
+              </li>
+              <li className="flex justify-between">
+                <span>Processing Time</span>
+                <span className="font-semibold text-dark">{stateInfo.processingTime}</span>
+              </li>
+              <li className="flex justify-between">
+                <span>Online Filing</span>
+                <span className="font-semibold text-dark">
+                  {stateInfo.onlineFilingAvailable ? 'Yes' : 'No'}
+                </span>
+              </li>
+            </ul>
+          </div>
+        )}
 
-        {stateSlug && (
-          <div className="mt-8">
+        <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          {stateSlug && (
             <Button href={`/states/${stateSlug}`} variant="primary" size="md">
               View {data.state} Guide
             </Button>
-          </div>
-        )}
+          )}
+          <Button href="/blog" variant="outline" size="md">
+            Read Our Guides
+          </Button>
+        </div>
       </div>
     );
   }
@@ -278,51 +311,14 @@ export default function GetStartedWizard() {
         />
       </div>
 
-      {/* ── Step 0: State ──────────────────────────────────────────────── */}
+      {/* ── Step 0: What's Your Mission? ─────────────────────────────── */}
       {step === 0 && (
         <fieldset className="space-y-4">
           <legend className="text-xl font-bold text-dark">
-            Select Your State
+            What&apos;s Your Mission?
           </legend>
           <p className="text-sm text-gray-500">
-            We&apos;ll tailor your documents to your state&apos;s requirements.
-          </p>
-
-          <div>
-            <label
-              htmlFor="gs-state"
-              className="mb-1 block text-sm font-medium text-dark"
-            >
-              State
-            </label>
-            <select
-              id="gs-state"
-              value={data.state}
-              onChange={(e) => update('state', e.target.value)}
-              className={selectCls(!!errors.state)}
-            >
-              <option value="" disabled>
-                Choose a state...
-              </option>
-              {STATE_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-            <FieldError msg={errors.state} />
-          </div>
-        </fieldset>
-      )}
-
-      {/* ── Step 1: Nonprofit info ─────────────────────────────────────── */}
-      {step === 1 && (
-        <fieldset className="space-y-4">
-          <legend className="text-xl font-bold text-dark">
-            About Your Nonprofit
-          </legend>
-          <p className="text-sm text-gray-500">
-            Tell us about the organisation you&apos;re creating.
+            Tell us about the organization you&apos;re creating.
           </p>
 
           <div>
@@ -393,14 +389,51 @@ export default function GetStartedWizard() {
         </fieldset>
       )}
 
-      {/* ── Step 2: Personal info ──────────────────────────────────────── */}
+      {/* ── Step 1: Which State? ─────────────────────────────────────── */}
+      {step === 1 && (
+        <fieldset className="space-y-4">
+          <legend className="text-xl font-bold text-dark">
+            Which State?
+          </legend>
+          <p className="text-sm text-gray-500">
+            We&apos;ll tailor your documents to your state&apos;s requirements.
+          </p>
+
+          <div>
+            <label
+              htmlFor="gs-state"
+              className="mb-1 block text-sm font-medium text-dark"
+            >
+              State
+            </label>
+            <select
+              id="gs-state"
+              value={data.state}
+              onChange={(e) => update('state', e.target.value)}
+              className={selectCls(!!errors.state)}
+            >
+              <option value="" disabled>
+                Choose a state...
+              </option>
+              {STATE_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            <FieldError msg={errors.state} />
+          </div>
+        </fieldset>
+      )}
+
+      {/* ── Step 2: Your Email ───────────────────────────────────────── */}
       {step === 2 && (
         <fieldset className="space-y-4">
           <legend className="text-xl font-bold text-dark">
             Your Information
           </legend>
           <p className="text-sm text-gray-500">
-            We&apos;ll use this to prepare your filing documents.
+            We&apos;ll use this to prepare your filing documents and send your personalized guide.
           </p>
 
           <div>
@@ -441,81 +474,6 @@ export default function GetStartedWizard() {
             <FieldError msg={errors.email} />
           </div>
 
-          <div>
-            <label
-              htmlFor="gs-phone"
-              className="mb-1 block text-sm font-medium text-dark"
-            >
-              Phone{' '}
-              <span className="font-normal text-gray-400">(optional)</span>
-            </label>
-            <input
-              id="gs-phone"
-              type="tel"
-              placeholder="(555) 123-4567"
-              maxLength={30}
-              value={data.phone}
-              onChange={(e) => update('phone', e.target.value)}
-              className={inputCls(!!errors.phone)}
-            />
-            <FieldError msg={errors.phone} />
-          </div>
-
-          <div>
-            <label
-              htmlFor="gs-role"
-              className="mb-1 block text-sm font-medium text-dark"
-            >
-              Your Role
-            </label>
-            <select
-              id="gs-role"
-              value={data.role}
-              onChange={(e) => update('role', e.target.value)}
-              className={selectCls(!!errors.role)}
-            >
-              <option value="" disabled>
-                Select your role...
-              </option>
-              {ROLES.map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </select>
-            <FieldError msg={errors.role} />
-          </div>
-        </fieldset>
-      )}
-
-      {/* ── Step 3: Review ─────────────────────────────────────────────── */}
-      {step === 3 && (
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-xl font-bold text-dark">Review & Submit</h3>
-            <p className="text-sm text-gray-500">
-              Please confirm your information is correct.
-            </p>
-          </div>
-
-          <div className="divide-y divide-gray-100 rounded-xl border border-gray-200 bg-white">
-            <ReviewRow label="State" value={data.state} />
-            <ReviewRow label="Organization" value={data.nonprofitName} />
-            <ReviewRow
-              label="Mission"
-              value={
-                data.mission.length > 200
-                  ? data.mission.slice(0, 200) + '...'
-                  : data.mission
-              }
-            />
-            <ReviewRow label="Category" value={data.category} />
-            <ReviewRow label="Full Name" value={data.fullName} />
-            <ReviewRow label="Email" value={data.email} />
-            {data.phone && <ReviewRow label="Phone" value={data.phone} />}
-            <ReviewRow label="Role" value={data.role} />
-          </div>
-
           {serverError && (
             <p
               className="text-center text-sm font-medium text-red-500"
@@ -524,7 +482,7 @@ export default function GetStartedWizard() {
               {serverError}
             </p>
           )}
-        </div>
+        </fieldset>
       )}
 
       {/* ── Navigation buttons ─────────────────────────────────────────── */}
@@ -573,23 +531,10 @@ export default function GetStartedWizard() {
           </Button>
         ) : (
           <Button type="submit" size="md" variant="secondary" disabled={submitting}>
-            {submitting ? 'Submitting...' : 'Submit Application'}
+            {submitting ? 'Submitting...' : 'Get My Personalized Guide'}
           </Button>
         )}
       </div>
     </form>
-  );
-}
-
-// ─── Sub-component ───────────────────────────────────────────────────────────
-
-function ReviewRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex flex-col gap-1 px-5 py-3 sm:flex-row sm:items-start sm:gap-4">
-      <span className="w-28 shrink-0 text-xs font-semibold uppercase tracking-wider text-gray-400">
-        {label}
-      </span>
-      <span className="text-sm text-dark">{value}</span>
-    </div>
   );
 }
