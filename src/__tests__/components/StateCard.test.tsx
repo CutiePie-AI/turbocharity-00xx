@@ -2,6 +2,17 @@ import { render, screen } from '@testing-library/react';
 import StateCard from '@/components/StateCard';
 import type { StateInfo } from '@/data/states';
 
+// Mock next/link to render as a plain anchor tag
+jest.mock('next/link', () => {
+  const MockLink = ({ children, href, ...rest }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  );
+  MockLink.displayName = 'MockLink';
+  return { __esModule: true, default: MockLink };
+});
+
 const mockState: StateInfo = {
   slug: 'california',
   name: 'California',
@@ -52,7 +63,7 @@ describe('StateCard', () => {
     expect(screen.getByText('3-5 business days')).toBeInTheDocument();
   });
 
-  it('links to correct /states/[slug] URL', () => {
+  it('links to correct /states/[slug] page', () => {
     render(<StateCard state={mockState} />);
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', '/states/california');
@@ -73,5 +84,21 @@ describe('StateCard', () => {
     };
     render(<StateCard state={offlineState} />);
     expect(screen.getByText('Mail-In Filing Only')).toBeInTheDocument();
+  });
+
+  it('renders a different state correctly', () => {
+    const texasState: StateInfo = {
+      ...mockState,
+      slug: 'texas',
+      name: 'Texas',
+      abbreviation: 'TX',
+      filingFee: 25,
+      processingTime: '3-5 business days',
+    };
+    render(<StateCard state={texasState} />);
+    expect(screen.getByText('Texas')).toBeInTheDocument();
+    expect(screen.getByText('TX')).toBeInTheDocument();
+    expect(screen.getByText('$25')).toBeInTheDocument();
+    expect(screen.getByRole('link')).toHaveAttribute('href', '/states/texas');
   });
 });

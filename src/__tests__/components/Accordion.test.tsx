@@ -18,7 +18,7 @@ const mockItems: AccordionItem[] = [
 ];
 
 describe('Accordion', () => {
-  it('renders all questions', () => {
+  it('renders all items', () => {
     render(<Accordion items={mockItems} />);
 
     mockItems.forEach((item) => {
@@ -31,12 +31,11 @@ describe('Accordion', () => {
 
     mockItems.forEach((item) => {
       const answer = screen.getByText(item.answer);
-      // The answer's parent panel should be hidden
       expect(answer.closest('[role="region"]')).toHaveAttribute('hidden');
     });
   });
 
-  it('clicking a question reveals its answer', () => {
+  it('clicking a question expands the item and reveals its answer', () => {
     render(<Accordion items={mockItems} />);
 
     const firstQuestion = screen.getByText(mockItems[0].question);
@@ -46,7 +45,7 @@ describe('Accordion', () => {
     expect(firstAnswer.closest('[role="region"]')).not.toHaveAttribute('hidden');
   });
 
-  it('clicking an open question hides its answer', () => {
+  it('clicking an open question collapses it', () => {
     render(<Accordion items={mockItems} />);
 
     const firstQuestion = screen.getByText(mockItems[0].question);
@@ -61,7 +60,7 @@ describe('Accordion', () => {
     expect(answerPanel).toHaveAttribute('hidden');
   });
 
-  it('opening one question closes the previously open one', () => {
+  it('only one item is open at a time — opening one closes the other', () => {
     render(<Accordion items={mockItems} />);
 
     const firstQuestion = screen.getByText(mockItems[0].question);
@@ -92,5 +91,10 @@ describe('Accordion', () => {
     fireEvent.click(buttons[0]);
     expect(buttons[0]).toHaveAttribute('aria-expanded', 'true');
     expect(buttons[1]).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('renders with empty items array without crashing', () => {
+    render(<Accordion items={[]} />);
+    expect(screen.queryAllByRole('button')).toHaveLength(0);
   });
 });

@@ -1,4 +1,4 @@
-import { SITE_CONFIG, generatePageMeta } from '@/lib/seo';
+import { SITE_CONFIG, generatePageMeta, generateMetadata } from '@/lib/seo';
 
 describe('SITE_CONFIG', () => {
   it('has all required fields', () => {
@@ -104,5 +104,56 @@ describe('generatePageMeta', () => {
     expect(meta.alternates).toBeDefined();
     expect(meta.alternates?.canonical).toBeDefined();
     expect(typeof meta.alternates?.canonical).toBe('string');
+  });
+});
+
+describe('generateMetadata', () => {
+  it('returns correct structure with title and description', () => {
+    const meta = generateMetadata('Test Page', 'A test description', '/test');
+    expect(meta.title).toBe('Test Page');
+    expect(meta.description).toBe('A test description');
+  });
+
+  it('generates correct canonical URL from path', () => {
+    const meta = generateMetadata('State Page', 'Description', '/states/california');
+    expect(meta.alternates?.canonical).toBe('https://turbocharity.com/states/california');
+  });
+
+  it('generates canonical URL with empty path default', () => {
+    const meta = generateMetadata('Home', 'Home description');
+    expect(meta.alternates?.canonical).toBe('https://turbocharity.com');
+  });
+
+  it('includes OpenGraph properties', () => {
+    const meta = generateMetadata('OG Test', 'OG description', '/og-page');
+    expect(meta.openGraph).toBeDefined();
+    expect(meta.openGraph?.title).toBe('OG Test');
+    expect(meta.openGraph?.description).toBe('OG description');
+    expect(meta.openGraph?.url).toBe('https://turbocharity.com/og-page');
+    expect(meta.openGraph?.siteName).toBe('TurboCharity');
+    expect(meta.openGraph?.type).toBe('website');
+  });
+
+  it('includes twitter card data', () => {
+    const meta = generateMetadata('Twitter Test', 'Twitter desc', '/tw');
+    expect(meta.twitter).toBeDefined();
+    expect(meta.twitter?.card).toBe('summary_large_image');
+    expect(meta.twitter?.title).toBe('Twitter Test');
+    expect(meta.twitter?.description).toBe('Twitter desc');
+  });
+
+  it('works for blog post metadata', () => {
+    const meta = generateMetadata(
+      'How to Start a Nonprofit',
+      'Complete guide to starting a nonprofit.',
+      '/blog/how-to-start-a-nonprofit',
+    );
+    expect(meta.title).toBe('How to Start a Nonprofit');
+    expect(meta.alternates?.canonical).toBe(
+      'https://turbocharity.com/blog/how-to-start-a-nonprofit',
+    );
+    expect(meta.openGraph?.url).toBe(
+      'https://turbocharity.com/blog/how-to-start-a-nonprofit',
+    );
   });
 });
