@@ -4,7 +4,7 @@ import type { BlogPost } from '@/data/blog-posts';
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://turbocharity.com';
 
-// ─── Organization ────────────────────────────────────────────────────────────
+// --- Organization --------------------------------------------------------
 
 export function organizationSchema() {
   return {
@@ -12,9 +12,8 @@ export function organizationSchema() {
     '@type': 'Organization',
     name: 'TurboCharity',
     url: SITE_URL,
+    description: 'AI-powered nonprofit formation platform',
     logo: `${SITE_URL}/logo.png`,
-    description:
-      'AI-powered nonprofit creation platform. Incorporate, generate bylaws, and auto-fill IRS Form 1023-EZ without expensive lawyers.',
     sameAs: [
       'https://twitter.com/turbocharity',
       'https://www.facebook.com/turbocharity',
@@ -28,7 +27,7 @@ export function organizationSchema() {
   };
 }
 
-// ─── WebSite (search action) ─────────────────────────────────────────────────
+// --- WebSite (search action) ---------------------------------------------
 
 export function websiteSchema() {
   return {
@@ -44,7 +43,7 @@ export function websiteSchema() {
   };
 }
 
-// ─── HowTo (state-specific nonprofit creation) ──────────────────────────────
+// --- HowTo (state-specific nonprofit creation) ---------------------------
 
 export function howToSchema(state: StateInfo) {
   return {
@@ -94,26 +93,12 @@ export function howToSchema(state: StateInfo) {
   };
 }
 
-// ─── FAQ Page ────────────────────────────────────────────────────────────────
+// --- Article (blog posts) ------------------------------------------------
 
-export function faqSchema(faqs: { question: string; answer: string }[]) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  };
-}
-
-// ─── Article (blog posts) ────────────────────────────────────────────────────
-
-export function articleSchema(post: BlogPost) {
+/**
+ * Generate Article schema from a full BlogPost object.
+ */
+export function articleSchemaFromPost(post: BlogPost) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -140,22 +125,69 @@ export function articleSchema(post: BlogPost) {
   };
 }
 
-// ─── Breadcrumb ──────────────────────────────────────────────────────────────
+/**
+ * Generate Article schema from individual parameters.
+ */
+export function articleSchema(
+  title: string,
+  description: string,
+  url: string,
+  datePublished: string,
+  author: string,
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    url,
+    datePublished,
+    author: {
+      '@type': 'Person',
+      name: author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'TurboCharity',
+    },
+  };
+}
+
+// --- FAQ Page ------------------------------------------------------------
+
+export function faqSchema(faqs: { question: string; answer: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  };
+}
+
+// --- Breadcrumb ----------------------------------------------------------
 
 export interface BreadcrumbItem {
   name: string;
-  href: string;
+  url: string;
+  /** @deprecated Use `url` instead */
+  href?: string;
 }
 
 export function breadcrumbSchema(items: BreadcrumbItem[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: items.map((item, index) => ({
+    itemListElement: items.map((item, i) => ({
       '@type': 'ListItem',
-      position: index + 1,
+      position: i + 1,
       name: item.name,
-      item: `${SITE_URL}${item.href}`,
+      item: item.url.startsWith('http') ? item.url : `${SITE_URL}${item.url}`,
     })),
   };
 }
