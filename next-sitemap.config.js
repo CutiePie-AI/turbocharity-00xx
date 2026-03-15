@@ -1,15 +1,8 @@
 /** @type {import('next-sitemap').IConfig} */
-const config = {
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://turbocharity.com",
-  generateRobotsTxt: true,
-  robotsTxtOptions: {
-    policies: [
-      {
-        userAgent: "*",
-        allow: "/",
-      },
-    ],
-  },
+module.exports = {
+  siteUrl: 'https://turbocharity.com',
+  generateRobotsTxt: false,
+  sitemapSize: 7000,
+  changefreq: 'weekly',
+  priority: 0.7,
 };
-
-module.exports = config;

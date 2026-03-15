@@ -3,63 +3,122 @@
 declare global {
   interface Window {
     gtag?: (...args: any[]) => void;
+    posthog?: {
+      capture: (event: string, properties?: Record<string, any>) => void;
+      identify: (distinctId: string, properties?: Record<string, any>) => void;
+    };
   }
 }
 
-function isGtagAvailable(): boolean {
-  return typeof window !== 'undefined' && typeof window.gtag === 'function';
+const isDev =
+  typeof process !== 'undefined' && process.env.NODE_ENV === 'development';
+
+/**
+ * Check if we are running in the browser (SSR safe).
+ */
+function isBrowser(): boolean {
+  return typeof window !== 'undefined';
 }
 
 /**
- * Track a custom event via Google Analytics 4.
+ * Track a custom event across all configured analytics providers.
  */
 export function trackEvent(
-  action: string,
-  category: string,
-  label?: string,
-  value?: number,
+  name: string,
+  properties?: Record<string, any>,
 ): void {
-  if (!isGtagAvailable()) return;
+  if (!isBrowser()) return;
 
-  window.gtag!('event', action, {
-    event_category: category,
-    event_label: label,
-    value,
-  });
-}
+  if (isDev) {
+    console.log('[Analytics] trackEvent', name, properties);
+  }
 
-/**
- * Track a signup funnel step.
- */
-export function trackSignup(step: string): void {
-  if (!isGtagAvailable()) return;
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', name, properties);
+  }
 
-  window.gtag!('event', 'signup', {
-    event_category: 'engagement',
-    event_label: step,
-  });
+  if (window.posthog) {
+    window.posthog.capture(name, properties);
+  }
 }
 
 /**
  * Track a page view.
  */
 export function trackPageView(url: string): void {
-  if (!isGtagAvailable()) return;
+  if (!isBrowser()) return;
 
-  window.gtag!('event', 'page_view', {
-    page_path: url,
-  });
+  if (isDev) {
+    console.log('[Analytics] trackPageView', url);
+  }
+
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'page_view', { page_path: url });
+  }
+
+  if (window.posthog) {
+    window.posthog.capture('$pageview', { page_path: url });
+  }
+}
+
+/**
+ * Track a signup event.
+ */
+export function trackSignup(email: string, source: string): void {
+  if (!isBrowser()) return;
+
+  const properties = {
+    email,
+    source,
+    event_category: 'engagement',
+  };
+
+  if (isDev) {
+    console.log('[Analytics] trackSignup', properties);
+  }
+
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'signup', properties);
+  }
+
+  if (window.posthog) {
+    window.posthog.capture('signup', properties);
+  }
 }
 
 /**
  * Track a CTA click.
  */
-export function trackCTA(ctaName: string, location: string): void {
-  if (!isGtagAvailable()) return;
+export function trackCTAClick(ctaName: string, page: string): void {
+  if (!isBrowser()) return;
 
-  window.gtag!('event', 'cta_click', {
+  const properties = {
+    cta_name: ctaName,
+    page,
     event_category: 'engagement',
-    event_label: ctaName,
-    cta_location: location,
-  });
+  };
+
+  if (isDev) {
+    console.log('[Analytics] trackCTAClick', properties);
+  }
+
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'cta_click', properties);
+  }
+
+  if (window.posthog) {
+    window.posthog.capture('cta_click', properties);
+  }
+}
+
+/**
+ * Initialize analytics listeners (e.g. global click tracking).
+ * Should be called once on the client side.
+ */
+export function initAnalytics(): void {
+  if (!isBrowser()) return;
+
+  if (isDev) {
+    console.log('[Analytics] Initialized');
+  }
 }
