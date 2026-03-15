@@ -1,5 +1,39 @@
-export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+/**
+ * Analytics utilities for TurboCharity.
+ *
+ * Sends events and page views to Google Analytics (gtag) and PostHog when
+ * available. Guards against missing window / gtag so callers never need to
+ * worry about SSR or blocked scripts.
+ */
 
+// ---------------------------------------------------------------------------
+// GA Measurement ID
+// ---------------------------------------------------------------------------
+export const GA_MEASUREMENT_ID =
+  process.env.NEXT_PUBLIC_GA_ID ??
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ??
+  '';
+
+// ---------------------------------------------------------------------------
+// Event name constants
+// ---------------------------------------------------------------------------
+export const EVENTS = {
+  WAITLIST_SIGNUP: 'waitlist_signup',
+  GET_STARTED_BEGIN: 'get_started_begin',
+  GET_STARTED_COMPLETE: 'get_started_complete',
+  STATE_GUIDE_VIEW: 'state_guide_view',
+  BLOG_VIEW: 'blog_view',
+  RESOURCE_CLICK: 'resource_click',
+  CTA_CLICK: 'cta_click',
+  LEAD_MAGNET_SUBMIT: 'lead_magnet_submit',
+  NEWSLETTER_SIGNUP: 'newsletter_signup',
+} as const;
+
+export type EventName = (typeof EVENTS)[keyof typeof EVENTS];
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
 type GTagEvent = {
   action: string;
   category: string;
@@ -23,49 +57,53 @@ declare global {
 const isDev =
   typeof process !== 'undefined' && process.env.NODE_ENV === 'development';
 
-/**
- * Check if we are running in the browser (SSR safe).
- */
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+/** Check whether we are running in a browser context. */
 function isBrowser(): boolean {
   return typeof window !== 'undefined';
 }
 
-/**
- * Track a structured GA event with category/action/label/value.
- */
-export function trackGTagEvent({ action, category, label, value }: GTagEvent) {
-  if (!isBrowser() || !window.gtag) return;
-  window.gtag('event', action, {
-    event_category: category,
-    event_label: label,
-    value: value,
-  });
+/** Safely check for the gtag function. */
+function hasGtag(): boolean {
+  return isBrowser() && typeof window.gtag === 'function';
 }
+
+// ---------------------------------------------------------------------------
+// Core public API
+// ---------------------------------------------------------------------------
 
 /**
  * Track a custom event across all configured analytics providers.
+ *
+ * @param eventName - The name of the event (use EVENTS constants where possible).
+ * @param properties - Optional key/value properties attached to the event.
  */
 export function trackEvent(
-  name: string,
-  properties?: AnalyticsProperties,
+  eventName: string,
+  properties?: Record<string, string | number | boolean | undefined>,
 ): void {
   if (!isBrowser()) return;
 
   if (isDev) {
-    console.log('[Analytics] trackEvent', name, properties);
+    console.log('[Analytics] trackEvent', eventName, properties);
   }
 
-  if (typeof window.gtag === 'function') {
-    window.gtag('event', name, properties);
+  if (hasGtag()) {
+    window.gtag('event', eventName, properties);
   }
 
   if (window.posthog) {
-    window.posthog.capture(name, properties);
+    window.posthog.capture(eventName, properties);
   }
 }
 
 /**
  * Track a page view.
+ *
+ * @param url - The pathname / URL of the page being viewed.
  */
 export function trackPageView(url: string): void {
   if (!isBrowser()) return;
@@ -74,8 +112,11 @@ export function trackPageView(url: string): void {
     console.log('[Analytics] trackPageView', url);
   }
 
-  if (typeof window.gtag === 'function') {
-    window.gtag('event', 'page_view', { page_path: url });
+  if (hasGtag()) {
+    window.gtag('event', 'page_view', {
+      page_path: url,
+      page_location: window.location.href,
+    });
   }
 
   if (window.posthog) {
@@ -83,109 +124,71 @@ export function trackPageView(url: string): void {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Structured GA event helpers (category / action / label / value)
+// ---------------------------------------------------------------------------
+
 /**
- * Track a waitlist signup event.
+ * Track a structured GA event with category/action/label/value.
  */
+export function trackGTagEvent({ action, category, label, value }: GTagEvent) {
+  if (!hasGtag()) return;
+  window.gtag('event', action, {
+    event_category: category,
+    event_label: label,
+    value,
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Convenience helpers
+// ---------------------------------------------------------------------------
+
+/** Track a waitlist signup event. */
 export function trackWaitlistSignup(source: string): void {
-  trackGTagEvent({
-    action: 'waitlist_signup',
-    category: 'engagement',
-    label: source,
+  trackEvent(EVENTS.WAITLIST_SIGNUP, {
+    source,
+    event_category: 'conversion',
   });
-
-  if (isBrowser() && window.posthog) {
-    window.posthog.capture('waitlist_signup', {
-      source,
-      event_category: 'engagement',
-    });
-  }
 }
 
-/**
- * Track a newsletter signup event.
- */
+/** Track a newsletter signup event. */
 export function trackNewsletterSignup(source: string): void {
-  trackGTagEvent({
-    action: 'newsletter_signup',
-    category: 'engagement',
-    label: source,
+  trackEvent(EVENTS.NEWSLETTER_SIGNUP, {
+    source,
+    event_category: 'conversion',
   });
-
-  if (isBrowser() && window.posthog) {
-    window.posthog.capture('newsletter_signup', {
-      source,
-      event_category: 'engagement',
-    });
-  }
 }
 
-/**
- * Track a blog view event.
- */
+/** Track a blog view event. */
 export function trackBlogView(slug: string): void {
-  trackGTagEvent({
-    action: 'blog_view',
-    category: 'content',
-    label: slug,
+  trackEvent(EVENTS.BLOG_VIEW, {
+    slug,
+    event_category: 'content',
   });
-
-  if (isBrowser() && window.posthog) {
-    window.posthog.capture('blog_view', {
-      slug,
-      event_category: 'content',
-    });
-  }
 }
 
-/**
- * Track a signup event.
- */
+/** Track a signup event. */
 export function trackSignup(email: string, source: string): void {
-  if (!isBrowser()) return;
-
-  const properties = {
+  trackEvent('signup', {
     email,
     source,
     event_category: 'engagement',
-  };
-
-  if (isDev) {
-    console.log('[Analytics] trackSignup', properties);
-  }
-
-  if (typeof window.gtag === 'function') {
-    window.gtag('event', 'signup', properties);
-  }
-
-  if (window.posthog) {
-    window.posthog.capture('signup', properties);
-  }
+  });
 }
 
-/**
- * Track a CTA click.
- */
+/** Track a CTA click. */
 export function trackCTAClick(ctaName: string, page: string): void {
-  if (!isBrowser()) return;
-
-  const properties = {
+  trackEvent(EVENTS.CTA_CLICK, {
     cta_name: ctaName,
     page,
     event_category: 'engagement',
-  };
-
-  if (isDev) {
-    console.log('[Analytics] trackCTAClick', properties);
-  }
-
-  if (typeof window.gtag === 'function') {
-    window.gtag('event', 'cta_click', properties);
-  }
-
-  if (window.posthog) {
-    window.posthog.capture('cta_click', properties);
-  }
+  });
 }
+
+// ---------------------------------------------------------------------------
+// Init
+// ---------------------------------------------------------------------------
 
 /**
  * Initialize analytics listeners (e.g. global click tracking).

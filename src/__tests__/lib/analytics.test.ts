@@ -1,4 +1,4 @@
-import { trackEvent, trackWaitlistSignup, trackNewsletterSignup, trackBlogView } from '@/lib/analytics';
+import { trackEvent, trackWaitlistSignup, trackNewsletterSignup, trackBlogView, EVENTS } from '@/lib/analytics';
 
 describe('Analytics', () => {
   beforeEach(() => {
@@ -17,25 +17,37 @@ describe('Analytics', () => {
 
   test('trackWaitlistSignup fires correct event', () => {
     trackWaitlistSignup('homepage');
-    expect(window.gtag).toHaveBeenCalledWith('event', 'waitlist_signup', expect.objectContaining({
-      event_category: 'engagement',
-      event_label: 'homepage',
+    expect(window.gtag).toHaveBeenCalledWith('event', EVENTS.WAITLIST_SIGNUP, expect.objectContaining({
+      event_category: 'conversion',
+      source: 'homepage',
     }));
   });
 
   test('trackNewsletterSignup fires correct event', () => {
     trackNewsletterSignup('blog');
-    expect(window.gtag).toHaveBeenCalledWith('event', 'newsletter_signup', expect.objectContaining({
-      event_category: 'engagement',
-      event_label: 'blog',
+    expect(window.gtag).toHaveBeenCalledWith('event', EVENTS.NEWSLETTER_SIGNUP, expect.objectContaining({
+      event_category: 'conversion',
+      source: 'blog',
     }));
   });
 
   test('trackBlogView fires correct event', () => {
     trackBlogView('test-slug');
-    expect(window.gtag).toHaveBeenCalledWith('event', 'blog_view', expect.objectContaining({
+    expect(window.gtag).toHaveBeenCalledWith('event', EVENTS.BLOG_VIEW, expect.objectContaining({
       event_category: 'content',
-      event_label: 'test-slug',
+      slug: 'test-slug',
     }));
+  });
+
+  test('EVENTS contains all expected event names', () => {
+    expect(EVENTS.WAITLIST_SIGNUP).toBe('waitlist_signup');
+    expect(EVENTS.GET_STARTED_BEGIN).toBe('get_started_begin');
+    expect(EVENTS.GET_STARTED_COMPLETE).toBe('get_started_complete');
+    expect(EVENTS.STATE_GUIDE_VIEW).toBe('state_guide_view');
+    expect(EVENTS.BLOG_VIEW).toBe('blog_view');
+    expect(EVENTS.RESOURCE_CLICK).toBe('resource_click');
+    expect(EVENTS.CTA_CLICK).toBe('cta_click');
+    expect(EVENTS.LEAD_MAGNET_SUBMIT).toBe('lead_magnet_submit');
+    expect(EVENTS.NEWSLETTER_SIGNUP).toBe('newsletter_signup');
   });
 });
