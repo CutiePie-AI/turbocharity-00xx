@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import Button from "@/components/Button";
+import { submitNewsletterLead } from "@/app/actions/leads";
 
 interface NewsletterSignupProps {
   className?: string;
@@ -17,8 +18,10 @@ export default function NewsletterSignup({
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
 
@@ -32,18 +35,36 @@ export default function NewsletterSignup({
       return;
     }
 
-    // Store in localStorage
+    setLoading(true);
+
     try {
-      const existing = JSON.parse(localStorage.getItem("tc_newsletter_emails") || "[]");
-      if (!existing.includes(email)) {
-        existing.push(email);
-        localStorage.setItem("tc_newsletter_emails", JSON.stringify(existing));
+      const result = await submitNewsletterLead({
+        email: email.trim(),
+        source: "newsletter_signup",
+      });
+
+      if (result.success) {
+        // Also store locally as a fallback
+        try {
+          const existing = JSON.parse(localStorage.getItem("tc_newsletter_emails") || "[]");
+          if (!existing.includes(email)) {
+            existing.push(email);
+            localStorage.setItem("tc_newsletter_emails", JSON.stringify(existing));
+          }
+        } catch {
+          // Silently handle storage errors
+        }
+
+        setSuccessMessage(result.message);
+        setSubmitted(true);
+      } else {
+        setError(result.message);
       }
     } catch {
-      // Silently handle storage errors
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    setSubmitted(true);
   }
 
   if (submitted) {
@@ -61,7 +82,7 @@ export default function NewsletterSignup({
             dark ? "text-white" : "text-dark"
           }`}
         >
-          Check your inbox! 🎉
+          {successMessage || "Check your inbox!"} 🎉
         </p>
         <p
           className={`mt-2 text-sm ${
@@ -121,8 +142,8 @@ export default function NewsletterSignup({
           }`}
           aria-label="Email address"
         />
-        <Button type="submit" size="md">
-          Get Started
+        <Button type="submit" size="md" disabled={loading}>
+          {loading ? "Submitting..." : "Get Started"}
         </Button>
       </form>
 
