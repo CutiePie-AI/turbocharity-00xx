@@ -1,0 +1,7 @@
+# TurboCharity — robots.txt
+# https://turbocharity.com
+
+User-agent: *
+Allow: /
+
+Sitemap: https://turbocharity.com/sitemap.xml
