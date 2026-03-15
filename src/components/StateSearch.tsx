@@ -34,6 +34,11 @@ export default function StateSearch({ states }: StateSearchProps) {
     };
   }, []);
 
+  const clearSearch = useCallback(() => {
+    setQuery('');
+    setDebouncedQuery('');
+  }, []);
+
   const filteredStates = states.filter((state) => {
     if (!debouncedQuery.trim()) return true;
     const q = debouncedQuery.toLowerCase().trim();
@@ -47,7 +52,7 @@ export default function StateSearch({ states }: StateSearchProps) {
   return (
     <div>
       {/* Search input */}
-      <div className="relative mx-auto mb-10 max-w-xl">
+      <div className="relative mx-auto mb-6 max-w-xl">
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
           <svg
             className="h-5 w-5 text-gray-400"
@@ -68,15 +73,12 @@ export default function StateSearch({ states }: StateSearchProps) {
           value={query}
           onChange={handleChange}
           placeholder="Search states (e.g., California, TX, New York...)"
-          className="w-full rounded-xl border border-gray-300 bg-white py-3.5 pl-12 pr-4 text-base text-dark shadow-sm transition-all placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+          className="w-full rounded-xl border border-gray-300 bg-white py-3.5 pl-12 pr-10 text-base text-dark shadow-sm transition-all placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
           aria-label="Search states by name or abbreviation"
         />
         {query && (
           <button
-            onClick={() => {
-              setQuery('');
-              setDebouncedQuery('');
-            }}
+            onClick={clearSearch}
             className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600"
             aria-label="Clear search"
           >
@@ -88,15 +90,15 @@ export default function StateSearch({ states }: StateSearchProps) {
       </div>
 
       {/* Results count */}
-      {debouncedQuery.trim() && (
-        <p className="mb-6 text-center text-sm text-gray-500">
-          Showing {filteredStates.length} of {states.length} states
-        </p>
-      )}
+      <p className="mb-6 text-center text-sm text-gray-500">
+        {debouncedQuery.trim()
+          ? `Showing ${filteredStates.length} of ${states.length} states`
+          : `${states.length} states available`}
+      </p>
 
       {/* Grid of state cards */}
       {filteredStates.length > 0 ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredStates.map((state) => (
             <StateCard key={state.slug} state={state} />
           ))}
@@ -121,10 +123,7 @@ export default function StateSearch({ states }: StateSearchProps) {
             Try searching with a different state name or abbreviation.
           </p>
           <button
-            onClick={() => {
-              setQuery('');
-              setDebouncedQuery('');
-            }}
+            onClick={clearSearch}
             className="mt-4 text-sm font-semibold text-primary hover:text-blue-700 transition-colors"
           >
             Clear search

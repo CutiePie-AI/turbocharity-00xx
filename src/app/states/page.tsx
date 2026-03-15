@@ -1,22 +1,57 @@
 import type { Metadata } from 'next';
 import Container from '@/components/Container';
-import DirectorySearch from '@/components/DirectorySearch';
+import StateSearch from '@/components/StateSearch';
+import Breadcrumb from '@/components/Breadcrumb';
+import StructuredData from '@/components/StructuredData';
 import { STATES } from '@/lib/states';
 
 export const metadata: Metadata = {
-  title: 'Nonprofit Formation Guides for All 50 States | TurboCharity',
+  title: 'Start a Nonprofit by State | TurboCharity',
   description:
-    'Compare nonprofit filing requirements, fees, and processing times for all 50 states. Find everything you need to incorporate your nonprofit organization.',
+    'Find your state and get a complete guide to starting a nonprofit. Compare filing fees, processing times, and requirements for all 50 states plus DC.',
   openGraph: {
-    title: 'Nonprofit Formation Guides for All 50 States | TurboCharity',
+    title: 'Start a Nonprofit by State | TurboCharity',
     description:
-      'Compare nonprofit filing requirements, fees, and processing times for all 50 states.',
+      'Compare nonprofit filing requirements, fees, and processing times for all 50 states. Find everything you need to incorporate your nonprofit organization.',
   },
+};
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'States' },
+];
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: 'https://turbocharity.com',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'States',
+      item: 'https://turbocharity.com/states',
+    },
+  ],
 };
 
 export default function StatesPage() {
   return (
     <main className="min-h-screen bg-gray-50/60">
+      <StructuredData data={breadcrumbSchema} />
+
+      {/* Breadcrumb */}
+      <div className="border-b border-gray-100 bg-white">
+        <Container className="py-3">
+          <Breadcrumb items={breadcrumbItems} />
+        </Container>
+      </div>
+
       {/* Hero / Header */}
       <section className="border-b border-gray-100 bg-white">
         <Container className="py-16 text-center lg:py-20">
@@ -25,13 +60,13 @@ export default function StatesPage() {
               State-by-State Guide
             </span>
             <h1 className="text-4xl font-extrabold tracking-tight text-dark sm:text-5xl">
-              Nonprofit Formation Guides{' '}
-              <span className="text-primary">for All 50 States</span>
+              Start a Nonprofit{' '}
+              <span className="text-primary">in Any State</span>
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-gray-600">
               Every state has unique requirements for forming a nonprofit corporation.
               From filing fees and processing times to publication notices and online
-              filing options, the landscape varies significantly. Use the filters below
+              filing options, the landscape varies significantly. Use the search below
               to find your state and get a complete guide to incorporating your
               nonprofit the right way.
             </p>
@@ -59,10 +94,10 @@ export default function StatesPage() {
         </Container>
       </section>
 
-      {/* States directory with search & filters */}
+      {/* States directory with search */}
       <section>
         <Container className="py-12 lg:py-16">
-          <DirectorySearch states={STATES} />
+          <StateSearch states={STATES} />
         </Container>
       </section>
 

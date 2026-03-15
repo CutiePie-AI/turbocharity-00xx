@@ -1,4 +1,6 @@
-import Link from 'next/link';
+'use client';
+
+import { useState, useCallback } from 'react';
 
 interface ShareButtonsProps {
   url: string;
@@ -29,60 +31,95 @@ function LinkedInIcon() {
   );
 }
 
-function EmailIcon() {
+function CopyIcon() {
   return (
     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+    </svg>
+  );
+}
+
+function CheckCopyIcon() {
+  return (
+    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
     </svg>
   );
 }
 
 export default function ShareButtons({ url, title }: ShareButtonsProps) {
+  const [copied, setCopied] = useState(false);
+
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title);
 
-  const shareLinks = [
-    {
-      label: 'Share on X',
-      href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
-      icon: <TwitterIcon />,
-      className: 'bg-gray-900 hover:bg-gray-800 text-white',
-    },
-    {
-      label: 'Share on Facebook',
-      href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
-      icon: <FacebookIcon />,
-      className: 'bg-blue-600 hover:bg-blue-700 text-white',
-    },
-    {
-      label: 'Share on LinkedIn',
-      href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-      icon: <LinkedInIcon />,
-      className: 'bg-blue-700 hover:bg-blue-800 text-white',
-    },
-    {
-      label: 'Share via Email',
-      href: `mailto:?subject=${encodedTitle}&body=${encodedUrl}`,
-      icon: <EmailIcon />,
-      className: 'bg-gray-600 hover:bg-gray-700 text-white',
-    },
-  ];
+  const handleCopyLink = useCallback(() => {
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }, [url]);
+
+  const handleShareTwitter = useCallback(() => {
+    window.open(
+      `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
+  }, [encodedUrl, encodedTitle]);
+
+  const handleShareFacebook = useCallback(() => {
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
+  }, [encodedUrl]);
+
+  const handleShareLinkedIn = useCallback(() => {
+    window.open(
+      `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
+  }, [encodedUrl]);
 
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <span className="text-sm font-medium text-gray-600">Share this article:</span>
-      {shareLinks.map((link) => (
-        <Link
-          key={link.label}
-          href={link.href}
-          target={link.href.startsWith('mailto') ? undefined : '_blank'}
-          rel={link.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
-          aria-label={link.label}
-          className={`inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm transition-colors ${link.className}`}
-        >
-          {link.icon}
-        </Link>
-      ))}
+      <span className="text-sm font-medium text-gray-600">Share this guide:</span>
+      <button
+        onClick={handleShareTwitter}
+        aria-label="Share on X"
+        className="inline-flex items-center justify-center rounded-lg bg-gray-900 px-3 py-2 text-sm text-white transition-colors hover:bg-gray-800"
+      >
+        <TwitterIcon />
+      </button>
+      <button
+        onClick={handleShareFacebook}
+        aria-label="Share on Facebook"
+        className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-3 py-2 text-sm text-white transition-colors hover:bg-blue-700"
+      >
+        <FacebookIcon />
+      </button>
+      <button
+        onClick={handleShareLinkedIn}
+        aria-label="Share on LinkedIn"
+        className="inline-flex items-center justify-center rounded-lg bg-blue-700 px-3 py-2 text-sm text-white transition-colors hover:bg-blue-800"
+      >
+        <LinkedInIcon />
+      </button>
+      <button
+        onClick={handleCopyLink}
+        aria-label={copied ? 'Link copied' : 'Copy link'}
+        className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+          copied
+            ? 'bg-secondary text-white'
+            : 'bg-gray-600 text-white hover:bg-gray-700'
+        }`}
+      >
+        {copied ? <CheckCopyIcon /> : <CopyIcon />}
+        {copied ? 'Copied!' : 'Copy Link'}
+      </button>
     </div>
   );
 }
