@@ -514,3 +514,42 @@ export const STATES: StateInfo[] = [
 
 /** @deprecated Use STATES instead */
 export const states = STATES;
+
+/** Return all slugs for static param generation. */
+export function getAllStateSlugs(): string[] {
+  return STATES.map((s) => s.slug);
+}
+
+/** Look up a single state by slug, or undefined if not found. */
+export function getStateBySlug(slug: string): StateInfo | undefined {
+  return STATES.find((s) => s.slug === slug);
+}
+
+/** Region mapping for grouping states. */
+export type Region = 'Northeast' | 'Southeast' | 'Midwest' | 'Southwest' | 'West';
+
+const REGION_MAP: Record<string, Region> = {
+  connecticut: 'Northeast', delaware: 'Northeast', maine: 'Northeast',
+  maryland: 'Northeast', massachusetts: 'Northeast', 'new-hampshire': 'Northeast',
+  'new-jersey': 'Northeast', 'new-york': 'Northeast', pennsylvania: 'Northeast',
+  'rhode-island': 'Northeast', vermont: 'Northeast',
+  alabama: 'Southeast', arkansas: 'Southeast', florida: 'Southeast',
+  georgia: 'Southeast', kentucky: 'Southeast', louisiana: 'Southeast',
+  mississippi: 'Southeast', 'north-carolina': 'Southeast', 'south-carolina': 'Southeast',
+  tennessee: 'Southeast', virginia: 'Southeast', 'west-virginia': 'Southeast',
+  illinois: 'Midwest', indiana: 'Midwest', iowa: 'Midwest',
+  kansas: 'Midwest', michigan: 'Midwest', minnesota: 'Midwest',
+  missouri: 'Midwest', nebraska: 'Midwest', 'north-dakota': 'Midwest',
+  ohio: 'Midwest', 'south-dakota': 'Midwest', wisconsin: 'Midwest',
+  arizona: 'Southwest', 'new-mexico': 'Southwest', oklahoma: 'Southwest',
+  texas: 'Southwest',
+  alaska: 'West', california: 'West', colorado: 'West',
+  hawaii: 'West', idaho: 'West', montana: 'West',
+  nevada: 'West', oregon: 'West', utah: 'West',
+  washington: 'West', wyoming: 'West',
+};
+
+/** Get the region a state belongs to. */
+export function getStateRegion(slug: string): Region {
+  return REGION_MAP[slug] ?? 'West';
+}
