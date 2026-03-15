@@ -3,63 +3,56 @@
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Script from 'next/script';
-import { initAnalytics, trackPageView } from '@/lib/analytics';
+import { GA_MEASUREMENT_ID, initAnalytics, trackPageView } from '@/lib/analytics';
 
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
-const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-
+/**
+ * Google Analytics script injection and page-view tracking.
+ *
+ * Reads the GA ID from `NEXT_PUBLIC_GA_ID` (or `NEXT_PUBLIC_GA_MEASUREMENT_ID`).
+ * Only renders script tags when an ID is present.
+ * Automatically tracks page views on every Next.js route change.
+ */
 export default function Analytics() {
   const pathname = usePathname();
 
-  // Initialize analytics once on mount
+  // Initialise analytics listeners once on mount.
   useEffect(() => {
     initAnalytics();
   }, []);
 
-  // Track page views on route change
+  // Track page views whenever the pathname changes.
   useEffect(() => {
     if (pathname) {
       trackPageView(pathname);
     }
   }, [pathname]);
 
-  if (!GA_MEASUREMENT_ID && !POSTHOG_KEY) return null;
+  // Don't inject any scripts when no GA ID is configured.
+  if (!GA_MEASUREMENT_ID) return null;
 
   return (
     <>
-      {/* Google Analytics 4 */}
-      {GA_MEASUREMENT_ID && (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-            strategy="afterInteractive"
-          />
-          <Script id="google-analytics" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${GA_MEASUREMENT_ID}', {
-                page_title: document.title,
-                send_page_view: true,
-              });
-            `}
-          </Script>
-        </>
-      )}
+      {/* Google Analytics 4 – async script loader */}
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        strategy="afterInteractive"
+      />
 
-      {/* PostHog */}
-      {POSTHOG_KEY && (
-        <Script id="posthog-init" strategy="afterInteractive">
-          {`
-            !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-            posthog.init('${POSTHOG_KEY}', {
-              api_host: 'https://app.posthog.com',
-              capture_pageview: false
-            });
-          `}
-        </Script>
-      )}
+      {/* GA4 configuration */}
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('consent', 'default', {
+            analytics_storage: 'denied',
+          });
+          gtag('config', '${GA_MEASUREMENT_ID}', {
+            page_title: document.title,
+            send_page_view: true,
+          });
+        `}
+      </Script>
     </>
   );
 }
