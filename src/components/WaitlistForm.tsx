@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import Button from "@/components/Button";
+import { submitWaitlistLead } from "@/app/actions/leads";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -50,6 +51,8 @@ export default function WaitlistForm({ className = "" }: { className?: string })
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [waitlistNumber, setWaitlistNumber] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [serverMessage, setServerMessage] = useState("");
 
   function validate(): FormErrors {
     const errs: FormErrors = {};
@@ -75,34 +78,54 @@ export default function WaitlistForm({ className = "" }: { className?: string })
     return errs;
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
+    setServerMessage("");
 
     if (Object.keys(validationErrors).length > 0) return;
 
-    const entry: WaitlistEntry = {
-      name: name.trim(),
-      email: email.trim(),
-      state,
-      nonprofitType,
-      timestamp: new Date().toISOString(),
-    };
+    setLoading(true);
 
     try {
-      const existing: WaitlistEntry[] = JSON.parse(
-        localStorage.getItem("tc_waitlist") || "[]"
-      );
-      existing.push(entry);
-      localStorage.setItem("tc_waitlist", JSON.stringify(existing));
-    } catch {
-      // Silently handle storage errors
-    }
+      const result = await submitWaitlistLead({
+        email: email.trim(),
+        name: name.trim(),
+        source: "homepage_waitlist",
+      });
 
-    // Random waitlist position between 100 and 500
-    setWaitlistNumber(Math.floor(Math.random() * 401) + 100);
-    setSubmitted(true);
+      if (result.success) {
+        // Also store locally as a fallback
+        try {
+          const entry: WaitlistEntry = {
+            name: name.trim(),
+            email: email.trim(),
+            state,
+            nonprofitType,
+            timestamp: new Date().toISOString(),
+          };
+          const existing: WaitlistEntry[] = JSON.parse(
+            localStorage.getItem("tc_waitlist") || "[]"
+          );
+          existing.push(entry);
+          localStorage.setItem("tc_waitlist", JSON.stringify(existing));
+        } catch {
+          // Silently handle storage errors
+        }
+
+        // Random waitlist position between 100 and 500
+        setWaitlistNumber(Math.floor(Math.random() * 401) + 100);
+        setServerMessage(result.message);
+        setSubmitted(true);
+      } else {
+        setServerMessage(result.message);
+      }
+    } catch {
+      setServerMessage("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   const selectClasses = (hasError: boolean) =>
@@ -258,9 +281,15 @@ export default function WaitlistForm({ className = "" }: { className?: string })
           )}
         </div>
 
-        <Button type="submit" size="md" className="w-full">
-          Join the Waitlist
+        <Button type="submit" size="md" className="w-full" disabled={loading}>
+          {loading ? "Joining..." : "Join the Waitlist"}
         </Button>
+
+        {serverMessage && !submitted && (
+          <p className="mt-2 text-center text-sm font-medium text-red-500" role="alert">
+            {serverMessage}
+          </p>
+        )}
       </form>
     </div>
   );
